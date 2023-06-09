@@ -17,12 +17,61 @@
     <link rel="stylesheet" href="../CSS/styles.css">
     <script>
         $(document).ready(() => {
-
+            //get the songs from the server
+            getFromServer()
         });
+        function getFromServer() {
+            ajaxCall("GET", baseApi + "Songs", "", successCBAllSongs, errorCB);
+        }
+        function successCBAllSongs(data){
+            let container=$(".container")
+            let str=`<div class="row mx-auto">`;
+            for (const song of data) {
+                str+= ` <div class="col-3 card text-bg-dark mb-3 mx-4">
+            <div class="card-header">${song.id}</div>
+            <div class="card-body">
+              <h5 class="card-title">${song.name}</h5>
+              <h6 class="card-title">${song.artistName}</h6>
+              <br>
+              <button class="btn btn-secondary">See Lyrics</button>
+              </div>
+              </div>`
+            }
+            //   <p class="card-text">${song.lyrics}</p>
+            str+=`</div>`
+            container.html(str)
+            
+        }
+        function successCB(data){
+            
+        }
+        function errorCB(data){
+
+        }
+     
     </script>
 </head>
 
 <body>
+
+
+    <div class='container'>
+        <div class="card text-bg-dark mb-3" style="max-width: 18rem;">
+            <div class="card-header">Header</div>
+            <div class="card-body">
+              <h5 class="card-title">Dark card title</h5>
+              <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+          </div>
+    </div>
+
+
+
+
+
+
+
+
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
