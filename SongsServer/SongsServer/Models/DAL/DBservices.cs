@@ -64,10 +64,382 @@ public class DBservices
         return cmd;
     }
 
+    //***Orders Methods***
+
+    //--------------------------------------------------------------------------------------------------
+    // This method reads all users
+    //--------------------------------------------------------------------------------------------------
+    public List<UserClass> getAllUsers()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_getAllUsers", con, null);             // create the command
+
+
+        List<UserClass> usersList = new List<UserClass>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                UserClass u = new UserClass();
+                u.id = Convert.ToInt32(dataReader["id"]);
+                u.name = dataReader["name"].ToString();
+                u.email = dataReader["email"].ToString();
+                u.password = dataReader["password"].ToString();
+                u.regDate = Convert.ToDateTime(dataReader["regDate"]);
+                usersList.Add(u);
+            }
+            return usersList;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method reads all songs of specific user
+    //--------------------------------------------------------------------------------------------------
+    public List<Song> getSongsByUser(int userId)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@userId", userId);
+        cmd = CreateCommandWithStoredProcedure("SP_getSongsByUser", con, paramDic);             // create the command
+
+        List<Song> songsList = new List<Song>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Song s = new Song();
+                s.id = Convert.ToInt32(dataReader["id"]);
+                s.name = dataReader["name"].ToString();
+                s.artistName = dataReader["artistName"].ToString();
+                s.link = dataReader["link"].ToString();
+                s.lyrics = dataReader["lyrics"].ToString();
+                s.rate = Convert.ToInt32(dataReader["rate"]);
+                songsList.Add(s);
+            }
+            return songsList;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Inserts a new User to the Users table 
+    //--------------------------------------------------------------------------------------------------
+    public UserClass Register(UserClass user)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@name", user.name);
+        paramDic.Add("@email", user.email);
+        paramDic.Add("@password", user.password);
+        paramDic.Add("@regDate", user.regDate);
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_Register", con, paramDic);             // create the command
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                UserClass u = new UserClass();
+                u.id = Convert.ToInt32(dataReader["id"]);
+                u.name = dataReader["name"].ToString();
+                u.email = dataReader["email"].ToString();
+                u.password = dataReader["password"].ToString();
+                u.regDate = Convert.ToDateTime(dataReader["regDate"]);
+                return u;
+            }
+            throw new Exception("User with this email is already exits.");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    // This method Check If Exists User by Email
+    //--------------------------------------------------------------------------------------------------
+    public int FindUser(string email)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@email", email);
+
+        cmd = CreateCommandWithStoredProcedure("SP_FindUser", con, paramDic);             // create the command
+        var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+        returnParameter.Direction = ParameterDirection.ReturnValue;
+
+        try
+        {
+            cmd.ExecuteNonQuery(); // execute the command
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+        return (int)returnParameter.Value;
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Check If user password is valid
+    //--------------------------------------------------------------------------------------------------
+    public UserClass checkUserPassword(string email, string password)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@email", email);
+        paramDic.Add("@password", password);
+
+        cmd = CreateCommandWithStoredProcedure("SP_checkUserPassword", con, paramDic);
+        UserClass u = new UserClass();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            if (dataReader.Read())
+            {
+                u.id = Convert.ToInt32(dataReader["id"]);
+                u.name = dataReader["name"].ToString();
+                u.email = dataReader["email"].ToString();
+                u.password = dataReader["password"].ToString();
+                return u;
+            }
+            return null;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Insert a song to userSongs table
+    //--------------------------------------------------------------------------------------------------
+    public bool addSongToFav(int userId, int songId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@userId", userId);
+        paramDic.Add("@songId", songId);
+
+        cmd = CreateCommandWithStoredProcedure("SP_addSongToFav", con, paramDic);// create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected>0;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Delete a song to userSongs table
+    //--------------------------------------------------------------------------------------------------
+    public bool deleteSongFromFav(int userId, int songId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@userId", userId);
+        paramDic.Add("@songId", songId);
+
+        cmd = CreateCommandWithStoredProcedure("SP_deleteSongFromFav", con, paramDic);// create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected>0;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
 
     public int InsertSong(Song s)
     {
-        Console.WriteLine( "Ofek hagever");
         SqlConnection con;
         SqlCommand cmd;
 

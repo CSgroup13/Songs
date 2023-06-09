@@ -1,0 +1,7 @@
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.csproj.AssemblyReference.cache
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.AssemblyInfoInputs.cache
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.AssemblyInfo.cs
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.csproj.CoreCompileInputs.cache
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\elada\Desktop\לימודים\רופין\שנה ב\סמסטר ב\צד שרת\Songs\SongsServer\SongsServer\obj\Debug\net6.0\SongsServer.MvcApplicationPartsAssemblyInfo.cache
