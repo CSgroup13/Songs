@@ -14,5 +14,26 @@
             DBservices dbs = new DBservices();
             return dbs.InsertSong(this) == 1;
         }
+        public static List<Song> getAllSongs()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getAllSongs();
+        }
+        public static Song getRandomSong()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getRandomSong();
+        }
+        public static Song getSongByName(string songName)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getSongByName(songName);
+        }
+
+        public static Song getByLyrics(string lyrics)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getByLyrics(lyrics);
+        }
     }
 }
