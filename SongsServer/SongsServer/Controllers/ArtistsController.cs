@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SongsServer.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,9 +11,22 @@ namespace SongsServer.Controllers
     {
         // GET: api/<ArtistsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<Artist> getAllArtists()
         {
-            return new string[] { "value1", "value2" };
+            return Artist.getAllArtists();
+        }
+
+        [HttpGet("{artistName}/songs")]
+        public IActionResult getSongsByArtist(string artistName)
+        {
+            try
+            {
+            return Ok(Artist.getSongsByArtist(artistName));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET api/<ArtistsController>/5
