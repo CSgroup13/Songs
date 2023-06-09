@@ -11,9 +11,27 @@ namespace SongsServer.Controllers
     {
         // GET: api/<SongsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public List<Song> getAllSongs()
         {
-            return new string[] { "value1", "value2" };
+            return Song.getAllSongs();
+        }
+        // GET: api/<SongsController>/randomSong
+        [HttpGet("randomSong")]
+        public Song getRandomSong()
+        {
+            return Song.getRandomSong();
+        }
+        // GET: api/<SongsController>/{songName}/info
+        [HttpGet("{songName}/info")]
+        public Song getSongByName(string songName)
+        {
+            return Song.getSongByName(songName);
+        }
+        // GET: api/<SongsController>/songBylyrics
+        [HttpGet("songBylyrics")]
+        public Song getByLyrics([FromBody] string lyrics)
+        {
+            return Song.getByLyrics(lyrics);
         }
 
         // GET api/<SongsController>/5
