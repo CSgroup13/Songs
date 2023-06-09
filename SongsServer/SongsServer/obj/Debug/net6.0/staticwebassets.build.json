@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "e5Q8YhRJu65q8HWCjCEp9StXv9Q1WxZML/lTJWoze6k=",
+  "Source": "SongsServer",
+  "BasePath": "_content/SongsServer",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
