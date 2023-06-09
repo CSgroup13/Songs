@@ -67,7 +67,7 @@ public class DBservices
 
     public int InsertSong(Song s)
     {
-        Console.WriteLine();
+        
         SqlConnection con;
         SqlCommand cmd;
 
