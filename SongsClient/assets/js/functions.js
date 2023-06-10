@@ -188,7 +188,6 @@ $(document).ready(function () {
         $center = $('.slider--item-center'),
         $right = $('.slider--item-right'),
         $item = $('.slider--item');
-
       $('.slider').animate({ opacity: 0 }, 400);
 
       setTimeout(function () {
