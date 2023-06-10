@@ -14,53 +14,122 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous">
     </script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="./assets/js/ajaxCalls.js"></script>
   <script>
     const baseApi = 'https://localhost:7091/api/Users'
     $(document).ready(() => {
-      $("#loginForm").submit(() => {
-        let email = $("#logEmailInp").val();
-        let password = $("#logPassInp").val();
-        User = {
-          id: 0,
-          name: "",
-          email: email,
-          password: password,
-          regDate: ""
+      let render = () => {
+        if (localStorage["user"] != undefined) {
+          $(".header--cta").html("Hello " + JSON.parse(localStorage["user"]).name);
+          $("#loginLink").html('LOGOUT <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
+          $('#notMember').hide();
+          $('#signUpLink').hide();
+          $('.side-nav li:nth-child(6)').addClass('logout');
+          $("#outBarLogin").html("Logout");
         }
-        ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
-
-        return false;
-      })
-
-        function successCBLogin(data) {
-          localStorage["user"] = JSON.stringify(data);
+        else {
+          $(".header--cta").html("Hello Guest");
+          $("#loginLink").html('Login <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
+          $('#notMember').show();
+          $('#signUpLink').show();
+          $('.side-nav li:nth-child(6)').removeClass('logout');
+          $("#outBarLogin").html("Login");
         }
-        function errorCBLogin(error) {
-          let message = error.responseText.split(" ");
-          Swal.fire({
-            icon: 'error',
-            text: message,
+      }
+
+      render();
+      $('#signUpLink').click(function () {
+        $("#mainFormDiv").html("");
+        $("#mainFormDiv").append('<h2 id="formHeader">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" pattern="[a-zA-Z]+" title="name must include only letters" required ><label for="name">Name</label></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" pattern="^([a-zA-Z\d.-]+)@([a-zA-Z\d-]+)\.([a-zA-Z]{2,8})(\.[a-zA-Z]{2,8})?$" title="example12@example.exapmle" required ><label for="email">Email</label></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" pattern="^[A-Z]+(?=.*\d).{7,}" title="The password must start with one or more uppercase letters and must be at least 8 characters long. It must also include at least one digit." required><label for="password">Password</label></div></div><input type="submit" value="Sign Up"></form>');
+        $('#signUpForm').submit(function () {
+          let email = $("#regEmailInp").val();
+          let password = $("#regPassInp").val();
+          let name = $("#regNameInp").val();
+          let currentDateTime = new Date();
+          let formattedDateTime = currentDateTime.toISOString();
+
+          User = {
+            id: 0,
+            name: name,
+            email: email,
+            password: password,
+            regDate: formattedDateTime
+          }
+          ajaxCall("POST", baseApi + "/register", JSON.stringify(User), successCBLogin, errorCBLogin);
+
+          return false;
+        })
+      });
+
+      $('#loginLi').click(function () {
+        if (localStorage["user"] != undefined) {
+          $("#mainFormDiv").html("");
+          $("#mainFormDiv").append('<h2 id="formHeader" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
+          $("#logoutBtn").click(() => {
+            alert("loggedout");
+            localStorage.removeItem("user");
+            render();
+            $("#HomeLi").click();
           })
         }
-      })
+      });
 
+      $('#loginLink').click(function () {
+        if (localStorage["user"] != undefined) { //logOut
+          localStorage.removeItem("user");
+          alert("loggedOut");
+        }
+        $("#mainFormDiv").html("");
+        $("#mainFormDiv").append('<h2 id="formHeader">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" pattern="^([a-zA-Z\d.-]+)@([a-zA-Z\d-]+)\.([a-zA-Z]{2,8})(\.[a-zA-Z]{2,8})?$" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" pattern="^[A-Z]+(?=.*\d).{7,}" title="The password must start with one or more uppercase letters and must be at least 8 characters long. It must also include at least one digit." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
+        render();
+        $('#loginForm').submit(function () {
+          let email = $("#logEmailInp").val();
+          let password = $("#logPassInp").val();
+          User = {
+            id: 0,
+            name: "string",
+            email: email,
+            password: password,
+            regDate: "2023-06-10T12:33:08.383Z"
+          }
+          ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
+
+          return false;
+        })
+      });
+
+      function successCBLogin(data) {
+        alert("signUp/login success")
+        localStorage["user"] = JSON.stringify(data);
+        $("#HomeLi").click();
+        render();
+      }
+      function errorCBLogin(error) {
+        let message = error.responseText;
+        Swal.fire({
+          icon: 'error',
+          text: message,
+        })
+      }
+
+    })
 
   </script>
   <script>
-      $(document).ready(() => {
-        for (let i = 0; i < 3; i++) {
-          ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
+    $(document).ready(() => {
+      for (let i = 0; i < 3; i++) {
+        ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
 
-        }
-      })
-
-      let i = 1;
-      function successCBRandom(data) {
-        $(`#randTitle${i}`).html(data.name)
-        $(`#randPara${i}`).html(data.artistName)
-        i++;
       }
+    })
+
+    let i = 1;
+    function successCBRandom(data) {
+      $(`#randTitle${i}`).html(data.name)
+      $(`#randPara${i}`).html(data.artistName)
+      i++;
+    }
   </script>
 </head>
 
@@ -93,12 +162,12 @@
           </header>
           <nav class="l-side-nav">
             <ul class="side-nav">
-              <li class="is-active"><span>Home</span></li>
+              <li id="HomeLi" class="is-active"><span>Home</span></li>
               <li><span>Songs</span></li>
               <li><span>Favorites</span></li>
               <li><span>Artists</span></li>
               <li><span>Quiz</span></li>
-              <li><span>Login</span></li>
+              <li id="loginLi"></li>
             </ul>
           </nav>
           <ul class="l-main-content main-content">
@@ -106,7 +175,7 @@
               <div class="intro">
                 <div class="intro--banner">
                   <h1>Your next<br>interactive<br>experience</h1>
-                  <button class="cta">Login
+                  <button id="loginLink" class="cta">Login
                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                       xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
                       style="enable-background:new 0 0 150 118;" xml:space="preserve">
@@ -117,6 +186,9 @@
                     </svg>
                     <span class="btn-background"></span>
                   </button>
+                  <br>
+                  <span id="notMember">Not a Member? </span><button id="signUpLink" class="cta notMember"><u>Sign Up
+                      Now</u></button>
                   <img src="assets/img/mainImage.png" alt="Welcome">
                 </div>
                 <div class="intro--options">
@@ -263,103 +335,7 @@
               </div>
             </li>
             <li class="l-section section">
-              <div class="hire">
-                <h2>Log in to enjoy your music</h2>
-                <!-- checkout formspree.io for easy form setup -->
-                <form id="loginForm" class="work-request">
-                  <!-- <div class="work-request--options">
-                    <span class="options-a">
-                      <input id="opt-1" type="checkbox" value="app design">
-                      <label for="opt-1">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 111"
-                          style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                          <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                            <path
-                              d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
-                          </g>
-                        </svg>
-                        App Design
-                      </label>
-                      <input id="opt-2" type="checkbox" value="graphic design">
-                      <label for="opt-2">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 111"
-                          style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                          <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                            <path
-                              d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
-                          </g>
-                        </svg>
-                        Graphic Design
-                      </label>
-                      <input id="opt-3" type="checkbox" value="motion design">
-                      <label for="opt-3">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 111"
-                          style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                          <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                            <path
-                              d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
-                          </g>
-                        </svg>
-                        Motion Design
-                      </label>
-                    </span>
-                    <span class="options-b">
-                      <input id="opt-4" type="checkbox" value="ux design">
-                      <label for="opt-4">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 111"
-                          style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                          <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                            <path
-                              d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
-                          </g>
-                        </svg>
-                        UX Design
-                      </label>
-                      <input id="opt-5" type="checkbox" value="webdesign">
-                      <label for="opt-5">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 111"
-                          style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                          <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                            <path
-                              d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
-                          </g>
-                        </svg>
-                        Webdesign
-                      </label>
-                      <input id="opt-6" type="checkbox" value="marketing">
-                      <label for="opt-6">
-                        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                          xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 111"
-                          style="enable-background:new 0 0 150 111;" xml:space="preserve">
-                          <g transform="translate(0.000000,111.000000) scale(0.100000,-0.100000)">
-                            <path
-                              d="M950,705L555,310L360,505C253,612,160,700,155,700c-6,0-44-34-85-75l-75-75l278-278L550-5l475,475c261,261,475,480,475,485c0,13-132,145-145,145C1349,1100,1167,922,950,705z" />
-                          </g>
-                        </svg>
-                        Marketing
-                      </label>
-                    </span>
-                  </div> -->
-                  <div class="work-request--information">
-                    <div class="information-email">
-                      <input id="logEmailInp" type="email" spellcheck="false">
-                      <label for="email">Email</label>
-                    </div>
-                    <div class="information-name">
-                      <input id="logPassInp" type="text" spellcheck="false">
-                      <label for="password">password</label>
-                    </div>
-                  </div>
-                  <input type="submit" value="Log In">
-                </form>
-                <div>
-                  <span>Not a Member? </span><a href="../Pages/register.html">Sign Up Now</a>
-                </div>
+              <div id="mainFormDiv" class="hire">
               </div>
             </li>
           </ul>
@@ -372,7 +348,7 @@
       <li>Favorites</li>
       <li>Artists</li>
       <li>Quiz</li>
-      <li>Login</li>
+      <li id="outBarLogin">Login</li>
     </ul>
   </div>
 
