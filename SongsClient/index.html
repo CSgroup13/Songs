@@ -33,10 +33,10 @@
         return false;
       })
 
-        function successCB(data) {
+        function successCBLogin(data) {
           localStorage["user"] = JSON.stringify(data);
         }
-        function errorCB(error) {
+        function errorCBLogin(error) {
           let message = error.responseText.split(" ");
           Swal.fire({
             icon: 'error',
