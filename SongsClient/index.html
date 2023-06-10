@@ -28,8 +28,18 @@
         ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
 
         return false;
-      })
 
+        for (let i = 0; i < 3; i++) {
+          ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
+
+        }
+      })
+      let i = 1;
+      function successCBRandom(data) {
+        $(`#randTitle${i}`).html(data.name)
+        $(`#randPara${i}`).html(data.artistName)
+        i++;
+      }
       function successCB(data) {
         localStorage["user"] = JSON.stringify(data);
       }
@@ -41,6 +51,8 @@
         })
       }
     })
+
+
   </script>
 </head>
 
@@ -101,16 +113,16 @@
                 </div>
                 <div class="intro--options">
                   <a href="#0">
-                    <h3>Metiew &amp; Smith</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
+                    <h3 id="randTitle1"></h3>
+                    <p id="randPara1"></p>
                   </a>
                   <a href="#0">
-                    <h3>Fantasy interactive</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
+                    <h3 id="randTitle2"></h3>
+                    <p id="randPara2"></p>
                   </a>
                   <a href="#0">
-                    <h3>Paul &amp; shark</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit sed do.</p>
+                    <h3 id="randTitle3"></h3>
+                    <p id="randPara3"></p>
                   </a>
                 </div>
               </div>
