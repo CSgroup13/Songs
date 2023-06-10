@@ -1875,3 +1875,19 @@ body {
     -webkit-transition-delay: .16s;
     transition-delay: .16s
 }
+.outer-nav li.is-vis:nth-child(6) {
+    -webkit-transition-delay: .20s;
+    transition-delay: .20s
+}
+
+#searchBtn{
+    width: 40%;
+}
+#search{
+height: auto;
+top:10%
+}
+#songs{
+    height: auto;
+    top:5%;
+}

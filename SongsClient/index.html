@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>SONGSHIVE</title>
+  <title>SongsHive</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,35 +33,21 @@
         return false;
       })
 
-        function successCBLogin(data) {
-          localStorage["user"] = JSON.stringify(data);
-        }
-        function errorCBLogin(error) {
-          let message = error.responseText.split(" ");
-          Swal.fire({
-            icon: 'error',
-            text: message,
-          })
-        }
-      })
-
-
-  </script>
-  <script>
-      $(document).ready(() => {
-        for (let i = 0; i < 3; i++) {
-          ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
-
-        }
-      })
-
-      let i = 1;
-      function successCBRandom(data) {
-        $(`#randTitle${i}`).html(data.name)
-        $(`#randPara${i}`).html(data.artistName)
-        i++;
+      function successCBLogin(data) {
+        localStorage["user"] = JSON.stringify(data);
       }
+      function errorCBLogin(error) {
+        let message = error.responseText.split(" ");
+        Swal.fire({
+          icon: 'error',
+          text: message,
+        })
+      }
+    })
+
+
   </script>
+
 </head>
 
 <body>
@@ -136,64 +122,37 @@
               </div>
             </li>
             <li class="l-section section">
-              <div class="work">
-                <h2>Your Favorite Songs</h2>
-                <div class="work--lockup">
-                  <ul class="slider">
-                    <li class="slider--item slider--item-left">
-                      <a href="#0">
-                        <div class="slider--item-image">
-                          <img src="assets/img/work-victory.jpg" alt="Victory">
-                        </div>
-                        <p class="slider--item-title">Victory</p>
-                        <p class="slider--item-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed
-                          do.</p>
-                      </a>
-                    </li>
-                    <li class="slider--item slider--item-center">
-                      <a href="#0">
-                        <div class="slider--item-image">
-                          <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
-                        </div>
-                        <p class="slider--item-title">Metiew &amp; Smith</p>
-                        <p class="slider--item-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed
-                          do.</p>
-                      </a>
-                    </li>
-                    <li class="slider--item slider--item-right">
-                      <a href="#0">
-                        <div class="slider--item-image">
-                          <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
-                        </div>
-                        <p class="slider--item-title">Alex Nowak</p>
-                        <p class="slider--item-description">Lorem ipsum dolor sit amet, consectetur adipisicing elit sed
-                          do.</p>
-                      </a>
-                    </li>
-                  </ul>
-                  <div class="slider--prev">
-                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
-                      style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                      <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                        <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
-                    c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
-                    c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z" />
-                      </g>
-                    </svg>
+              <div class="work" id="search">
+                <h2>Search Songs</h2>
+                <form id="searchForm" class="work-request">
+                  <div class="work-request--options">
+                    <span class="options-a">
+                      <input id="opt-1" type="checkbox" checked name="song-option" value="songName">
+                      <label for="opt-1">
+                        Song Name
+                      </label>
+                      <input id="opt-2" type="checkbox" name="song-option" value="artist">
+                      <label for="opt-2">
+                        Artist
+                      </label>
+                      <input id="opt-3" type="checkbox" name="song-option" value="lyrics">
+                      <label for="opt-3">
+                        Song Lyrics
+                      </label>
+                    </span>
+                    </span>
                   </div>
-                  <div class="slider--next">
-                    <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                      xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
-                      style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                      <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                        <path
-                          d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
-                      </g>
-                    </svg>
+                  <div class="work-request--information">
+                    <div class="information-email">
+                      <input type="text" id="searchInput" spellcheck="false">
+                      <label for="text">search</label>
+                    </div>
+                    <input type="submit" id="searchBtn" value="Search">
                   </div>
-                </div>
+                </form>
               </div>
+              <div class="work" id="songs">
+
             </li>
             <li class="l-section section">
               <div class="about">
@@ -379,6 +338,226 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
   <script src="assets/js/functions-min.js"></script>
+  <script>
+    const baseApiOfek = 'https://localhost:7091/api/'
+    $(document).ready(() => {
+      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom1, errorCB);
+      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom2, errorCB);
+      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom3, errorCB);
+
+      const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
+
+      // Add event listener to each checkbox
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+          // Uncheck all checkboxes except the current one
+          checkboxes.forEach(function (cb) {
+            if (cb !== checkbox) {
+              cb.checked = false;
+            }
+          });
+        });
+      });
+      $()
+      $("#searchForm").submit(() => {
+        const checkedValue = document.querySelector('input[name="song-option"]:checked').value;
+        let serachApi;
+        let userInput = $('#searchInput').val();
+        switch (checkedValue) {
+          case "songName":
+            serachApi = baseApiOfek + `Songs/${userInput}/info`
+            break;
+          case "artist":
+            serachApi = baseApiOfek + `Artists/${userInput}/songs`
+            break;
+          case "lyrics":
+            serachApi = baseApiOfek + `Songs/songBylyrics?lyrics=${userInput}`
+            break;
+          default: return false;
+        }
+        ajaxCall("GET", serachApi, "", successCBSong, errorCB);
+        return false;
+      })
+
+    })
+
+    function successCBSong(data) {
+      console.log(data)
+      $("#songs").html("")
+      console.log(data.length)
+      if (data.length === undefined) {
+        $("#songs").append(`<h2>Results:</h2>
+                  <div class="work--lockup">
+                    <ul class="slider">
+                      <li class="slider--item slider--item-center">
+                        <a href="#0">
+                          <div class="slider--item-image">
+                            <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+                          </div>
+                          <p class="slider--item-title">${data.name}</p>
+                          <p class="slider--item-description">${data.artistName}</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>`)
+      }
+      else {
+        let restOfSongs = "";
+        restOfSongs += `<h2>Results:</h2>
+           <div class="work--lockup">
+            <ul class="slider">
+            <li class="slider--item slider--item-left">
+            <a href="#0">
+            <div class="slider--item-image">
+            <img src="assets/img/work-victory.jpg" alt="Victory">
+            </div>
+            <p class="slider--item-title">${data[0].name}</p>
+            <p class="slider--item-description">${data[0].artistName}</p>
+            </a>
+            </li>
+            <li class="slider--item slider--item-center">
+            <a href="#0">
+            <div class="slider--item-image">
+            <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+            </div>
+            <p class="slider--item-title">${data[1].name}</p>
+            <p class="slider--item-description">${data[1].artistName}</p>
+            </a>
+            </li>
+            <li class="slider--item slider--item-right">
+            <a href="#0">
+            <div class="slider--item-image">
+            <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+            </div>
+            <p class="slider--item-title">${data[2].name}</p>
+            <p class="slider--item-description">${data[2].artistName}</p>
+            </a>
+            </li>`
+        for (let i = 3; i < data.length - 3; i++) {
+          restOfSongs += ` <li class="slider--item">
+             <a href="#0">
+             <div class="slider--item-image">
+             <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+             </div>
+             <p class="slider--item-title">${data[i].name}</p>
+             <p class="slider--item-description">${data[i].artistName}</p>
+             </a>
+             </li>`
+        }
+        restOfSongs += `</ul>
+        <div class="slider--prev">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
+                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
+                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                          <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
+                      c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
+                      c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z" />
+                        </g></svg></div>
+                        <div class="slider--next"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
+                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
+                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                          <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
+                        </g></svg></div></div>`
+        $("#songs").append(restOfSongs);
+        workSlider()
+      }
+    }
+    function workSlider() {
+
+      $('.slider--prev, .slider--next').click(function () {
+
+        var $this = $(this),
+          curLeft = $('.slider').find('.slider--item-left'),
+          curLeftPos = $('.slider').children().index(curLeft),
+          curCenter = $('.slider').find('.slider--item-center'),
+          curCenterPos = $('.slider').children().index(curCenter),
+          curRight = $('.slider').find('.slider--item-right'),
+          curRightPos = $('.slider').children().index(curRight),
+          totalWorks = $('.slider').children().length,
+          $left = $('.slider--item-left'),
+          $center = $('.slider--item-center'),
+          $right = $('.slider--item-right'),
+          $item = $('.slider--item');
+        console.log("works:" + totalWorks)
+        $('.slider').animate({ opacity: 0 }, 400);
+
+        setTimeout(function () {
+
+          if ($this.hasClass('slider--next')) {
+            if (curLeftPos < totalWorks - 1 && curCenterPos < totalWorks - 1 && curRightPos < totalWorks - 1) {
+              $left.removeClass('slider--item-left').next().addClass('slider--item-left');
+              $center.removeClass('slider--item-center').next().addClass('slider--item-center');
+              $right.removeClass('slider--item-right').next().addClass('slider--item-right');
+            }
+            else {
+              if (curLeftPos === totalWorks - 1) {
+                $item.removeClass('slider--item-left').first().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').next().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').next().addClass('slider--item-right');
+              }
+              else if (curCenterPos === totalWorks - 1) {
+                $left.removeClass('slider--item-left').next().addClass('slider--item-left');
+                $item.removeClass('slider--item-center').first().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').next().addClass('slider--item-right');
+              }
+              else {
+                $left.removeClass('slider--item-left').next().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').next().addClass('slider--item-center');
+                $item.removeClass('slider--item-right').first().addClass('slider--item-right');
+              }
+            }
+          }
+          else {
+            if (curLeftPos !== 0 && curCenterPos !== 0 && curRightPos !== 0) {
+              $left.removeClass('slider--item-left').prev().addClass('slider--item-left');
+              $center.removeClass('slider--item-center').prev().addClass('slider--item-center');
+              $right.removeClass('slider--item-right').prev().addClass('slider--item-right');
+            }
+            else {
+              if (curLeftPos === 0) {
+                $item.removeClass('slider--item-left').last().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').prev().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').prev().addClass('slider--item-right');
+              }
+              else if (curCenterPos === 0) {
+                $left.removeClass('slider--item-left').prev().addClass('slider--item-left');
+                $item.removeClass('slider--item-center').last().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').prev().addClass('slider--item-right');
+              }
+              else {
+                $left.removeClass('slider--item-left').prev().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').prev().addClass('slider--item-center');
+                $item.removeClass('slider--item-right').last().addClass('slider--item-right');
+              }
+            }
+          }
+
+        }, 400);
+
+        $('.slider').animate({ opacity: 1 }, 400);
+
+      });
+
+    }
+    function successCBRandom1(data) {
+      $(`#randTitle1`).html(data.name)
+      $(`#randPara1`).html(data.artistName)
+    }
+    function successCBRandom2(data) {
+      $(`#randTitle2`).html(data.name)
+      $(`#randPara2`).html(data.artistName)
+    }
+    function successCBRandom3(data) {
+      $(`#randTitle3`).html(data.name)
+      $(`#randPara3`).html(data.artistName)
+    }
+
+    function errorCB(data) {
+      console.log(data);
+    }
+  </script>
 </body>
 
 </html>

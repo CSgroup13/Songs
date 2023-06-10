@@ -29,7 +29,7 @@ namespace SongsServer.Controllers
         }
         // GET: api/<SongsController>/songBylyrics
         [HttpGet("songBylyrics")]
-        public Song getByLyrics([FromBody] string lyrics)
+        public Song getByLyrics(string lyrics)
         {
             return Song.getByLyrics(lyrics);
         }
