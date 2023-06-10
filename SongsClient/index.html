@@ -14,7 +14,8 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous">
     </script>
-  <script src="../JS/ajaxCalls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="./assets/js/ajaxCalls.js"></script>
   <script>
     const baseApi = 'https://localhost:7091/api/Users'
     $(document).ready(() => {
@@ -33,15 +34,16 @@
         return false;
       })
 
-      function successCB(data) {
+      function successCBLogin(data) {
         localStorage["user"] = JSON.stringify(data);
       }
-      function errorCB(error) {
-        let message = error.responseText.split(" ");
-        Swal.fire({
-          icon: 'error',
-          text: message,
-        })
+      function errorCBLogin(error) {
+        console.log(error);
+        // let message = error.responseText.split(" ");
+        // Swal.fire({
+        //   icon: 'error',
+        //   text: message,
+        // })
       }
     })
   </script>
