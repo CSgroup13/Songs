@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SongsServer.Models;
+using System.Diagnostics.Eventing.Reader;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -54,16 +55,22 @@ namespace SongsServer.Controllers
 
         // POST api/<UsersController>/login/1/1
         [HttpPost("{userId}/{songId}")]
-        public bool addSongToFav(int userId, int songId)
+        public IActionResult addSongToFav(int userId, int songId)
         {
-            return UserClass.addSongToFav(userId, songId);
+            if(UserClass.addSongToFav(userId, songId))
+                return Ok(true);
+                return BadRequest("Song is already in favorites");
+            
+            
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{userId}/{songId}")]
-        public bool deleteSongFromFav(int userId, int songId)
+        public IActionResult deleteSongFromFav(int userId, int songId)
         {
-            return UserClass.deleteSongFromFav(userId, songId);
+            if (UserClass.deleteSongFromFav(userId, songId))
+                return Ok(true);
+            return BadRequest("Song is not in favorites");
         }
     }
 }

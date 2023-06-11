@@ -11,9 +11,17 @@ namespace SongsServer.Controllers
     {
         // GET: api/<ArtistsController>
         [HttpGet]
-        public List<Artist> getAllArtists()
+        public IActionResult getAllArtists()
         {
-            return Artist.getAllArtists();
+
+            try
+            {
+                return Ok(Artist.getAllArtists());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{artistName}/songs")]

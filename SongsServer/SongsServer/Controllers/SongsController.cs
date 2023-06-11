@@ -11,27 +11,52 @@ namespace SongsServer.Controllers
     {
         // GET: api/<SongsController>
         [HttpGet]
-        public List<Song> getAllSongs()
+        public IActionResult getAllSongs()
         {
-            return Song.getAllSongs();
+            try
+            {
+                return Ok(Song.getAllSongs());
+            }
+            catch (Exception ex) { return BadRequest(ex.Message); }
         }
         // GET: api/<SongsController>/randomSong
         [HttpGet("randomSong")]
-        public Song getRandomSong()
+        public IActionResult getRandomSong()
         {
-            return Song.getRandomSong();
+            try
+            {
+                return Ok(Song.getRandomSong());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         // GET: api/<SongsController>/{songName}/info
         [HttpGet("{songName}/info")]
-        public Song getSongByName(string songName)
+        public IActionResult getSongByName(string songName)
         {
-            return Song.getSongByName(songName);
+            try
+            {
+                return Ok(Song.getSongByName(songName));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
         // GET: api/<SongsController>/songBylyrics
         [HttpGet("songBylyrics")]
-        public Song getByLyrics(string lyrics)
+        public IActionResult getByLyrics(string lyrics)
         {
-            return Song.getByLyrics(lyrics);
+            try
+            {
+                return Ok(Song.getByLyrics(lyrics));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET api/<SongsController>/5
@@ -43,9 +68,16 @@ namespace SongsServer.Controllers
 
         // POST api/<SongsController>
         [HttpPost]
-        public bool Post([FromBody] Song s)
+        public IActionResult Post([FromBody] Song s)
         {
-            return s.InsertSong();
+            try
+            {
+                return Ok(s.InsertSong());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // PUT api/<SongsController>/5
