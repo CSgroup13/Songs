@@ -116,40 +116,7 @@
     })
 
   </script>
-  <script>
-    $(document).ready(() => {
-      for (let i = 0; i < 3; i++) {
-        ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
-
-      }
-    })
-
-    let i = 1;
-    function successCBRandom(data) {
-      $(`#randTitle${i}`).html(data.name)
-      $(`#randPara${i}`).html(data.artistName)
-      i++;
-    }
-        ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
-
-        return false;
-      })
-
-      function successCBLogin(data) {
-        localStorage["user"] = JSON.stringify(data);
-      }
-      function errorCBLogin(error) {
-        let message = error.responseText.split(" ");
-        Swal.fire({
-          icon: 'error',
-          text: message,
-        })
-      }
-    })
-
-
-  </script>
-
+ 
 </head>
 
 <body>
