@@ -229,6 +229,7 @@
                     <input type="submit" id="searchBtn" value="Search">
                   </div>
                 </form>
+                <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
               </div>
               <div class="work" id="songs">
 
@@ -371,7 +372,7 @@
           return;
         }
         ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
-        
+
       })
 
     })
@@ -380,6 +381,19 @@
         icon: 'success',
         text: "Song added to your Favorites"
       })
+    }
+    runSpeechRecog = () => {
+      var output = $("#searchInput");
+      let recognization = new webkitSpeechRecognition();
+      recognization.onstart = () => {
+        output.innerHTML = "Listening...";
+      }
+      recognization.onresult = (e) => {
+        var transcript = e.results[0][0].transcript;
+        output.val( transcript);
+        console.log(transcript)
+      }
+      recognization.start();
     }
     function successCBSong(data) {
       console.log(data)
