@@ -671,8 +671,8 @@ body {
 
 .side-nav li.logout::before {
     content: "Logout";
-  }
-  
+}
+
 .side-nav li.is-active {
     color: #0f33ff;
     -webkit-transition: color .4s ease-in-out;
@@ -911,7 +911,7 @@ body {
     }
 }
 
-.btnbtn{
+.btnbtn {
     margin-right: auto;
     margin-left: auto;
     margin-top: 30px;
@@ -1679,6 +1679,11 @@ body {
     top: -15px;
     font-size: 14px
 }
+.has-value{
+    background-color: black;
+    color: blue;
+
+}
 
 @media (max-width: 767px) {
     .work-request--options {
@@ -1894,19 +1899,22 @@ body {
     -webkit-transition-delay: .16s;
     transition-delay: .16s
 }
+
 .outer-nav li.is-vis:nth-child(6) {
     -webkit-transition-delay: .20s;
     transition-delay: .20s
 }
 
-#searchBtn{
+#searchBtn {
     width: 40%;
 }
-#search{
-height: auto;
-top:10%
-}
-#songs{
+
+#search {
     height: auto;
-    top:5%;
+    top: 10%
+}
+
+#songs {
+    height: auto;
+    top: 5%;
 }

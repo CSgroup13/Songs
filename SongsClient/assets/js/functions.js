@@ -250,9 +250,7 @@ $(document).ready(function () {
   }
 
   function transitionLabels() {
-
     $('.work-request--information input').focusout(function () {
-
       var textVal = $(this).val();
 
       if (textVal === "") {

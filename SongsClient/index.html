@@ -11,7 +11,6 @@
   <meta name="author" content="Bucky Maler">
   <link rel="icon" href="./assets/img/logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous">
     </script>
@@ -20,101 +19,182 @@
   <script>
     const baseApi = 'https://localhost:7091/api/Users'
     $(document).ready(() => {
-      let render = () => {
-        if (localStorage["user"] != undefined) {
+      let updateLoginPage = (page) => {
+        $("#mainFormDiv").html("");
+        if (page === "logout") {//logout page
+          $("#mainFormDiv").append('<h2 id="formHeader" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
+          $("#logoutBtn").click(() => {
+            localStorage.removeItem("user");
+            Swal.fire({
+              icon: 'success',
+              text: "You Logged Out!",
+              color: 'white',
+              background: '#080808'
+            })
+            updateLoginBtns();
+            $("#HomeLi").click();
+          })
+        }
+        else if (page === "login") { //login page
+          $("#mainFormDiv").append('<h2 id="formHeader">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
+          $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
+          $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
+          $('#loginForm').submit(function () {
+            let email = $("#logEmailInp").val();
+            let password = $("#logPassInp").val();
+            User = {
+              id: 0,
+              name: "string",
+              email: email,
+              password: password,
+              regDate: "2023-06-10T12:33:08.383Z"
+            }
+            ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
+            return false;
+          })
+        }
+        else { //signup page
+          $("#mainFormDiv").append('<h2 id="formHeader">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" title="name must include only letters" required ><label for="name">Name</label></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required ><label for="email">Email</label></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">Password</label></div></div><input type="submit" value="Sign Up"></form>');
+          $('#regNameInp').attr('pattern', '[a-zA-Z]+');
+          $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
+          $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
+          $('#signUpForm').submit(function () {
+            let email = $("#regEmailInp").val();
+            let password = $("#regPassInp").val();
+            let name = $("#regNameInp").val();
+            let currentDateTime = new Date();
+            let formattedDateTime = currentDateTime.toISOString();
+            User = {
+              id: 0,
+              name: name,
+              email: email,
+              password: password,
+              regDate: formattedDateTime
+            }
+            ajaxCall("POST", baseApi + "/register", JSON.stringify(User), successCBSignUp, errorCBLogin);
+            return false;
+          })
+        }
+      }
+
+      let updateLoginBtns = () => {
+        if (localStorage["user"] != undefined) { //user logged in
           $(".header--cta").html("Hello " + JSON.parse(localStorage["user"]).name);
           $("#loginLink").html('LOGOUT <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
           $('#notMember').hide();
           $('#signUpLink').hide();
           $('.side-nav li:nth-child(6)').addClass('logout');
           $("#outBarLogin").html("Logout");
+          updateLoginPage("logout");
         }
-        else {
+        else { //guest
           $(".header--cta").html("Hello Guest");
           $("#loginLink").html('Login <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
           $('#notMember').show();
           $('#signUpLink').show();
           $('.side-nav li:nth-child(6)').removeClass('logout');
           $("#outBarLogin").html("Login");
+          updateLoginPage("login");
         }
       }
 
-      render();
+      updateLoginBtns();
+      updateLoginPage("login");
+
       $('#signUpLink').click(function () {
-        $("#mainFormDiv").html("");
-        $("#mainFormDiv").append('<h2 id="formHeader">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" pattern="[a-zA-Z]+" title="name must include only letters" required ><label for="name">Name</label></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" pattern="^([a-zA-Z\d.-]+)@([a-zA-Z\d-]+)\.([a-zA-Z]{2,8})(\.[a-zA-Z]{2,8})?$" title="example12@example.exapmle" required ><label for="email">Email</label></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" pattern="^[A-Z]+(?=.*\d).{7,}" title="The password must start with one or more uppercase letters and must be at least 8 characters long. It must also include at least one digit." required><label for="password">Password</label></div></div><input type="submit" value="Sign Up"></form>');
-        $('#signUpForm').submit(function () {
-          let email = $("#regEmailInp").val();
-          let password = $("#regPassInp").val();
-          let name = $("#regNameInp").val();
-          let currentDateTime = new Date();
-          let formattedDateTime = currentDateTime.toISOString();
-
-          User = {
-            id: 0,
-            name: name,
-            email: email,
-            password: password,
-            regDate: formattedDateTime
-          }
-          ajaxCall("POST", baseApi + "/register", JSON.stringify(User), successCBLogin, errorCBLogin);
-
-          return false;
-        })
+        updateLoginPage("signup");
       });
 
       $('#loginLi').click(function () {
-        if (localStorage["user"] != undefined) {
-          $("#mainFormDiv").html("");
-          $("#mainFormDiv").append('<h2 id="formHeader" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
-          $("#logoutBtn").click(() => {
-            alert("loggedout");
-            localStorage.removeItem("user");
-            render();
-            $("#HomeLi").click();
-          })
+        if (localStorage["user"] != undefined) { //user logged in
+          updateLoginPage("logout");
+        }
+        else {
+          updateLoginPage("login");
         }
       });
 
       $('#loginLink').click(function () {
-        if (localStorage["user"] != undefined) { //logOut
+        if (localStorage["user"] != undefined) { //user want to logOut
           localStorage.removeItem("user");
-          alert("loggedOut");
+          Swal.fire({
+            icon: 'success',
+            text: "You Logged Out!",
+            color: 'white',
+            background: '#080808'
+          })
+          updateLoginBtns();
+          $("#HomeLi").click();
         }
-        $("#mainFormDiv").html("");
-        $("#mainFormDiv").append('<h2 id="formHeader">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" pattern="^([a-zA-Z\d.-]+)@([a-zA-Z\d-]+)\.([a-zA-Z]{2,8})(\.[a-zA-Z]{2,8})?$" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" pattern="^[A-Z]+(?=.*\d).{7,}" title="The password must start with one or more uppercase letters and must be at least 8 characters long. It must also include at least one digit." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
-        render();
-        $('#loginForm').submit(function () {
-          let email = $("#logEmailInp").val();
-          let password = $("#logPassInp").val();
-          User = {
-            id: 0,
-            name: "string",
-            email: email,
-            password: password,
-            regDate: "2023-06-10T12:33:08.383Z"
-          }
-          ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
-
-          return false;
-        })
+        else { //user want to login
+          updateLoginPage("login");
+        }
       });
 
       function successCBLogin(data) {
-        alert("signUp/login success")
+        Swal.fire({
+          icon: 'success',
+          text: "You Logged In Successfully!",
+          color: 'white',
+          background: '#080808'
+        })
         localStorage["user"] = JSON.stringify(data);
         $("#HomeLi").click();
-        render();
+        updateLoginBtns();
       }
+
+      function successCBSignUp(data) {
+        Swal.fire({
+          icon: 'success',
+          text: "You Signed Up Successfully!",
+          color: 'white',
+          background: '#080808'
+        })
+        localStorage["user"] = JSON.stringify(data);
+        $("#HomeLi").click();
+        updateLoginBtns();
+      }
+
       function errorCBLogin(error) {
         let message = error.responseText;
         Swal.fire({
           icon: 'error',
           text: message,
+          color: 'white',
+          background: '#080808'
         })
       }
-
     })
+
+  </script>
+  <script>
+    $(document).ready(() => {
+      for (let i = 0; i < 3; i++) {
+        ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
+
+      }
+    })
+
+    let i = 1;
+    function successCBRandom(data) {
+      $(`#randTitle${i}`).html(data.name)
+      $(`#randPara${i}`).html(data.artistName)
+      i++;
+      ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
+
+      return false;
+    }
+
+    function successCBLogin(data) {
+      localStorage["user"] = JSON.stringify(data);
+    }
+    function errorCBLogin(error) {
+      let message = error.responseText.split(" ");
+      Swal.fire({
+        icon: 'error',
+        text: message,
+      })
+    }
 
   </script>
 
@@ -138,11 +218,11 @@
       <div id="viewport" class="l-viewport">
         <div class="l-wrapper">
           <header class="header">
-            <a class="header--logo" href="#0">
+            <a class="header--logo" href="./index.html">
               <img src="assets/img/logo.png" alt="Global">
               <p>SongsHive</p>
             </a>
-            <button class="header--cta cta">Hello Ofek</button>
+            <button class="header--cta cta">Hello</button>
             <div class="header--nav-toggle">
               <span></span>
             </div>
@@ -179,23 +259,17 @@
                   <img src="assets/img/mainImage.png" alt="Welcome">
                 </div>
                 <div class="intro--options">
-                  <a class="randSongs randSong1">
-                    <h3 class="randTitle1" style="display: inline-block;"></h3>
-                    <p class="randPara1"></p>
-                    <br>
-                    <i class="fa fa-heart-o " id="randHeart1" style="font-size:16px;"></i>
+                  <a href="#0">
+                    <h3 id="randTitle1"></h3>
+                    <p id="randPara1"></p>
                   </a>
-                  <a class="randSongs">
-                    <h3 class="randTitle2"></h3>
-                    <p class="randPara2"></p>
-                    <br>
-                    <i class="fa fa-heart-o " id="randHeart2" style="font-size:16px;"></i>
+                  <a href="#0">
+                    <h3 id="randTitle2"></h3>
+                    <p id="randPara2"></p>
                   </a>
-                  <a class="randSongs">
-                    <h3 class="randTitle3"></h3>
-                    <p class="randPara3"></p>
-                    <br>
-                    <i class="fa fa-heart-o" id="randHeart3" style="font-size:16px;"></i>
+                  <a href="#0">
+                    <h3 id="randTitle3"></h3>
+                    <p id="randPara3"></p>
                   </a>
                 </div>
               </div>
@@ -229,7 +303,6 @@
                     <input type="submit" id="searchBtn" value="Search">
                   </div>
                 </form>
-                <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
               </div>
               <div class="work" id="songs">
 
@@ -323,11 +396,11 @@
   <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
   <script src="assets/js/functions-min.js"></script>
   <script>
-    const baseApiOfek = 'https://localhost:7091/api'
+    const baseApiOfek = 'https://localhost:7091/api/'
     $(document).ready(() => {
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom1, errorCB);
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom2, errorCB);
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom3, errorCB);
+      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom1, errorCB);
+      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom2, errorCB);
+      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom3, errorCB);
 
       const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
 
@@ -349,13 +422,13 @@
         let userInput = $('#searchInput').val();
         switch (checkedValue) {
           case "songName":
-            serachApi = baseApiOfek + `/Songs/${userInput}/info`
+            serachApi = baseApiOfek + `Songs/${userInput}/info`
             break;
           case "artist":
-            serachApi = baseApiOfek + `/Artists/${userInput}/songs`
+            serachApi = baseApiOfek + `Artists/${userInput}/songs`
             break;
           case "lyrics":
-            serachApi = baseApiOfek + `/Songs/songBylyrics?lyrics=${userInput}`
+            serachApi = baseApiOfek + `Songs/songBylyrics?lyrics=${userInput}`
             break;
           default: return false;
         }
@@ -363,38 +436,8 @@
         return false;
       })
 
-      $(".randSongs").on("click", function () {
-        if (localStorage.user === undefined) {
-          Swal.fire({
-            icon: 'error',
-            text: "Please Log in to add song to Favorites",
-          })
-          return;
-        }
-        ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
-
-      })
-
     })
-    function successCBAddToFavorite() {
-      Swal.fire({
-        icon: 'success',
-        text: "Song added to your Favorites"
-      })
-    }
-    runSpeechRecog = () => {
-      var output = $("#searchInput");
-      let recognization = new webkitSpeechRecognition();
-      recognization.onstart = () => {
-        output.innerHTML = "Listening...";
-      }
-      recognization.onresult = (e) => {
-        var transcript = e.results[0][0].transcript;
-        output.val( transcript);
-        console.log(transcript)
-      }
-      recognization.start();
-    }
+
     function successCBSong(data) {
       console.log(data)
       $("#songs").html("")
@@ -556,27 +599,20 @@
 
     }
     function successCBRandom1(data) {
-      $(`.randTitle1`).html(data.name)
-      $(`.randPara1`).html(data.artistName)
-      $(`.randSong1`).attr('id', data.id)
+      $(`#randTitle1`).html(data.name)
+      $(`#randPara1`).html(data.artistName)
     }
     function successCBRandom2(data) {
-      $(`.randTitle2`).html(data.name)
-      $(`.randPara2`).html(data.artistName)
-      $(`.randSong2`).attr('id', data.id)
+      $(`#randTitle2`).html(data.name)
+      $(`#randPara2`).html(data.artistName)
     }
     function successCBRandom3(data) {
-      $(`.randSong3`).attr('id', data.id)
-      $(`.randTitle3`).html(data.name)
-      $(`.randPara3`).html(data.artistName)
+      $(`#randTitle3`).html(data.name)
+      $(`#randPara3`).html(data.artistName)
     }
 
-    function errorCB(error) {
-      let message = error.responseText;
-      Swal.fire({
-        icon: 'error',
-        text: message,
-      })
+    function errorCB(data) {
+      console.log(data);
     }
   </script>
 </body>
