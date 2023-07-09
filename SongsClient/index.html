@@ -11,6 +11,7 @@
   <meta name="author" content="Bucky Maler">
   <link rel="icon" href="./assets/img/logo.png">
   <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous">
     </script>
@@ -154,7 +155,6 @@
         $("#HomeLi").click();
         updateLoginBtns();
       }
-
       function errorCBLogin(error) {
         let message = error.responseText;
         Swal.fire({
@@ -165,36 +165,6 @@
         })
       }
     })
-
-  </script>
-  <script>
-    $(document).ready(() => {
-      for (let i = 0; i < 3; i++) {
-        ajaxCall("GET", `https://localhost:7091/api/Songs/randomSong`, "", successCBRandom, errorCB);
-
-      }
-    })
-
-    let i = 1;
-    function successCBRandom(data) {
-      $(`#randTitle${i}`).html(data.name)
-      $(`#randPara${i}`).html(data.artistName)
-      i++;
-      ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
-
-      return false;
-    }
-
-    function successCBLogin(data) {
-      localStorage["user"] = JSON.stringify(data);
-    }
-    function errorCBLogin(error) {
-      let message = error.responseText.split(" ");
-      Swal.fire({
-        icon: 'error',
-        text: message,
-      })
-    }
 
   </script>
 
@@ -222,7 +192,7 @@
               <img src="assets/img/logo.png" alt="Global">
               <p>SongsHive</p>
             </a>
-            <button class="header--cta cta">Hello</button>
+            <button class="header--cta cta">Hello Ofek</button>
             <div class="header--nav-toggle">
               <span></span>
             </div>
@@ -259,17 +229,23 @@
                   <img src="assets/img/mainImage.png" alt="Welcome">
                 </div>
                 <div class="intro--options">
-                  <a href="#0">
-                    <h3 id="randTitle1"></h3>
-                    <p id="randPara1"></p>
+                  <a class="randSongs randSong1">
+                    <h3 class="randTitle1" style="display: inline-block;"></h3>
+                    <p class="randPara1"></p>
+                    <br>
+                    <i class="fa fa-heart-o " id="randHeart1" style="font-size:16px;"></i>
                   </a>
-                  <a href="#0">
-                    <h3 id="randTitle2"></h3>
-                    <p id="randPara2"></p>
+                  <a class="randSongs">
+                    <h3 class="randTitle2"></h3>
+                    <p class="randPara2"></p>
+                    <br>
+                    <i class="fa fa-heart-o " id="randHeart2" style="font-size:16px;"></i>
                   </a>
-                  <a href="#0">
-                    <h3 id="randTitle3"></h3>
-                    <p id="randPara3"></p>
+                  <a class="randSongs">
+                    <h3 class="randTitle3"></h3>
+                    <p class="randPara3"></p>
+                    <br>
+                    <i class="fa fa-heart-o" id="randHeart3" style="font-size:16px;"></i>
                   </a>
                 </div>
               </div>
@@ -303,6 +279,9 @@
                     <input type="submit" id="searchBtn" value="Search">
                   </div>
                 </form>
+                <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
+                <button onclick="authenticate().then(loadClient)">authorize and load</button>
+<button onclick="execute()">execute</button>
               </div>
               <div class="work" id="songs">
 
@@ -396,11 +375,11 @@
   <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
   <script src="assets/js/functions-min.js"></script>
   <script>
-    const baseApiOfek = 'https://localhost:7091/api/'
+    const baseApiOfek = 'https://localhost:7091/api'
     $(document).ready(() => {
-      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom1, errorCB);
-      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom2, errorCB);
-      ajaxCall("GET", baseApiOfek + `Songs/randomSong`, "", successCBRandom3, errorCB);
+      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom1, errorCB);
+      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom2, errorCB);
+      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom3, errorCB);
 
       const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
 
@@ -422,13 +401,13 @@
         let userInput = $('#searchInput').val();
         switch (checkedValue) {
           case "songName":
-            serachApi = baseApiOfek + `Songs/${userInput}/info`
+            serachApi = baseApiOfek + `/Songs/${userInput}/info`
             break;
           case "artist":
-            serachApi = baseApiOfek + `Artists/${userInput}/songs`
+            serachApi = baseApiOfek + `/Artists/${userInput}/songs`
             break;
           case "lyrics":
-            serachApi = baseApiOfek + `Songs/songBylyrics?lyrics=${userInput}`
+            serachApi = baseApiOfek + `/Songs/songBylyrics?lyrics=${userInput}`
             break;
           default: return false;
         }
@@ -436,8 +415,38 @@
         return false;
       })
 
-    })
+      $(".randSongs").on("click", function () {
+        if (localStorage.user === undefined) {
+          Swal.fire({
+            icon: 'error',
+            text: "Please Log in to add song to Favorites",
+          })
+          return;
+        }
+        ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
 
+      })
+
+    })
+    function successCBAddToFavorite() {
+      Swal.fire({
+        icon: 'success',
+        text: "Song added to your Favorites"
+      })
+    }
+    runSpeechRecog = () => {
+      var output = $("#searchInput");
+      let recognization = new webkitSpeechRecognition();
+      recognization.onstart = () => {
+        output.innerHTML = "Listening...";
+      }
+      recognization.onresult = (e) => {
+        var transcript = e.results[0][0].transcript;
+        output.val( transcript);
+        console.log(transcript)
+      }
+      recognization.start();
+    }
     function successCBSong(data) {
       console.log(data)
       $("#songs").html("")
@@ -599,22 +608,66 @@
 
     }
     function successCBRandom1(data) {
-      $(`#randTitle1`).html(data.name)
-      $(`#randPara1`).html(data.artistName)
+      $(`.randTitle1`).html(data.name)
+      $(`.randPara1`).html(data.artistName)
+      $(`.randSong1`).attr('id', data.id)
     }
     function successCBRandom2(data) {
-      $(`#randTitle2`).html(data.name)
-      $(`#randPara2`).html(data.artistName)
+      $(`.randTitle2`).html(data.name)
+      $(`.randPara2`).html(data.artistName)
+      $(`.randSong2`).attr('id', data.id)
     }
     function successCBRandom3(data) {
-      $(`#randTitle3`).html(data.name)
-      $(`#randPara3`).html(data.artistName)
+      $(`.randSong3`).attr('id', data.id)
+      $(`.randTitle3`).html(data.name)
+      $(`.randPara3`).html(data.artistName)
     }
 
-    function errorCB(data) {
-      console.log(data);
+    function errorCB(error) {
+      let message = error.responseText;
+      Swal.fire({
+        icon: 'error',
+        text: message,
+      })
     }
   </script>
+  <script src="https://apis.google.com/js/api.js"></script>
+<script>
+  /**
+   * Sample JavaScript code for youtube.search.list
+   * See instructions for running APIs Explorer code samples locally:
+   * https://developers.google.com/explorer-help/code-samples#javascript
+   */
+
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://www.googleapis.com/auth/youtube.force-ssl"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    gapi.client.setApiKey("AIzaSyA0myQXBGlJF9glTLy5OKyLna33CfgTvzA");
+    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute() {
+    return gapi.client.youtube.search.list({
+      "q": "dior"
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }
+  gapi.load("client:auth2", function() {
+    gapi.auth2.init({client_id: "YOUR_CLIENT_ID"});
+  });
+</script>
+
+
 </body>
 
 </html>
