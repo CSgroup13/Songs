@@ -20,6 +20,8 @@
   <script>
     const baseApi = 'https://localhost:7091/api/Users'
     $(document).ready(() => {
+
+      ////////////////////////login and register///////////////////
       let updateLoginPage = (page) => {
         $("#mainFormDiv").html("");
         if (page === "logout") {//logout page
@@ -164,6 +166,48 @@
           background: '#080808'
         })
       }
+
+      ////////////////////////Favorites Songs///////////////////
+
+      let renderFavorites = () => {
+        if (localStorage["user"] !== undefined) {
+          let userId = JSON.parse(localStorage["user"]).id;
+          ajaxCall("GET", `${baseApi}/${userId}/songs`, "", successCBFavorites, errorCBFavorites);
+        }
+        else {
+          console.log("no login")
+          $("#favoriteSongs").html("<h3>You should login first to see your favorite songs</h3>");
+        }
+      }
+
+      function successCBFavorites(data) {
+        console.log(data);
+        if (data.length === 0) {
+          $("#favoriteSongs").html("<h3>You don't have favorite songs</h3>");
+        }
+        else {
+          let favoritesDiv = $("#favoriteSongs");
+          favoritesDiv.innerHTML = "";
+          for (let song of data) {
+            let songDiv = `<a id=${song.id} class="favSong">
+                    <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
+                    <p class="favP">${song.artistName}</p>
+                    <br>
+                    <i class="fa fa-heart-o " id="randHeart1" style="font-size:16px;"></i>
+                  </a>`;
+            favoritesDiv.append(songDiv);
+          }
+        }
+      }
+      function errorCBFavorites(error) {
+        let message = error.responseText;
+        Swal.fire({
+          icon: 'error',
+          text: message,
+          color: 'white',
+          background: '#080808'
+        })
+      }
     })
 
   </script>
@@ -181,7 +225,6 @@
     <p class="device-notification--message">Global has so much to offer that we must request you orient your device to
       portrait or find a larger screen. You won't be disappointed.</p>
   </div>
-
   <div class="perspective effect-rotate-left">
     <div class="container">
       <div class="outer-nav--return"></div>
@@ -201,7 +244,7 @@
             <ul class="side-nav">
               <li id="HomeLi" class="is-active"><span>Home</span></li>
               <li><span>Songs</span></li>
-              <li><span>Favorites</span></li>
+              <li onclick="renderFavorites()"><span>Favorites</span></li>
               <li><span>Artists</span></li>
               <li><span>Quiz</span></li>
               <li id="loginLi"></li>
@@ -281,40 +324,17 @@
                 </form>
                 <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
                 <button onclick="authenticate().then(loadClient)">authorize and load</button>
-<button onclick="execute()">execute</button>
+                <button onclick="execute()">execute</button>
               </div>
               <div class="work" id="songs">
-
             </li>
             <li class="l-section section">
               <div class="about">
                 <div class="about--banner">
-                  <h2>We<br>believe in<br>passionate<br>people</h2>
-                  <a href="#0">Career
-                    <span>
-                      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
-                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
-                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
-                          <path
-                            d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
-                        </g>
-                      </svg>
-                    </span>
-                  </a>
+                  <h2>Your Favorite Songs</h2>
                   <img src="assets/img/about-visual.png" alt="About Us">
                 </div>
-                <div class="about--options">
-                  <a href="#0">
-                    <h3>Winners</h3>
-                  </a>
-                  <a href="#0">
-                    <h3>Philosophy</h3>
-                  </a>
-                  <a href="#0">
-                    <h3>History</h3>
-                  </a>
-                </div>
+                <div id="favoriteSongs"></div>
               </div>
             </li>
             <li class="l-section section">
@@ -364,7 +384,7 @@
     <ul class="outer-nav">
       <li class="is-active">Home</li>
       <li>Songs</li>
-      <li>Favorites</li>
+      <li onclick="renderFavorites()">Favorites</li>
       <li>Artists</li>
       <li>Quiz</li>
       <li id="outBarLogin">Login</li>
@@ -424,7 +444,6 @@
           return;
         }
         ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
-
       })
 
     })
@@ -442,11 +461,12 @@
       }
       recognization.onresult = (e) => {
         var transcript = e.results[0][0].transcript;
-        output.val( transcript);
+        output.val(transcript);
         console.log(transcript)
       }
       recognization.start();
     }
+
     function successCBSong(data) {
       console.log(data)
       $("#songs").html("")
@@ -632,40 +652,40 @@
     }
   </script>
   <script src="https://apis.google.com/js/api.js"></script>
-<script>
-  /**
-   * Sample JavaScript code for youtube.search.list
-   * See instructions for running APIs Explorer code samples locally:
-   * https://developers.google.com/explorer-help/code-samples#javascript
-   */
+  <script>
+    /**
+     * Sample JavaScript code for youtube.search.list
+     * See instructions for running APIs Explorer code samples locally:
+     * https://developers.google.com/explorer-help/code-samples#javascript
+     */
 
-  function authenticate() {
-    return gapi.auth2.getAuthInstance()
-        .signIn({scope: "https://www.googleapis.com/auth/youtube.force-ssl"})
-        .then(function() { console.log("Sign-in successful"); },
-              function(err) { console.error("Error signing in", err); });
-  }
-  function loadClient() {
-    gapi.client.setApiKey("AIzaSyA0myQXBGlJF9glTLy5OKyLna33CfgTvzA");
-    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-        .then(function() { console.log("GAPI client loaded for API"); },
-              function(err) { console.error("Error loading GAPI client for API", err); });
-  }
-  // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute() {
-    return gapi.client.youtube.search.list({
-      "q": "dior"
-    })
-        .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-              },
-              function(err) { console.error("Execute error", err); });
-  }
-  gapi.load("client:auth2", function() {
-    gapi.auth2.init({client_id: "YOUR_CLIENT_ID"});
-  });
-</script>
+    function authenticate() {
+      return gapi.auth2.getAuthInstance()
+        .signIn({ scope: "https://www.googleapis.com/auth/youtube.force-ssl" })
+        .then(function () { console.log("Sign-in successful"); },
+          function (err) { console.error("Error signing in", err); });
+    }
+    function loadClient() {
+      gapi.client.setApiKey("AIzaSyA0myQXBGlJF9glTLy5OKyLna33CfgTvzA");
+      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function () { console.log("GAPI client loaded for API"); },
+          function (err) { console.error("Error loading GAPI client for API", err); });
+    }
+    // Make sure the client is loaded and sign-in is complete before calling this method.
+    function execute() {
+      return gapi.client.youtube.search.list({
+        "q": "dior"
+      })
+        .then(function (response) {
+          // Handle the results here (response.result has the parsed body).
+          console.log("Response", response);
+        },
+          function (err) { console.error("Execute error", err); });
+    }
+    gapi.load("client:auth2", function () {
+      gapi.auth2.init({ client_id: "YOUR_CLIENT_ID" });
+    });
+  </script>
 
 
 </body>
