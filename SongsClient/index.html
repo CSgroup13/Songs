@@ -166,7 +166,9 @@
           background: '#080808'
         })
       }
-      ////////////////////////Favorites Songs///////////////////
+    })
+
+    ////////////////////////Favorites Songs///////////////////
 
     let renderFavorites = () => {
       if (localStorage["user"] !== undefined) {
@@ -186,18 +188,38 @@
       }
       else {
         let favoritesDiv = $("#favoriteSongs");
-        favoritesDiv.innerHTML = "";
+        favoritesDiv.html("");
         for (let song of data) {
-          let songDiv = `<a id=${song.id} class="favSong">
-                    <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
-                    <p class="favP">${song.artistName}</p>
-                    <br>
-                    <i class="fa fa-heart-o " id="randHeart1" style="font-size:16px;"></i>
-                  </a>`;
+          let songDiv = `<a id="${song.id}" class="favSong" title="Click the heart to remove song from favorite">
+  <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
+  <p class="favP">${song.artistName}</p>
+  <br>
+  <i id="heart" class="fa fa-heart-o" id="randHeart1" style="font-size: 16px; color: red;"></i>
+</a>
+`;
           favoritesDiv.append(songDiv);
         }
       }
     }
+
+    $(document).on("click", "#heart", function () {
+      let userId = JSON.parse(localStorage["user"]).id;
+      let songId = $(this).closest(".favSong").attr("id");
+      ajaxCall("DELETE", baseApi + "/" + userId + "/" + songId, "", successCBRemoveFromFavorite, errorCBFavorites);
+    });
+
+    function successCBRemoveFromFavorite(data) {
+      if (data === true) {
+        Swal.fire({
+          icon: 'success',
+          text: "Song removed from your Favorites",
+          color: 'white',
+          background: '#080808'
+        })
+        renderFavorites();
+      }
+    }
+
     function errorCBFavorites(error) {
       let message = error.responseText;
       Swal.fire({
@@ -207,8 +229,6 @@
         background: '#080808'
       })
     }
-    })
-
   </script>
 
 </head>
@@ -337,7 +357,9 @@
                   <h2>Your Favorite Songs</h2>
                   <img src="assets/img/about-visual.png" alt="About Us">
                 </div>
-                <div id="favoriteSongs"></div>
+                <div id="favoriteSongsContainer">
+                  <div id="favoriteSongs"></div>
+                </div>
               </div>
             </li>
             <li class="l-section section">
@@ -440,12 +462,14 @@
         ajaxCall("GET", serachApi, "", successCBSong, errorCB);
         return false;
       })
-      
+
       $(".randSongs").on("click", function () {
         if (localStorage.user === undefined) {
           Swal.fire({
             icon: 'error',
             text: "Please Log in to add song to Favorites",
+            color: 'white',
+            background: '#080808'
           })
           return;
         }
@@ -457,7 +481,9 @@
     function successCBAddToFavorite() {
       Swal.fire({
         icon: 'success',
-        text: "Song added to your Favorites"
+        text: "Song added to your Favorites",
+        color: 'white',
+        background: '#080808'
       })
     }
     runSpeechRecog = () => {
@@ -648,6 +674,8 @@
       Swal.fire({
         icon: 'error',
         text: message,
+        color: 'white',
+        background: '#080808'
       })
     }
   </script>

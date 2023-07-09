@@ -671,8 +671,8 @@ body {
 
 .side-nav li.logout::before {
     content: "Logout";
-  }
-  
+}
+
 .side-nav li.is-active {
     color: #0f33ff;
     -webkit-transition: color .4s ease-in-out;
@@ -911,7 +911,7 @@ body {
     }
 }
 
-.btnbtn{
+.btnbtn {
     margin-right: auto;
     margin-left: auto;
     margin-top: 30px;
@@ -1142,23 +1142,24 @@ body {
 
 .about {
     position: relative;
+    top: 60px;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
     width: 900px;
     max-width: 75%;
-    height: 50%;
     -webkit-box-orient: vertical;
     -webkit-box-direction: normal;
     -webkit-flex-direction: column;
     -ms-flex-direction: column;
     flex-direction: column;
     -webkit-box-pack: center;
-    -webkit-justify-content: center;
     -ms-flex-pack: center;
-    justify-content: center;
-    margin: 0 auto
+    margin: 0 auto;
+    text-align: center;
+    height: 90%;
+    align-items: center;
 }
 
 @media (max-width: 1180px) {
@@ -1169,7 +1170,8 @@ body {
 
 .about--banner {
     position: relative;
-    height: 150px
+    height: 150px;
+    text-align: center;
 }
 
 .about--banner::before {
@@ -1894,19 +1896,62 @@ body {
     -webkit-transition-delay: .16s;
     transition-delay: .16s
 }
+
 .outer-nav li.is-vis:nth-child(6) {
     -webkit-transition-delay: .20s;
     transition-delay: .20s
 }
 
-#searchBtn{
+#searchBtn {
     width: 40%;
 }
-#search{
-height: auto;
-top:10%
-}
-#songs{
+
+#search {
     height: auto;
-    top:5%;
+    top: 10%
+}
+
+#songs {
+    height: auto;
+    top: 5%;
+}
+
+.favSong {
+    display: inline-block;
+    margin: 15px;
+    border: 2px solid white;
+    padding: 8px;
+    border-radius: 10px;
+    width: 27%;
+    cursor: pointer;
+}
+
+.favSong:hover {
+    box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8);
+}
+
+#favoriteSongsContainer {
+    overflow: auto;
+    max-height: 65%;
+    display: flex;
+    justify-content: center;
+}
+
+#favoriteSongsContainer::-webkit-scrollbar {
+    width: 10px;
+    /* Set the width of the scrollbar */
+    background-color: transparent;
+    /* Set the background color of the scrollbar */
+}
+
+#favoriteSongsContainer::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Set the color of the scrollbar thumb */
+    border-radius: 5px;
+    /* Round the corners of the scrollbar thumb */
+}
+
+#favoriteSongs {
+    display: flex;
+    flex-wrap: wrap;
 }
