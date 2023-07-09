@@ -814,7 +814,7 @@ public class DBservices
             while (dataReader.Read())
             {
                 Song s = new Song();
-                s.id = Convert.ToInt32(dataReader["Id"]);
+                s.id = Convert.ToInt32(dataReader["id"]);
                 s.name = dataReader["name"].ToString();
                 s.artistName = dataReader["artistName"].ToString();
                 s.link = dataReader["link"].ToString();
