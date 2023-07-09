@@ -19,7 +19,7 @@ namespace SongsServer.Controllers
         }
 
         // GET: api/<UsersController>/
-        [HttpGet("{userName}/songs")]
+        [HttpGet("{userId}/songs")]
         public List<Song> getSongsByUser(int userId)
         {
             return UserClass.getSongsByUser(userId);

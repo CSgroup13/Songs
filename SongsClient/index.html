@@ -20,6 +20,8 @@
   <script>
     const baseApi = 'https://localhost:7091/api/Users'
     $(document).ready(() => {
+
+      ////////////////////////login and register///////////////////
       let updateLoginPage = (page) => {
         $("#mainFormDiv").html("");
         if (page === "logout") {//logout page
@@ -222,7 +224,6 @@
     <p class="device-notification--message">Global has so much to offer that we must request you orient your device to
       portrait or find a larger screen. You won't be disappointed.</p>
   </div>
-
   <div class="perspective effect-rotate-left">
     <div class="container">
       <div class="outer-nav--return"></div>
@@ -450,7 +451,6 @@
         }
         this.querySelector(".fa-heart-o").style.color = "red"
         ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
-
       })
 
     })
@@ -473,6 +473,7 @@
       }
       recognization.start();
     }
+
     function successCBSong(data) {
       console.log(data)
       $("#songs").html("")
