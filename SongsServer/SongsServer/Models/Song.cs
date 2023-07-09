@@ -19,7 +19,7 @@
             DBservices dbs = new DBservices();
             return dbs.getAllSongs();
         }
-        public static Song getRandomSong()
+        public static List<Song> getRandomSong()
         {
             DBservices dbs = new DBservices();
             return dbs.getRandomSong();
@@ -30,7 +30,7 @@
             return dbs.getSongByName(songName);
         }
 
-        public static Song getByLyrics(string lyrics)
+        public static List<Song> getByLyrics(string lyrics)
         {
             DBservices dbs = new DBservices();
             return dbs.getByLyrics(lyrics);

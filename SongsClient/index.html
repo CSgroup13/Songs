@@ -229,23 +229,23 @@
                   <img src="assets/img/mainImage.png" alt="Welcome">
                 </div>
                 <div class="intro--options">
-                  <a class="randSongs randSong1">
-                    <h3 class="randTitle1" style="display: inline-block;"></h3>
-                    <p class="randPara1"></p>
+                  <a class="randSongs">
+                    <h3 class="randTitle" style="display: inline-block;"></h3>
+                    <p class="randPara"></p>
                     <br>
-                    <i class="fa fa-heart-o " id="randHeart1" style="font-size:16px;"></i>
+                    <i class="fa fa-heart-o " style="font-size:16px;"></i>
                   </a>
                   <a class="randSongs">
-                    <h3 class="randTitle2"></h3>
-                    <p class="randPara2"></p>
+                    <h3 class="randTitle"></h3>
+                    <p class="randPara"></p>
                     <br>
-                    <i class="fa fa-heart-o " id="randHeart2" style="font-size:16px;"></i>
+                    <i class="fa fa-heart-o " style="font-size:16px;"></i>
                   </a>
                   <a class="randSongs">
-                    <h3 class="randTitle3"></h3>
-                    <p class="randPara3"></p>
+                    <h3 class="randTitle"></h3>
+                    <p class="randPara"></p>
                     <br>
-                    <i class="fa fa-heart-o" id="randHeart3" style="font-size:16px;"></i>
+                    <i class="fa fa-heart-o" style="font-size:16px;"></i>
                   </a>
                 </div>
               </div>
@@ -268,6 +268,10 @@
                       <label for="opt-3">
                         Song Lyrics
                       </label>
+                      <input id="opt-4" class="allSongs" type="checkbox" name="song-option" value="allSongs">
+                      <label for="opt-4">
+                        All Songs
+                      </label>
                     </span>
                     </span>
                   </div>
@@ -279,9 +283,9 @@
                     <input type="submit" id="searchBtn" value="Search">
                   </div>
                 </form>
-                <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
+                <!-- <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
                 <button onclick="authenticate().then(loadClient)">authorize and load</button>
-<button onclick="execute()">execute</button>
+<button onclick="execute()">execute</button> -->
               </div>
               <div class="work" id="songs">
 
@@ -377,9 +381,7 @@
   <script>
     const baseApiOfek = 'https://localhost:7091/api'
     $(document).ready(() => {
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom1, errorCB);
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom2, errorCB);
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom3, errorCB);
+      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom, errorCB);
 
       const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
 
@@ -394,7 +396,9 @@
           });
         });
       });
-      $()
+      $(".allSongs").on("click", function () {
+        ajaxCall("GET", baseApiOfek + `/Songs`, "", successCBSong, errorCB);
+      })
       $("#searchForm").submit(() => {
         const checkedValue = document.querySelector('input[name="song-option"]:checked').value;
         let serachApi;
@@ -409,12 +413,15 @@
           case "lyrics":
             serachApi = baseApiOfek + `/Songs/songBylyrics?lyrics=${userInput}`
             break;
+          case "allSongs":
+            serachApi = baseApiOfek + `/Songs`
+            break;
           default: return false;
         }
         ajaxCall("GET", serachApi, "", successCBSong, errorCB);
         return false;
       })
-
+      
       $(".randSongs").on("click", function () {
         if (localStorage.user === undefined) {
           Swal.fire({
@@ -423,6 +430,7 @@
           })
           return;
         }
+        this.querySelector(".fa-heart-o").style.color = "red"
         ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
 
       })
@@ -442,7 +450,7 @@
       }
       recognization.onresult = (e) => {
         var transcript = e.results[0][0].transcript;
-        output.val( transcript);
+        output.val(transcript);
         console.log(transcript)
       }
       recognization.start();
@@ -499,7 +507,7 @@
             <p class="slider--item-description">${data[2].artistName}</p>
             </a>
             </li>`
-        for (let i = 3; i < data.length - 3; i++) {
+        for (let i = 3; i < data.length; i++) {
           restOfSongs += ` <li class="slider--item">
              <a href="#0">
              <div class="slider--item-image">
@@ -607,20 +615,13 @@
       });
 
     }
-    function successCBRandom1(data) {
-      $(`.randTitle1`).html(data.name)
-      $(`.randPara1`).html(data.artistName)
-      $(`.randSong1`).attr('id', data.id)
-    }
-    function successCBRandom2(data) {
-      $(`.randTitle2`).html(data.name)
-      $(`.randPara2`).html(data.artistName)
-      $(`.randSong2`).attr('id', data.id)
-    }
-    function successCBRandom3(data) {
-      $(`.randSong3`).attr('id', data.id)
-      $(`.randTitle3`).html(data.name)
-      $(`.randPara3`).html(data.artistName)
+    function successCBRandom(data) {
+      let songsCards = document.querySelectorAll(".randSongs")
+      for (let i = 0; i < 3; i++) {
+        songsCards[i].id = data[i].id;
+        songsCards[i].querySelector(".randTitle").innerHTML = data[i].name;
+        songsCards[i].querySelector(".randPara").innerHTML = data[i].artistName;
+      }
     }
 
     function errorCB(error) {
@@ -631,7 +632,7 @@
       })
     }
   </script>
-  <script src="https://apis.google.com/js/api.js"></script>
+  <!-- <script src="https://apis.google.com/js/api.js"></script>
 <script>
   /**
    * Sample JavaScript code for youtube.search.list
@@ -665,7 +666,7 @@
   gapi.load("client:auth2", function() {
     gapi.auth2.init({client_id: "YOUR_CLIENT_ID"});
   });
-</script>
+</script> -->
 
 
 </body>

@@ -550,7 +550,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method return random song
     //--------------------------------------------------------------------------------------------------
-    public Song getRandomSong()
+    public List<Song> getRandomSong()
     {
 
         SqlConnection con;
@@ -570,10 +570,12 @@ public class DBservices
         cmd = CreateCommandWithStoredProcedure("SP_getRandomSong", con, null);// create the command
 
 
+        List<Song> songList = new List<Song>();
+
         try
         {
             SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            if (dataReader.Read())
+            while (dataReader.Read())
             {
                 Song s = new Song();
                 s.id = Convert.ToInt32(dataReader["Id"]);
@@ -582,10 +584,9 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
-
-                return s;
+                songList.Add(s);
             }
-            throw new Exception("could not find Song");
+            return songList;
         }
         catch (Exception ex)
         {
@@ -666,7 +667,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method return song by lyrics
     //--------------------------------------------------------------------------------------------------
-    public Song getByLyrics(string lyrics)
+    public List<Song> getByLyrics(string lyrics)
     {
 
         SqlConnection con;
@@ -689,10 +690,12 @@ public class DBservices
         cmd = CreateCommandWithStoredProcedure("SP_getByLyrics", con, paramDic);// create the command
 
 
+        List<Song> songList = new List<Song>();
+
         try
         {
             SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            if (dataReader.Read())
+            while (dataReader.Read())
             {
                 Song s = new Song();
                 s.id = Convert.ToInt32(dataReader["Id"]);
@@ -701,9 +704,10 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
-
-                return s;
+                songList.Add(s);
             }
+            if(songList.Count>0)
+            return songList;
             throw new Exception("could not find Song");
         }
         catch (Exception ex)
