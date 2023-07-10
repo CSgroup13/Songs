@@ -35,7 +35,7 @@
               background: '#080808'
             })
             updateLoginBtns();
-            $("#HomeLi").click();
+            window.location.href = "./index.html";
           })
         }
         else if (page === "login") { //login page
@@ -127,7 +127,7 @@
             background: '#080808'
           })
           updateLoginBtns();
-          $("#HomeLi").click();
+          window.location.href = "./index.html";
         }
         else { //user want to login
           updateLoginPage("login");
@@ -142,7 +142,7 @@
           background: '#080808'
         })
         localStorage["user"] = JSON.stringify(data);
-        $("#HomeLi").click();
+        window.location.href = "./index.html";
         updateLoginBtns();
       }
 
@@ -154,7 +154,7 @@
           background: '#080808'
         })
         localStorage["user"] = JSON.stringify(data);
-        $("#HomeLi").click();
+        window.location.href = "./index.html";
         updateLoginBtns();
       }
       function errorCBLogin(error) {
@@ -660,13 +660,31 @@
       });
 
     }
+
     function successCBRandom(data) {
-      let songsCards = document.querySelectorAll(".randSongs")
+      let songsCards = document.querySelectorAll(".randSongs");
+      let ids = [];
       for (let i = 0; i < 3; i++) {
         songsCards[i].id = data[i].id;
         songsCards[i].querySelector(".randTitle").innerHTML = data[i].name;
         songsCards[i].querySelector(".randPara").innerHTML = data[i].artistName;
+        ids.push(data[i].id);
       }
+      let userId = JSON.parse(localStorage["user"]).id;
+      if (localStorage.user !== undefined) {
+        ajaxCall("GET", `${baseApi}/${userId}/songs`, "", function (responseData) {
+          successCBFavRand(ids, responseData); // Pass the responseData to successCBFavRand
+        }, errorCBFavorites);
+      }
+    }
+
+    function successCBFavRand(ids, data) {
+      const randomSongs = document.querySelectorAll(".randSongs");
+      const matchingSongs = data.filter(song => ids.includes(song.id));
+      console.log(matchingSongs);
+      matchingSongs.forEach(matchingSong => {
+        document.getElementById(matchingSong.id).querySelector("i.fa.fa-heart-o").style.color = "red";
+      });
     }
 
     function errorCB(error) {

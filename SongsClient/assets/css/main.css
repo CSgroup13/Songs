@@ -1955,3 +1955,13 @@ body {
     display: flex;
     flex-wrap: wrap;
 }
+
+.randSongs {
+    color: white !important;
+    text-align: center;
+    cursor: pointer;
+}
+
+.randSongs:hover {
+    color: #0f33ff !important;
+}
