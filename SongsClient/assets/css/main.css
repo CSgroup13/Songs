@@ -978,7 +978,8 @@ body {
 .work--lockup .slider--item {
     position: absolute;
     display: none;
-    text-align: center
+    text-align: center;
+    cursor: pointer;
 }
 
 .work--lockup .slider--item a {
@@ -1107,6 +1108,7 @@ body {
         top: 130px
     }
 }
+
 @media (max-width: 900px) {
     .work--lockup .slider--item-image {
         width: 120px;
@@ -1580,7 +1582,7 @@ body {
     -webkit-align-items: center;
     -ms-flex-align: center;
     align-items: center;
-    
+
 }
 
 .work-request--options .options-a {
@@ -1918,8 +1920,29 @@ body {
     transition-delay: .20s
 }
 
-#searchBtn {
+#searchBtn,
+#searchArtistBtn {
     width: 40%;
+}
+
+#searchArtistInput {
+    display: inline-block !important;
+    width: 200px;
+}
+
+#searchArtistBtn {
+    background-color: #0f33ff;
+    color: white;
+    border-radius: 15px;
+    border: 1px solid #0f33ff;
+    width: 100px !important;
+    height: 50px !important;
+    display: inline-block !important;
+    margin-left: 30px;
+}
+
+#searchArtistBtn:hover {
+    opacity: .9;
 }
 
 #search {
@@ -1946,24 +1969,28 @@ body {
     box-shadow: 0 0 10px 5px rgba(255, 255, 255, 0.8);
 }
 
-#favoriteSongsContainer, #artistsContainer {
+#favoriteSongsContainer,
+#artistsContainer {
     overflow: auto;
     max-height: 65%;
     display: flex;
     justify-content: center;
 }
 
-#favoriteSongsContainer::-webkit-scrollbar,#artistsContainer::-webkit-scrollbar {
+#favoriteSongsContainer::-webkit-scrollbar,
+#artistsContainer::-webkit-scrollbar {
     width: 10px;
     background-color: transparent;
 }
 
-#favoriteSongsContainer::-webkit-scrollbar-thumb,#artistsContainer::-webkit-scrollbar-thumb  {
+#favoriteSongsContainer::-webkit-scrollbar-thumb,
+#artistsContainer::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
 }
 
-#favoriteSongs, #artists {
+#favoriteSongs,
+#artists {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -2012,6 +2039,7 @@ body {
     border-radius: 5px;
     /* Round the corners of the scrollbar thumb */
 }
+
 .artist {
     perspective: 1000px;
     width: 200px;
@@ -2041,11 +2069,12 @@ body {
 .back {
     transform: rotateY(180deg);
 }
-.front>img{
+
+.front>img {
     border-radius: 20px;
 }
 
-.back>h4{
+.back>h4 {
     color: #fc42ea;
 }
 
@@ -2053,6 +2082,14 @@ body {
     transform: rotateY(180deg);
 }
 
-.artist{
+.artist {
     cursor: pointer;
+}
+
+#searchArtistBtn {
+    display: inline-block;
+    width: 60px;
+    background-color: #0f33ff;
+    color: white;
+    font-size: 20px;
 }

@@ -20,8 +20,8 @@
   <script>
     const baseApi = 'https://localhost:7091/api/Users'
     $(document).ready(() => {
-
       ///Artists////
+
       const renderArtists = () => {
         if (localStorage.artists == undefined)
           ajaxCall("GET", baseApiOfek + `/Artists`, "", successCBAllArtists, errorCB);
@@ -29,7 +29,7 @@
           const artistsDiv = document.getElementById("artists");
           const data = JSON.parse(localStorage.artists);
           for (let artist of data) {
-            artistsDiv.innerHTML += `<div class="artist">
+            artistsDiv.innerHTML += `<div class="artist" title="Click for more info">
     <div class="flipper">
       <div class="front">
         <img src=${artist.image}>
@@ -47,25 +47,66 @@
       }
       renderArtists();
 
+      $("#searchArtistForm").submit(() => {
+        event.preventDefault();
+        var inputVal = $("#searchArtistInput").val().toLowerCase();
+        const data = JSON.parse(localStorage.artists);
+        const artistsDiv = document.getElementById("artists");
+        let filteredData = data;
+        artistsDiv.innerHTML = "";
+        if (inputVal !== '') {
+          filteredData = data.filter(artist => artist.name.toLowerCase().startsWith(inputVal));
+        }
+        for (let artist of filteredData) {
+          artistsDiv.innerHTML += `<div class="artist" title="Click for more info">
+    <div class="flipper">
+      <div class="front">
+        <img src=${artist.image}>
+      </div>
+      <div class="back">
+        <h4>${artist.name}</h4>
+        <p>published: ${artist.published}</p>
+        <p>listeners: ${artist.listeners}</p>
+        <p>playcount: ${artist.playcount}</p>
+      </div>
+    </div>
+  </div>`;
+        }
+      })
+
+      $(document).on("click", ".back", function (event) {
+        event.preventDefault();
+        const name = $(event.target).closest(".artist").find("h4").text();
+        const data = JSON.parse(localStorage.artists);
+        const currArtist = data.filter(artist => artist.name === name)[0];
+        Swal.fire({
+          title: `About ${currArtist.name}`,
+          html: `<div class="song-popup">${currArtist.summary}</div>`,
+          color: 'white',
+          background: '#171717',
+          confirmButtonText: "Close",
+        });
+      });
+
       ////////////////////////login and register///////////////////
       let updateLoginPage = (page) => {
         $("#mainFormDiv").html("");
         if (page === "logout") {//logout page
-          $("#mainFormDiv").append('<h2 id="formHeader" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
+          $("#mainFormDiv").append('<h2 id="formHeader1" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
           $("#logoutBtn").click(() => {
             localStorage.removeItem("user");
             Swal.fire({
               icon: 'success',
               text: "You Logged Out!",
               color: 'white',
-              background: '#080808'
+              background: '#171717'
             })
             updateLoginBtns();
             window.location.href = "./index.html";
           })
         }
         else if (page === "login") { //login page
-          $("#mainFormDiv").append('<h2 id="formHeader">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
+          $("#mainFormDiv").append('<h2 id="formHeader2">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
           $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
           $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
           $('#loginForm').submit(function () {
@@ -83,7 +124,7 @@
           })
         }
         else { //signup page
-          $("#mainFormDiv").append('<h2 id="formHeader">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" title="name must include only letters" required ><label for="name">Name</label></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required ><label for="email">Email</label></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">Password</label></div></div><input type="submit" value="Sign Up"></form>');
+          $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" title="name must include only letters" required ><label for="name">Name</label></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required ><label for="email">Email</label></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">Password</label></div></div><input type="submit" value="Sign Up"></form>');
           $('#regNameInp').attr('pattern', '[a-zA-Z]+');
           $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
           $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
@@ -150,7 +191,7 @@
             icon: 'success',
             text: "You Logged Out!",
             color: 'white',
-            background: '#080808'
+            background: '#171717'
           })
           updateLoginBtns();
           window.location.href = "./index.html";
@@ -165,7 +206,7 @@
           icon: 'success',
           text: "You Logged In Successfully!",
           color: 'white',
-          background: '#080808'
+          background: '#171717'
         })
         localStorage["user"] = JSON.stringify(data);
         window.location.href = "./index.html";
@@ -177,7 +218,7 @@
           icon: 'success',
           text: "You Signed Up Successfully!",
           color: 'white',
-          background: '#080808'
+          background: '#171717'
         })
         localStorage["user"] = JSON.stringify(data);
         window.location.href = "./index.html";
@@ -189,7 +230,7 @@
           icon: 'error',
           text: message,
           color: 'white',
-          background: '#080808',
+          background: '#171717',
         })
       }
     })
@@ -202,13 +243,11 @@
         ajaxCall("GET", `${baseApi}/${userId}/songs`, "", successCBFavorites, errorCBFavorites);
       }
       else {
-        console.log("no login")
         $("#favoriteSongs").html("<h3>You should login first to see your favorite songs</h3>");
       }
     }
 
     function successCBFavorites(data) {
-      console.log(data);
       if (data.length === 0) {
         $("#favoriteSongs").html("<h3>You don't have favorite songs</h3>");
       }
@@ -240,7 +279,7 @@
           icon: 'success',
           text: "Song removed from your Favorites",
           color: 'white',
-          background: '#080808'
+          background: '#171717'
         })
         renderFavorites();
         ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom, errorCB);
@@ -253,7 +292,7 @@
         icon: 'error',
         text: message,
         color: 'white',
-        background: '#080808'
+        background: '#171717'
       })
     }
 
@@ -304,7 +343,7 @@
             errorCB(error);
           })
           .finally(() => {
-            console.log("finish");
+            localStorage.artists = JSON.stringify(artistsArr);
           })
           ;
       }
@@ -443,8 +482,14 @@
             </li>
             <li class="l-section section">
               <div class="about">
-                <div class="about--banner">
-                  <h2>Artists</h2>
+                <h1>Artists</h1>
+                <div>
+                  <div class="work-request--information">
+                    <form id="searchArtistForm">
+                      <input id="searchArtistInput" type="text" name="search" placeholder="Search">
+                      <button id="searchArtistBtn">Search</button>
+                    </form>
+                  </div>
                 </div>
                 <div id="artistsContainer">
                   <div id="artists">
@@ -533,16 +578,16 @@
             icon: 'error',
             text: "Please enter a valid input",
             color: 'white',
-            background: '#080808'
+            background: '#171717'
           })
           return false;
         }
-        if (checkedValue===null) {
+        if (checkedValue === null) {
           Swal.fire({
             icon: 'error',
             text: "Please Select a Filter",
             color: 'white',
-            background: '#080808'
+            background: '#171717'
           });
           return false;
         }
@@ -572,7 +617,7 @@
             icon: 'error',
             text: "Please Log in to add song to Favorites",
             color: 'white',
-            background: '#080808'
+            background: '#171717'
           })
           return;
         }
@@ -586,7 +631,7 @@
         icon: 'success',
         text: "Song added to your Favorites",
         color: 'white',
-        background: '#080808'
+        background: '#171717'
       })
     }
     runSpeechRecog = () => {
@@ -604,7 +649,6 @@
     }
 
     function successCBSong(data) {
-      console.log(data)
       $("#songs").html("")
       if (data.length === undefined) {//single song returned as object and not array
         let lyrics = data.lyrics
@@ -715,7 +759,7 @@
                 icon: 'error',
                 text: "Please Log in to add song to Favorites",
                 color: 'white',
-                background: '#080808'
+                background: '#171717'
               })
               return;
             }
@@ -812,8 +856,8 @@
         songsCards[i].querySelector(".randPara").innerHTML = data[i].artistName;
         ids.push(data[i].id);
       }
-      let userId = JSON.parse(localStorage["user"]).id;
       if (localStorage.user !== undefined) {
+        let userId = JSON.parse(localStorage["user"]).id;
         ajaxCall("GET", `${baseApi}/${userId}/songs`, "", function (responseData) {
           successCBFavRand(ids, responseData); // Pass the responseData to successCBFavRand
         }, errorCBFavorites);
@@ -826,7 +870,6 @@
         document.getElementById(song.id).querySelector("i.fa.fa-heart-o").style.color = "white";
       });
       const matchingSongs = data.filter(song => ids.includes(song.id));
-      console.log(matchingSongs);
       matchingSongs.forEach(matchingSong => {
         document.getElementById(matchingSong.id).querySelector("i.fa.fa-heart-o").style.color = "red";
       });
@@ -838,7 +881,7 @@
         icon: 'error',
         text: message,
         color: 'white',
-        background: '#080808'
+        background: '#171717'
       })
     }
   </script>
