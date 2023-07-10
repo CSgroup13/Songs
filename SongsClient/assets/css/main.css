@@ -1922,7 +1922,7 @@ body {
     border: 2px solid white;
     padding: 8px;
     border-radius: 10px;
-    width: 27%;
+    width: 200px;
     cursor: pointer;
 }
 
@@ -1954,6 +1954,7 @@ body {
 #favoriteSongs {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .randSongs {
