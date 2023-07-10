@@ -318,19 +318,20 @@
                 <form id="searchForm" class="work-request">
                   <div class="work-request--options">
                     <span class="options-a">
-                      <input id="opt-1" type="checkbox" checked name="song-option" value="songName">
+                      <input id="opt-1" class="song-option" type="checkbox" checked name="song-option" value="songName">
                       <label for="opt-1">
                         Song Name
                       </label>
-                      <input id="opt-2" type="checkbox" name="song-option" value="artist">
+                      <input id="opt-2" class="song-option" type="checkbox" name="song-option" value="artist">
                       <label for="opt-2">
                         Artist
                       </label>
-                      <input id="opt-3" type="checkbox" name="song-option" value="lyrics">
+                      <input id="opt-3" class="song-option" type="checkbox" name="song-option" value="lyrics">
                       <label for="opt-3">
                         Song Lyrics
                       </label>
-                      <input id="opt-4" class="allSongs" type="checkbox" name="song-option" value="allSongs">
+                      <input id="opt-4" class="allSongs song-option" type="checkbox" name="song-option"
+                        value="allSongs">
                       <label for="opt-4">
                         All Songs
                       </label>
@@ -338,7 +339,7 @@
                     </span>
                   </div>
                   <div class="work-request--information">
-                    <div class="information-email">
+                    <div class="information-email searchInput">
                       <input type="text" id="searchInput" spellcheck="false">
                       <label for="text">search</label>
                     </div>
@@ -422,10 +423,10 @@
   <script>
     const baseApiOfek = 'https://localhost:7091/api'
     $(document).ready(() => {
+      //generate random songs
       ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom, errorCB);
-
+      //////////add filters 
       const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
-
       // Add event listener to each checkbox
       checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {
@@ -437,13 +438,33 @@
           });
         });
       });
+      $(".song-option").on("click", function () {
+        if (this.value === "allSongs") {
+          $(".searchInput").hide()
+          $("#searchBtn").hide()
+        }
+        else {
+          $(".searchInput").show()
+          $("#searchBtn").show()
+        }
+      })
       $(".allSongs").on("click", function () {
         ajaxCall("GET", baseApiOfek + `/Songs`, "", successCBSong, errorCB);
       })
+      $(".allSongs").click();
       $("#searchForm").submit(() => {
         const checkedValue = document.querySelector('input[name="song-option"]:checked').value;
         let serachApi;
         let userInput = $('#searchInput').val();
+        if (userInput == "") {
+          Swal.fire({
+            icon: 'error',
+            text: "Please enter a valid input",
+            color: 'white',
+            background: '#080808'
+          })
+          return false;
+        }
         switch (checkedValue) {
           case "songName":
             serachApi = baseApiOfek + `/Songs/${userInput}/info`
@@ -503,8 +524,7 @@
     function successCBSong(data) {
       console.log(data)
       $("#songs").html("")
-      console.log(data.length)
-      if (data.length === undefined) {
+      if (data.length === undefined) {//single song returned as object and not array
         $("#songs").append(`<h2>Results:</h2>
                   <div class="work--lockup">
                     <ul class="slider">
@@ -525,7 +545,7 @@
         restOfSongs += `<h2>Results:</h2>
            <div class="work--lockup">
             <ul class="slider">
-            <li class="slider--item slider--item-left">
+            <li class="slider--item slider--item-center">
             <a href="#0">
             <div class="slider--item-image">
             <img src="assets/img/work-victory.jpg" alt="Victory">
@@ -533,38 +553,44 @@
             <p class="slider--item-title">${data[0].name}</p>
             <p class="slider--item-description">${data[0].artistName}</p>
             </a>
-            </li>
-            <li class="slider--item slider--item-center">
+            </li>`
+        if (data.length > 1) {
+          restOfSongs +=
+            `<li class="slider--item slider--item-left">
             <a href="#0">
-            <div class="slider--item-image">
-            <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
-            </div>
-            <p class="slider--item-title">${data[1].name}</p>
-            <p class="slider--item-description">${data[1].artistName}</p>
+              <div class="slider--item-image">
+                <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+              </div>
+             <p class="slider--item-title">${data[1].name}</p>
+             <p class="slider--item-description">${data[1].artistName}</p>
             </a>
-            </li>
-            <li class="slider--item slider--item-right">
-            <a href="#0">
+          </li>`
+        }
+        if (data.length > 2) {
+          restOfSongs += `<li class="slider--item slider--item-right">
+          <a href="#0">
             <div class="slider--item-image">
-            <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+              <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
             </div>
             <p class="slider--item-title">${data[2].name}</p>
             <p class="slider--item-description">${data[2].artistName}</p>
-            </a>
-            </li>`
-        for (let i = 3; i < data.length; i++) {
-          restOfSongs += ` <li class="slider--item">
-             <a href="#0">
-             <div class="slider--item-image">
-             <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
-             </div>
-             <p class="slider--item-title">${data[i].name}</p>
-             <p class="slider--item-description">${data[i].artistName}</p>
-             </a>
-             </li>`
+          </a>
+        </li>`
         }
-        restOfSongs += `</ul>
-        <div class="slider--prev">
+        for (let i = 3; i < data.length; i++) {
+          restOfSongs += ` <li li class="slider--item" >
+          <a href="#0">
+            <div class="slider--item-image">
+              <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+            </div>
+            <p class="slider--item-title">${data[i].name}</p>
+            <p class="slider--item-description">${data[i].artistName}</p>
+          </a>
+             </li> `
+        }
+        restOfSongs += `</ul>`
+        if (data.length > 2) {
+          restOfSongs +=` <div class="slider--prev">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
                         style="enable-background:new 0 0 150 118;" xml:space="preserve">
@@ -578,9 +604,10 @@
                         style="enable-background:new 0 0 150 118;" xml:space="preserve">
                         <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
                           <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
-                        </g></svg></div></div>`
+                        </g></svg></div></div >`
+                      }
         $("#songs").append(restOfSongs);
-        workSlider()
+        workSlider();
       }
     }
     function workSlider() {
@@ -599,7 +626,6 @@
           $center = $('.slider--item-center'),
           $right = $('.slider--item-right'),
           $item = $('.slider--item');
-        console.log("works:" + totalWorks)
         $('.slider').animate({ opacity: 0 }, 400);
 
         setTimeout(function () {
