@@ -194,7 +194,7 @@
   <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
   <p class="favP">${song.artistName}</p>
   <br>
-  <i id="heart" class="fa fa-heart-o" id="randHeart1" style="font-size: 16px; color: red;"></i>
+  <i id="heart" class="fa fa-heart-o" style="font-size: 16px; color: red;"></i>
 </a>
 `;
           favoritesDiv.append(songDiv);
@@ -526,11 +526,12 @@
       console.log(data)
       $("#songs").html("")
       if (data.length === undefined) {//single song returned as object and not array
+        let lyrics = data.lyrics
         $("#songs").append(`<h2>Results:</h2>
                   <div class="work--lockup">
                     <ul class="slider">
-                      <li class="slider--item slider--item-center">
-                        <a href="#0">
+                      <li class="slider--item slider--item-center" id="${data.id}" onclick="showSongPopup('${data.id}', '${data.name}')">
+                        <a>
                           <div class="slider--item-image">
                             <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
                           </div>
@@ -546,8 +547,8 @@
         restOfSongs += `<h2>Results:</h2>
            <div class="work--lockup">
             <ul class="slider">
-            <li class="slider--item slider--item-center">
-            <a href="#0">
+            <li class="slider--item slider--item-center" id="${data[0].id}" onclick="showSongPopup('${data[0].id}', '${data[0].name}')">
+            <a>
             <div class="slider--item-image">
             <img src="assets/img/work-victory.jpg" alt="Victory">
             </div>
@@ -557,8 +558,8 @@
             </li>`
         if (data.length > 1) {
           restOfSongs +=
-            `<li class="slider--item slider--item-left">
-            <a href="#0">
+            `<li class="slider--item slider--item-left" id="${data[1].id}" onclick="showSongPopup('${data[1].id}', '${data[1].name}')">
+            <a>
               <div class="slider--item-image">
                 <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
               </div>
@@ -568,8 +569,8 @@
           </li>`
         }
         if (data.length > 2) {
-          restOfSongs += `<li class="slider--item slider--item-right">
-          <a href="#0">
+          restOfSongs += `<li class="slider--item slider--item-right" id="${data[2].id}" onclick=showSongPopup('${data[2].id}','${data[2].name}')">
+          <a>
             <div class="slider--item-image">
               <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
             </div>
@@ -579,8 +580,8 @@
         </li>`
         }
         for (let i = 3; i < data.length; i++) {
-          restOfSongs += ` <li li class="slider--item" >
-          <a href="#0">
+          restOfSongs += ` <li class="slider--item" id="${data[i].id}" onclick="showSongPopup('${data[i].id}', '${data[i].name}')">
+          <a>
             <div class="slider--item-image">
               <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
             </div>
@@ -611,6 +612,39 @@
         workSlider();
       }
     }
+    function showSongPopup(songId, songName) {
+      ajaxCall("GET", baseApiOfek + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
+    }
+    function successCBSongLyrics(data) {
+      Swal.fire({
+        title: `${data.name} Lyrics`,
+        html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
+               <br>
+               <i id="addToFavorites" class="fa fa-heart-o" title="Add to Favorite" style="font-size: 16px; color: white;"></i>`,
+        color: 'white',
+        background: '#171717',
+        confirmButtonText:"Close",
+        didOpen: () => {
+          // Initialize the scrollable section
+          $('.song-popup').scrollTop(0);
+          // Add event listener to the "Add to Favorites" button
+          $('#addToFavorites').click(function () {
+            if (localStorage.user === undefined) {
+              Swal.fire({
+                icon: 'error',
+                text: "Please Log in to add song to Favorites",
+                color: 'white',
+                background: '#080808'
+              })
+              return;
+            }
+            ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
+          });
+        }
+      });
+    }
+
+
     function workSlider() {
 
       $('.slider--prev, .slider--next').click(function () {
