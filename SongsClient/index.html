@@ -393,7 +393,6 @@
             </li>
             <li class="l-section section">
               <div class="work" id="search">
-                <h2>Search Songs</h2>
                 <form id="searchForm" class="work-request">
                   <div class="work-request--options">
                     <span class="options-a">
@@ -526,7 +525,7 @@
       })
       $(".allSongs").click();
       $("#searchForm").submit(() => {
-        const checkedValue = document.querySelector('input[name="song-option"]:checked').value;
+        let checkedValue = document.querySelector('input[name="song-option"]:checked');
         let serachApi;
         let userInput = $('#searchInput').val();
         if (userInput == "") {
@@ -538,6 +537,16 @@
           })
           return false;
         }
+        if (checkedValue===null) {
+          Swal.fire({
+            icon: 'error',
+            text: "Please Select a Filter",
+            color: 'white',
+            background: '#080808'
+          });
+          return false;
+        }
+        checkedValue = checkedValue.value
         switch (checkedValue) {
           case "songName":
             serachApi = baseApiOfek + `/Songs/${userInput}/info`
@@ -695,7 +704,7 @@
                <i id="addToFavorites" class="fa fa-heart-o" title="Add to Favorite" style="font-size: 16px; color: white;"></i>`,
         color: 'white',
         background: '#171717',
-        confirmButtonText:"Close",
+        confirmButtonText: "Close",
         didOpen: () => {
           // Initialize the scrollable section
           $('.song-popup').scrollTop(0);
