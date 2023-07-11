@@ -236,7 +236,6 @@
           `;
           favoritesDiv.append(songDiv);
           $("#favoriteSongs").on("click",`#${song.id}`,function () {
-            console.log("in")
             showSongPopup(song.id, song.name, 'remove')
           })
         }
