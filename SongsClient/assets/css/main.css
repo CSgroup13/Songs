@@ -1966,7 +1966,8 @@ body {
     border: 2px solid white;
     padding: 8px;
     border-radius: 10px;
-    width: 200px;
+    width: 190px;
+    height: 130px;
     cursor: pointer;
 }
 
@@ -2051,12 +2052,13 @@ body {
     height: 200px;
 }
 
-.flipper {
+.artist {
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 180px;
+    height: 180px;
     transform-style: preserve-3d;
     transition: transform 0.6s;
+    margin: 15px;
 }
 
 .front,
@@ -2076,6 +2078,9 @@ body {
 }
 
 .front>img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 20px;
 }
 
@@ -2083,7 +2088,7 @@ body {
     color: #fc42ea;
 }
 
-.artist:hover .flipper {
+.artist:hover {
     transform: rotateY(180deg);
 }
 
