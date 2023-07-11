@@ -548,7 +548,7 @@ public class DBservices
 
     }
     //--------------------------------------------------------------------------------------------------
-    // This method return random song
+    // This method return 3 random songs
     //--------------------------------------------------------------------------------------------------
     public List<Song> getRandomSong()
     {
@@ -604,6 +604,67 @@ public class DBservices
         }
 
     }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method return 3 random songs that are different from input value
+    //--------------------------------------------------------------------------------------------------
+    public List<Song> getDiffRandomSongs(String songName)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@songName", songName);
+
+        cmd = CreateCommandWithStoredProcedure("SP_getDiffRandom", con, paramDic);// create the command
+
+        List<Song> songList = new List<Song>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                Song s = new Song();
+                s.id = Convert.ToInt32(dataReader["Id"]);
+                s.name = dataReader["name"].ToString();
+                s.artistName = dataReader["artistName"].ToString();
+                s.link = dataReader["link"].ToString();
+                s.lyrics = dataReader["lyrics"].ToString();
+                s.rate = Convert.ToInt32(dataReader["rate"]);
+                songList.Add(s);
+            }
+            return songList;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     //--------------------------------------------------------------------------------------------------
     // This method return song by name
     //--------------------------------------------------------------------------------------------------

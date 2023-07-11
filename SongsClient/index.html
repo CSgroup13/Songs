@@ -18,17 +18,17 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="./assets/js/ajaxCalls.js"></script>
   <script>
-    const baseApi = 'https://localhost:7091/api/Users'
+    const baseApi = 'https://localhost:7091/api';
+
     $(document).ready(() => {
       ///Artists////
-
       $("#showAllArtistsBtn").click(function () {
         $("#searchArtistInput").val("");
         renderArtists();
       })
       function renderArtists() {
         if (localStorage.artists == undefined)
-          ajaxCall("GET", baseApiOfek + `/Artists`, "", successCBAllArtists, errorCB);
+          ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
         else {
           const artistsDiv = document.getElementById("artists");
           const data = JSON.parse(localStorage.artists);
@@ -93,7 +93,7 @@
               password: password,
               regDate: "2023-06-10T12:33:08.383Z"
             }
-            ajaxCall("POST", baseApi + "/login", JSON.stringify(User), successCBLogin, errorCBLogin);
+            ajaxCall("POST", baseApi + "Users/login", JSON.stringify(User), successCBLogin, errorCBLogin);
             return false;
           })
         }
@@ -115,7 +115,7 @@
               password: password,
               regDate: formattedDateTime
             }
-            ajaxCall("POST", baseApi + "/register", JSON.stringify(User), successCBSignUp, errorCBLogin);
+            ajaxCall("POST", baseApi + "/Users/register", JSON.stringify(User), successCBSignUp, errorCBLogin);
             return false;
           })
         }
@@ -214,7 +214,7 @@
     function renderFavorites() {
       if (localStorage["user"] !== undefined) {
         let userId = JSON.parse(localStorage["user"]).id;
-        ajaxCall("GET", `${baseApi}/${userId}/songs`, "", successCBFavorites, errorCB);
+        ajaxCall("GET", `${baseApi}/Users/${userId}/songs`, "", successCBFavorites, errorCB);
       }
       else {
         $("#favoriteSongs").html("<h3>You should login first to see your favorite songs</h3>");
@@ -247,7 +247,7 @@
               didOpen: () => {
                 $('.song-popup').scrollTop(0);
                 $(`#fav_${song.id}`).click(function () {
-                  ajaxCall("DELETE", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${song.id}`, "", successCBRemoveFromFavorite, errorCB);
+                  ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${song.id}`, "", successCBRemoveFromFavorite, errorCB);
                 });
               }
             });
@@ -264,7 +264,7 @@
           background: '#171717'
         })
         renderFavorites();
-        ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom, errorCB);
+        ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
       }
     }
 
@@ -319,6 +319,154 @@
       else {
         artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
       }
+    }
+    //////////Quiz/////////////
+
+    //random artist
+    function randomArtist() {
+      if (localStorage.artists !== undefined) {
+        const artists = JSON.parse(localStorage.artists);
+        const rand = Math.floor(Math.random() * artists.length);
+        const artistName = artists[rand].name;
+
+        return artistName;
+      }
+    }
+
+    //3 random songs of artist
+    function getArtistSongs(artistName) {
+      let songsList = []; // here will be 3 songs of the artist
+      $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Artists/${artistName}/songs`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+          for (let i = 0; i < 3; i++) {
+            let rand = Math.floor(Math.random() * data.length);
+            let song = data[rand];
+            while (songsList.includes(song)) {
+              rand = Math.floor(Math.random() * data.length);
+              song = data[rand];
+            }
+            songsList.push(song);
+          }
+        },
+        error: errorCB
+      });
+      return songsList;
+    }
+
+    //song of different artist
+    function getRandomSongOfDifferentArtist(artistName) {
+      let song;
+      const artists = JSON.parse(localStorage.artists);
+      const filteredArtists = artists.filter(artist => artist.name !== artistName);
+      const rand = Math.floor(Math.random() * filteredArtists.length);
+      const differentArtist = filteredArtists[rand].name;
+      $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Artists/${differentArtist}/songs`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+          const rand = Math.floor(Math.random() * data.length);
+          song = data[rand];
+        },
+        error: errorCB
+      });
+      return song;
+    }
+
+    //3 sentences of different songs of artist
+    function getSongsSentences(artistName) {
+      const songs = getArtistSongs(artistName);
+      const sentences = [];
+      for (let song of songs) {
+        let sentence = song.lyrics.split("\n")[1];
+        sentences.push(sentence);
+      }
+      return sentences;
+    }
+
+    function getSongsSentenceOFDifferentArtist(artistName) {
+      const song = getRandomSongOfDifferentArtist(artistName);
+      let sentence = song.lyrics.split("\n")[1];
+
+      return sentence;
+    }
+
+    //return 3 random songs different from songName
+    function getDifferentSongs(songName) {
+      let songsList = [];
+      $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/diffRandomSongs/${songName}`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+          songsList = data;
+        },
+        error: errorCB
+      });
+      return songsList;
+    }
+
+    function renderQ3() {
+      let q3 = [];
+      const artistName = randomArtist();
+      const question = "Which of the following songs is not by " + artistName + "?";
+      q3.push(question);
+      q3.push(getRandomSongOfDifferentArtist(artistName).name);
+      const songs = getArtistSongs(artistName);
+      q3.push(songs[0].name, songs[1].name, songs[2].name);
+
+      return q3;
+    }
+
+    function renderQ6() {
+      let q6 = [];
+      const artistName = randomArtist();
+      const question = "Which of the following sentences is not part of " + artistName + "'s song?";
+      q6.push(question);
+      q6.push(getSongsSentenceOFDifferentArtist(artistName));
+      q6.push(...getSongsSentences(artistName));
+
+      return q6;
+    }
+
+    function renderQ7() {
+      let q7 = [];
+      const artistName = randomArtist();
+      const song = getArtistSongs(artistName)[0];//random song
+      const sentence = song.lyrics.split("\n")[1];
+      const question = `From which song is the following sentence taken? ${sentence}`;
+      const answer = song.name;
+      q7.push(question.split("\n")[0]);
+      q7.push(answer);
+      const songs = getDifferentSongs(answer);
+      q7.push(songs[0].name, songs[1].name, songs[2].name);
+
+      return q7;
+    }
+
+    function errorCB(error) {
+      let message = error.responseText;
+      Swal.fire({
+        icon: 'error',
+        text: message,
+        color: 'white',
+        background: '#171717'
+      })
     }
 
   </script>
@@ -474,21 +622,11 @@
               </div>
             </li>
             <li class="l-section section">
-              <div class="contact">
-                <div class="contact--lockup">
-                  <div class="modal">
-                    <div class="modal--information">
-                      <p>Pawia 5, 31-154 Kraków, Poland</p>
-                      <a href="mailto:ouremail@gmail.com">ouremail@gmail.com</a>
-                      <a href="tel:+148126287560">+48 12 628 75 60</a>
-                    </div>
-                    <ul class="modal--options">
-                      <li><a href="#0">Bēhance</a></li>
-                      <li><a href="#0">dribbble</a></li>
-                      <li><a href="mailto:ouremail@gmail.com">Contact Us</a></li>
-                    </ul>
-                  </div>
-                </div>
+              <div class="about--banner">
+                <h2>Songs Quiz</h2>
+              </div>
+              <div id="Quiz">
+
               </div>
             </li>
             <li class="l-section section">
@@ -513,10 +651,9 @@
   <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
   <script src="assets/js/functions-min.js"></script>
   <script>
-    const baseApiOfek = 'https://localhost:7091/api'
     $(document).ready(() => {
       //generate random songs
-      ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom, errorCB);
+      ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
       //////////add filters 
       const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
       // Add event listener to each checkbox
@@ -541,7 +678,7 @@
         }
       })
       $(".allSongs").on("click", function () {
-        ajaxCall("GET", baseApiOfek + `/Songs`, "", successCBSong, errorCB);
+        ajaxCall("GET", baseApi + `/Songs`, "", successCBSong, errorCB);
       })
       $(".allSongs").click();
       $("#searchForm").submit(() => {
@@ -569,16 +706,16 @@
         checkedValue = checkedValue.value
         switch (checkedValue) {
           case "songName":
-            serachApi = baseApiOfek + `/Songs/${userInput}/info`
+            serachApi = baseApi + `/Songs/${userInput}/info`
             break;
           case "artist":
-            serachApi = baseApiOfek + `/Artists/${userInput}/songs`
+            serachApi = baseApi + `/Artists/${userInput}/songs`
             break;
           case "lyrics":
-            serachApi = baseApiOfek + `/Songs/songBylyrics?lyrics=${userInput}`
+            serachApi = baseApi + `/Songs/songBylyrics?lyrics=${userInput}`
             break;
           case "allSongs":
-            serachApi = baseApiOfek + `/Songs`
+            serachApi = baseApi + `/Songs`
             break;
           default: return false;
         }
@@ -597,7 +734,7 @@
           return;
         }
         this.querySelector(".fa-heart-o").style.color = "red";
-        ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
+        ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
       })
 
     })
@@ -724,7 +861,7 @@
       }
     }
     function showSongPopup(songId, songName) {
-      ajaxCall("GET", baseApiOfek + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
+      ajaxCall("GET", baseApi + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
     }
 
     function successCBSongLyrics(data) {
@@ -748,7 +885,7 @@
               })
               return;
             }
-            ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
+            ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
           });
         }
       });
@@ -843,7 +980,7 @@
       }
       if (localStorage.user !== undefined) {
         let userId = JSON.parse(localStorage["user"]).id;
-        ajaxCall("GET", `${baseApi}/${userId}/songs`, "", function (responseData) {
+        ajaxCall("GET", `${baseApi}/Users/${userId}/songs`, "", function (responseData) {
           successCBFavRand(ids, responseData); // Pass the responseData to successCBFavRand
         }, errorCB);
       }

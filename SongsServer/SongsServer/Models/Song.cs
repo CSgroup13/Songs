@@ -24,6 +24,11 @@
             DBservices dbs = new DBservices();
             return dbs.getRandomSong();
         }
+        public static List<Song> getDiffRandomSongs(String songName)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getDiffRandomSongs(songName);
+        }
         public static Song getSongByName(string songName)
         {
             DBservices dbs = new DBservices();

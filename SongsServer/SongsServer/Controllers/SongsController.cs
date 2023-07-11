@@ -32,6 +32,21 @@ namespace SongsServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // GET: api/<SongsController>/randomSong
+        [HttpGet("diffRandomSongs/{songName}")]
+        public IActionResult getDiffRandomSongs(String songName)
+        {
+            try
+            {
+                return Ok(Song.getDiffRandomSongs(songName));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         // GET: api/<SongsController>/{songName}/info
         [HttpGet("{songName}/info")]
         public IActionResult getSongByName(string songName)
