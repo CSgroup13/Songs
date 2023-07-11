@@ -714,7 +714,7 @@
         title: `${data.name} Lyrics`,
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                <br>
-               <i id="addToFavorites" class="fa fa-heart-o" title="Add to Favorite" style="color: white;"></i>`,
+               <i class="fa fa-heart-o addToFavorites" title="Add to Favorite" style="font-size: 16px; color: white;"></i>`,
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -722,7 +722,7 @@
           // Initialize the scrollable section
           $('.song-popup').scrollTop(0);
           // Add event listener to the "Add to Favorites" button
-          $('#addToFavorites').click(function () {
+          $('.addToFavorites').click(function () {
             if (localStorage.user === undefined) {
               Swal.fire({
                 icon: 'error',
