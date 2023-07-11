@@ -1613,16 +1613,17 @@ body {
 
 .work-request--options label {
     display: block;
-    width: 150px;
+    width: 120px;
     margin-bottom: 30px;
-    line-height: 50px;
+    line-height: 40px;
     font-size: 16px;
     font-weight: 700;
     text-align: center;
     border: 2px solid #fff;
     cursor: pointer;
     -webkit-transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
-    transition: background-color .2s ease-in-out, border-color .2s ease-in-out
+    transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
+    border-radius: 10px;
 }
 
 .work-request--options label svg {
@@ -1639,8 +1640,8 @@ body {
 }
 
 .work-request--options input[type="checkbox"]:checked+label {
-    background-color: #0f33ff;
-    border-color: #0f33ff
+    background-color: #00aeff;
+    border-color: #00aeff;
 }
 
 .work-request--options input[type="checkbox"]:checked+label svg {
@@ -1654,19 +1655,20 @@ body {
     display: flex;
     width: 100%;
     -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
-    justify-content: space-between;
-    margin-bottom: 30px
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    margin: ;
 }
 
 .work-request--information .information-name,
 .work-request--information .information-email {
     position: relative;
-    width: 45%;
+    width: 25%;
     height: 50px;
-    font-size: 30px;
-    font-weight: 300
+    font-size: 20px;
+    font-weight: 300;
 }
 
 .work-request--information input[type="text"],
@@ -1676,7 +1678,8 @@ body {
     background-color: transparent;
     border: none;
     border-bottom: 1px solid #fff;
-    border-radius: 0
+    border-radius: 0;
+
 }
 
 .work-request--information input[type="text"]:focus,
@@ -1921,9 +1924,13 @@ body {
     transition-delay: .20s
 }
 
-#searchBtn,
+
 .artiststBtns {
     width: 40%;
+}
+
+#searchBtn {
+    width: 20%;
 }
 
 .artiststBtns {
@@ -1970,6 +1977,10 @@ body {
     width: 190px;
     height: 130px;
     cursor: pointer;
+}
+
+.rand_heart {
+    color: white;
 }
 
 .favSong:hover {

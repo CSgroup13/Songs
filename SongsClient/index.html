@@ -214,7 +214,7 @@
     function renderFavorites() {
       if (localStorage["user"] !== undefined) {
         let userId = JSON.parse(localStorage["user"]).id;
-        ajaxCall("GET", `${baseApi}/${userId}/songs`, "", successCBFavorites, errorCBFavorites);
+        ajaxCall("GET", `${baseApi}/${userId}/songs`, "", successCBFavorites, errorCB);
       }
       else {
         $("#favoriteSongs").html("<h3>You should login first to see your favorite songs</h3>");
@@ -229,14 +229,28 @@
         let favoritesDiv = $("#favoriteSongs");
         favoritesDiv.html("");
         for (let song of data) {
-          let songDiv = `<a id="${song.id}" class="favSong" title="Click to see song details">
+          let songDiv = `<a id="a_${song.id}" class="favSong" title="Click to see song details">
             <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
             <p class="favP">${song.artistName}</p>
           </a>
           `;
           favoritesDiv.append(songDiv);
-          $("#favoriteSongs").on("click",`#${song.id}`,function () {
-            showSongPopup(song.id, song.name, 'remove')
+          $(`#a_${song.id}`).on("click", function () {
+            Swal.fire({
+              title: `${song.name} Lyrics`,
+              html: `<div class="song-popup">${song.lyrics.replace(/\n/g, '<br>')}</div>
+               <br>
+               <i id="fav_${song.id}" class="fa fa-heart-o removeFromFavorite" title="Remove From Favorite" style="color:red;"></i>`,
+              color: 'white',
+              background: '#171717',
+              confirmButtonText: "Close",
+              didOpen: () => {
+                $('.song-popup').scrollTop(0);
+                $(`#fav_${song.id}`).click(function () {
+                  ajaxCall("DELETE", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${song.id}`, "", successCBRemoveFromFavorite, errorCB);
+                });
+              }
+            });
           })
         }
       }
@@ -252,16 +266,6 @@
         renderFavorites();
         ajaxCall("GET", baseApiOfek + `/Songs/randomSong`, "", successCBRandom, errorCB);
       }
-    }
-
-    function errorCBFavorites(error) {
-      let message = error.responseText;
-      Swal.fire({
-        icon: 'error',
-        text: message,
-        color: 'white',
-        background: '#171717'
-      })
     }
 
     ///////////Artists/////////////////
@@ -382,19 +386,19 @@
                     <h3 class="randTitle" style="display: inline-block;"></h3>
                     <p class="randPara"></p>
                     <br>
-                    <i class="fa fa-heart-o "></i>
+                    <i class="fa fa-heart-o rand_heart"></i>
                   </a>
                   <a class="randSongs" title="click to add to your favorite">
                     <h3 class="randTitle"></h3>
                     <p class="randPara"></p>
                     <br>
-                    <i class="fa fa-heart-o "></i>
+                    <i class="fa fa-heart-o rand_heart"></i>
                   </a>
                   <a class="randSongs" title="click to add to your favorite">
                     <h3 class="randTitle"></h3>
                     <p class="randPara"></p>
                     <br>
-                    <i class="fa fa-heart-o"></i>
+                    <i class="fa fa-heart-o rand_heart"></i>
                   </a>
                 </div>
               </div>
@@ -582,7 +586,7 @@
         return false;
       })
 
-      $(".randSongs").on("click", function () {
+      $(document).on("click", ".randSongs", function () {
         if (localStorage.user === undefined) {
           Swal.fire({
             icon: 'error',
@@ -592,8 +596,8 @@
           })
           return;
         }
-        this.querySelector(".fa-heart-o").style.color = "red"
-        ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id}`, "", successCBAddToFavorite, errorCB);
+        this.querySelector(".fa-heart-o").style.color = "red";
+        ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
       })
 
     })
@@ -614,7 +618,6 @@
       recognization.onresult = (e) => {
         var transcript = e.results[0][0].transcript;
         output.val(transcript);
-        console.log(transcript)
       }
       recognization.start();
     }
@@ -625,7 +628,7 @@
         $("#songs").append(`
                   <div class="work--lockup">
                     <ul class="slider">
-                      <li class="slider--item slider--item-center" id="${data.id}">
+                      <li class="slider--item slider--item-center" id="slideSong_${data.id}">
                         <a>
                           <div class="slider--item-image">
                             <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
@@ -636,8 +639,8 @@
                       </li>
                     </ul>
                   </div>`)
-        $(`#${data.id}`).click(function () {
-          showSongPopup(data.id, data.name, 'add');
+        $(`#slideSong_${data.id}`).click(function () {
+          showSongPopup(data.id, data.name);
         });
       }
       else {
@@ -646,7 +649,7 @@
             <ul class="slider"> </ul>
               </div>`)
         $("div.work--lockup>ul.slider").append(`
-            <li class="slider--item slider--item-center" id="${data[0].id}">
+            <li class="slider--item slider--item-center" id="slideSong_${data[0].id}">
             <a>
             <div class="slider--item-image">
             <img src="assets/img/work-victory.jpg" alt="Victory">
@@ -655,11 +658,11 @@
             <p class="slider--item-description">${data[0].artistName}</p>
             </a>
             </li>`)
-        $(`#${data[0].id}`).click(function () {
-          showSongPopup(data[0].id, data[0].name, 'add');
+        $(`#slideSong_${data[0].id}`).click(function () {
+          showSongPopup(data[0].id, data[0].name);
         });
         if (data.length > 1) {
-          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="${data[1].id}">
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="slideSong_${data[1].id}">
             <a>
               <div class="slider--item-image">
                 <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
@@ -668,12 +671,12 @@
              <p class="slider--item-description">${data[1].artistName}</p>
             </a>
           </li>`)
-          $(`#${data[1].id}`).click(function () {
-            showSongPopup(data[1].id, data[1].name, 'add');
+          $(`#slideSong_${data[1].id}`).click(function () {
+            showSongPopup(data[1].id, data[1].name);
           });
         }
         if (data.length > 2) {
-          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-right" id="${data[2].id}">
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-right" id="slideSong_${data[2].id}">
           <a>
             <div class="slider--item-image">
               <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
@@ -682,12 +685,12 @@
             <p class="slider--item-description">${data[2].artistName}</p>
             </a>
             </li>`)
-          $(`#${data[2].id}`).click(function () {
-            showSongPopup(data[2].id, data[2].name, 'add');
+          $(`#slideSong_${data[2].id}`).click(function () {
+            showSongPopup(data[2].id, data[2].name);
           });
         }
         for (let i = 3; i < data.length; i++) {
-          $("div.work--lockup>ul.slider").append(`<li class="slider--item" id="${data[i].id}">
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item" id="slideSong_${data[i].id}">
           <a>
             <div class="slider--item-image">
               <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
@@ -696,8 +699,8 @@
             <p class="slider--item-description">${data[i].artistName}</p>
           </a>
              </li> `)
-          $(`#${data[i].id}`).click(function () {
-            showSongPopup(data[i].id, data[i].name, 'add');
+          $(`#slideSong_${data[i].id}`).click(function () {
+            showSongPopup(data[i].id, data[i].name);
           });
         }
         if (data.length > 2) {
@@ -720,44 +723,22 @@
         workSlider();
       }
     }
-    function showSongPopup(songId, songName, favorite) {
-      ajaxCall("GET", baseApiOfek + `/Songs/${songName}/info`, "", function (data) { successCBSongLyrics(data, favorite) }, errorCB);
+    function showSongPopup(songId, songName) {
+      ajaxCall("GET", baseApiOfek + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
     }
 
-    function successCBSongLyrics(data, favorite) {
-      let className;
-      let titleText;
-      let style;
-      let req;
-      let successFunc;
-
-      if (favorite === "add") {
-        className = "addToFavorites";
-        titleText = "Add to Favorites";
-        style = "color: white;";
-        req = "POST";
-        successFunc = successCBAddToFavorite;
-      }
-      else {
-        className = "removeFromFavorites";
-        titleText = "Remove from Favorites";
-        style = "color: red;";
-        req = "DELETE";
-        successFunc = successCBRemoveFromFavorite;
-      }
+    function successCBSongLyrics(data) {
       Swal.fire({
         title: `${data.name} Lyrics`,
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                <br>
-               <i class="fa fa-heart-o ${className}" title="${titleText}" style="${style}"></i>`,
+               <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>`,
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
         didOpen: () => {
-          // Initialize the scrollable section
           $('.song-popup').scrollTop(0);
-          // Add event listener to the "Add to Favorites" button
-          $(`.${className}`).click(function () {
+          $(`#song_${data.id}`).click(function () {
             if (localStorage.user === undefined) {
               Swal.fire({
                 icon: 'error',
@@ -767,7 +748,7 @@
               })
               return;
             }
-            ajaxCall(req, baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successFunc, errorCB);
+            ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
           });
         }
       });
@@ -855,7 +836,7 @@
       let songsCards = document.querySelectorAll(".randSongs");
       let ids = [];
       for (let i = 0; i < 3; i++) {
-        songsCards[i].id = data[i].id;
+        songsCards[i].id = `rand_${data[i].id}`;
         songsCards[i].querySelector(".randTitle").innerHTML = data[i].name;
         songsCards[i].querySelector(".randPara").innerHTML = data[i].artistName;
         ids.push(data[i].id);
@@ -864,7 +845,7 @@
         let userId = JSON.parse(localStorage["user"]).id;
         ajaxCall("GET", `${baseApi}/${userId}/songs`, "", function (responseData) {
           successCBFavRand(ids, responseData); // Pass the responseData to successCBFavRand
-        }, errorCBFavorites);
+        }, errorCB);
       }
     }
 
@@ -875,7 +856,7 @@
       });
       const matchingSongs = data.filter(song => ids.includes(song.id));
       matchingSongs.forEach(matchingSong => {
-        document.getElementById(matchingSong.id).querySelector("i.fa.fa-heart-o").style.color = "red";
+        document.getElementById(`rand_${matchingSong.id}`).querySelector("i.fa.fa-heart-o").style.color = "red";
       });
     }
 
