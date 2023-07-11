@@ -300,10 +300,13 @@
     const lastfmBaseAPi = "http://ws.audioscrobbler.com/2.0";
     const lastfmKey = "d6293ebc904c9f3e71bf638f0b55a5f6";
 
-    const getArtistDetails = (artistName) => {
-      const api = `${lastfmBaseAPi}/?method=artist.getinfo&artist=${artistName}&api_key=${lastfmKey}&format=json`;
-      return new Promise((resolve, reject) => {
-        ajaxCall("GET", api, "", (data) => {
+    function successCBAllArtists(data) {
+      const artistsDiv = document.getElementById("artists");
+      const artistsArr = [];
+      for (let artist of data) {
+        const api = `${lastfmBaseAPi}/?method=artist.getinfo&artist=${artist.name}&api_key=${lastfmKey}&format=json`;
+
+        ajaxCall("GET", api, "", function (data) {
           const artistObj = data.artist;
           const name = artistObj.name;
           const summary = artistObj.bio.summary;
@@ -313,39 +316,25 @@
           const published = artistObj.bio.published.split(",")[0];
           const res = { name, summary, image, listeners, playcount, published };
 
-          resolve(res);
-        }, reject);
-      });
-    };
+          artistsDiv.innerHTML += `<div class="artist">
+        <div class="flipper">
+          <div class="front">
+            <img src=${res.image}>
+          </div>
+          <div class="back">
+            <h4>${res.name}</h4>
+            <p>published: ${res.published}</p>
+            <p>listeners: ${res.listeners}</p>
+            <p>playcount: ${res.playcount}</p>
+          </div>
+        </div>
+      </div>`;
 
-    function successCBAllArtists(data) {
-      const artistsDiv = document.getElementById("artists");
-      const artistsArr = [];
-      for (let artist of data) {
-        getArtistDetails(artist.name)
-          .then((res) => {
-            artistsArr.push(res);
-            artistsDiv.innerHTML += `<div class="artist">
-    <div class="flipper">
-      <div class="front">
-        <img src=${res.image}>
-      </div>
-      <div class="back">
-        <h4>${res.name}</h4>
-        <p>published: ${res.published}</p>
-        <p>listeners: ${res.listeners}</p>
-        <p>playcount: ${res.playcount}</p>
-      </div>
-    </div>
-  </div>`;
-          })
-          .catch((error) => {
-            errorCB(error);
-          })
-          .finally(() => {
-            localStorage.artists = JSON.stringify(artistsArr);
-          })
-          ;
+          artistsArr.push(res);
+          localStorage.artists = JSON.stringify(artistsArr);
+        }, function (error) {
+          errorCB(error);
+        });
       }
     }
   </script>
