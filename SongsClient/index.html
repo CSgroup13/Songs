@@ -229,12 +229,16 @@
         let favoritesDiv = $("#favoriteSongs");
         favoritesDiv.html("");
         for (let song of data) {
-          let songDiv = `<a id="${song.id}" class="favSong" title="Click to see song details" onclick="showSongPopup('${song.id}', '${song.name}','remove')">
-  <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
-  <p class="favP">${song.artistName}</p>
-</a>
-`;
+          let songDiv = `<a id="${song.id}" class="favSong" title="Click to see song details">
+            <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
+            <p class="favP">${song.artistName}</p>
+          </a>
+          `;
           favoritesDiv.append(songDiv);
+          $("#favoriteSongs").on("click",`#${song.id}`,function () {
+            console.log("in")
+            showSongPopup(song.id, song.name, 'remove')
+          })
         }
       }
     }
@@ -634,7 +638,7 @@
                     </ul>
                   </div>`)
         $(`#${data.id}`).click(function () {
-          showSongPopup(data.id, data.name,'add');
+          showSongPopup(data.id, data.name, 'add');
         });
       }
       else {
@@ -653,7 +657,7 @@
             </a>
             </li>`)
         $(`#${data[0].id}`).click(function () {
-          showSongPopup(data[0].id, data[0].name,'add');
+          showSongPopup(data[0].id, data[0].name, 'add');
         });
         if (data.length > 1) {
           $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="${data[1].id}">
@@ -666,8 +670,8 @@
             </a>
           </li>`)
           $(`#${data[1].id}`).click(function () {
-          showSongPopup(data[1].id, data[1].name,'add');
-        });
+            showSongPopup(data[1].id, data[1].name, 'add');
+          });
         }
         if (data.length > 2) {
           $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-right" id="${data[2].id}">
@@ -679,9 +683,9 @@
             <p class="slider--item-description">${data[2].artistName}</p>
             </a>
             </li>`)
-            $(`#${data[2].id}`).click(function () {
-          showSongPopup(data[2].id, data[2].name,'add');
-        });
+          $(`#${data[2].id}`).click(function () {
+            showSongPopup(data[2].id, data[2].name, 'add');
+          });
         }
         for (let i = 3; i < data.length; i++) {
           $("div.work--lockup>ul.slider").append(`<li class="slider--item" id="${data[i].id}">
@@ -693,9 +697,9 @@
             <p class="slider--item-description">${data[i].artistName}</p>
           </a>
              </li> `)
-             $(`#${data[i].id}`).click(function () {
-          showSongPopup(data[i].id, data[i].name,'add');
-        });
+          $(`#${data[i].id}`).click(function () {
+            showSongPopup(data[i].id, data[i].name, 'add');
+          });
         }
         if (data.length > 2) {
           $("div.work--lockup").append(`<div class="slider--prev">
