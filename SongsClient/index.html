@@ -620,11 +620,10 @@
     function successCBSong(data) {
       $("#songs").html("")
       if (data.length === undefined) {//single song returned as object and not array
-        let lyrics = data.lyrics
-        $("#songs").append(`<h2>Results:</h2>
+        $("#songs").append(`
                   <div class="work--lockup">
                     <ul class="slider">
-                      <li class="slider--item slider--item-center" id="${data.id}" onclick="showSongPopup('${data.id}', '${data.name}')">
+                      <li class="slider--item slider--item-center" id="${data.id}">
                         <a>
                           <div class="slider--item-image">
                             <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
@@ -635,13 +634,17 @@
                       </li>
                     </ul>
                   </div>`)
+        $(`#${data.id}`).click(function () {
+          showSongPopup(data.id, data.name,'add');
+        });
       }
       else {
-        let restOfSongs = "";
-        restOfSongs += `<h2>Results:</h2>
+        $("#songs").append(`
            <div class="work--lockup">
-            <ul class="slider">
-            <li class="slider--item slider--item-center" id="${data[0].id}" onclick="showSongPopup('${data[0].id}', '${data[0].name}')">
+            <ul class="slider"> </ul>
+              </div>`)
+        $("div.work--lockup>ul.slider").append(`
+            <li class="slider--item slider--item-center" id="${data[0].id}">
             <a>
             <div class="slider--item-image">
             <img src="assets/img/work-victory.jpg" alt="Victory">
@@ -649,10 +652,12 @@
             <p class="slider--item-title">${data[0].name}</p>
             <p class="slider--item-description">${data[0].artistName}</p>
             </a>
-            </li>`
+            </li>`)
+        $(`#${data[0].id}`).click(function () {
+          showSongPopup(data[0].id, data[0].name,'add');
+        });
         if (data.length > 1) {
-          restOfSongs +=
-            `<li class="slider--item slider--item-left" id="${data[1].id}" onclick="showSongPopup('${data[1].id}', '${data[1].name}')">
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="${data[1].id}">
             <a>
               <div class="slider--item-image">
                 <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
@@ -660,21 +665,27 @@
              <p class="slider--item-title">${data[1].name}</p>
              <p class="slider--item-description">${data[1].artistName}</p>
             </a>
-          </li>`
+          </li>`)
+          $(`#${data[1].id}`).click(function () {
+          showSongPopup(data[1].id, data[1].name,'add');
+        });
         }
         if (data.length > 2) {
-          restOfSongs += `<li class="slider--item slider--item-right" id="${data[2].id}" onclick=showSongPopup('${data[2].id}','${data[2].name}')">
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-right" id="${data[2].id}">
           <a>
             <div class="slider--item-image">
               <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
             </div>
             <p class="slider--item-title">${data[2].name}</p>
             <p class="slider--item-description">${data[2].artistName}</p>
-          </a>
-        </li>`
+            </a>
+            </li>`)
+            $(`#${data[2].id}`).click(function () {
+          showSongPopup(data[2].id, data[2].name,'add');
+        });
         }
         for (let i = 3; i < data.length; i++) {
-          restOfSongs += ` <li class="slider--item" id="${data[i].id}" onclick="showSongPopup('${data[i].id}', '${data[i].name}')">
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item" id="${data[i].id}">
           <a>
             <div class="slider--item-image">
               <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
@@ -682,11 +693,13 @@
             <p class="slider--item-title">${data[i].name}</p>
             <p class="slider--item-description">${data[i].artistName}</p>
           </a>
-             </li> `
+             </li> `)
+             $(`#${data[i].id}`).click(function () {
+          showSongPopup(data[i].id, data[i].name,'add');
+        });
         }
-        restOfSongs += `</ul>`
         if (data.length > 2) {
-          restOfSongs += ` <div class="slider--prev">
+          $("div.work--lockup").append(`<div class="slider--prev">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
                         style="enable-background:new 0 0 150 118;" xml:space="preserve">
@@ -700,9 +713,8 @@
                         style="enable-background:new 0 0 150 118;" xml:space="preserve">
                         <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
                           <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
-                        </g></svg></div></div >`
+                        </g></svg></div>`)
         }
-        $("#songs").append(restOfSongs);
         workSlider();
       }
     }

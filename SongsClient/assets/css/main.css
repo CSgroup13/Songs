@@ -1738,7 +1738,8 @@ body {
     .work-request--options label {
         width: 150px;
         margin-bottom: 15px;
-        font-size: 14px
+        font-size: 14px;
+        line-height: 30px;
     }
 
     .work-request--options input[type="checkbox"]:checked+label svg {
