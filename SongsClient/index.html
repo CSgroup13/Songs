@@ -22,7 +22,11 @@
     $(document).ready(() => {
       ///Artists////
 
-      const renderArtists = () => {
+      $("#showAllArtistsBtn").click(function () {
+        $("#searchArtistInput").val("");
+        renderArtists();
+      })
+      function renderArtists() {
         if (localStorage.artists == undefined)
           ajaxCall("GET", baseApiOfek + `/Artists`, "", successCBAllArtists, errorCB);
         else {
@@ -207,7 +211,7 @@
 
     ////////////////////////Favorites Songs///////////////////
 
-    let renderFavorites = () => {
+    function renderFavorites() {
       if (localStorage["user"] !== undefined) {
         let userId = JSON.parse(localStorage["user"]).id;
         ajaxCall("GET", `${baseApi}/${userId}/songs`, "", successCBFavorites, errorCBFavorites);
@@ -225,24 +229,15 @@
         let favoritesDiv = $("#favoriteSongs");
         favoritesDiv.html("");
         for (let song of data) {
-          let songDiv = `<a id="${song.id}" class="favSong" title="Click the heart to remove song from favorite">
+          let songDiv = `<a id="${song.id}" class="favSong" title="Click to see song details" onclick="showSongPopup('${song.id}', '${song.name}','remove')">
   <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
   <p class="favP">${song.artistName}</p>
-  <br>
-  <i class="fa fa-heart-o" style=color:red;"></i>
 </a>
 `;
           favoritesDiv.append(songDiv);
         }
       }
     }
-
-    $(document).on("click", "#heart", function () {
-      let userId = JSON.parse(localStorage["user"]).id;
-      let songId = $(this).closest(".favSong").attr("id");
-      ajaxCall("DELETE", baseApi + "/" + userId + "/" + songId, "", successCBRemoveFromFavorite, errorCBFavorites);
-    });
-
     function successCBRemoveFromFavorite(data) {
       if (data === true) {
         Swal.fire({
@@ -282,8 +277,8 @@
           const image = artistObj.image[2]["#text"];
           const listeners = artistObj.stats.listeners;
           const playcount = artistObj.stats.playcount;
-          const published = artistObj.bio.published.split(",")[0];
-          const res = { name, summary, listeners, playcount, published, image };
+          const rate = artist.rate;
+          const res = { name, summary, listeners, playcount, rate, image };
           artistsArr.push(res);
           count -= 1;
           if (count === 0) {
@@ -299,20 +294,23 @@
     function addArtistsToDiv(data) {
       const artistsDiv = document.getElementById("artists");
       artistsDiv.innerHTML = "";
-      for (let artist of data) {
-        artistsDiv.innerHTML += `<div class="artist">
-          <div class="flipper">
-            <div class="front">
-              <img src=${artist.image}>
-            </div>
-            <div class="back">
-              <h4>${artist.name}</h4>
-              <p>published: ${artist.published}</p>
-              <p>listeners: ${artist.listeners}</p>
-              <p>playcount: ${artist.playcount}</p>
-            </div>
-          </div>
-        </div>`;
+      if (data.length !== 0) {
+        for (let artist of data) {
+          artistsDiv.innerHTML += `<div class="artist">
+              <div class="front">
+                <img src=${artist.image}>
+              </div>
+              <div class="back">
+                <h4>${artist.name}</h4>
+                <p>listeners: ${artist.listeners}</p>
+                <p>playcount: ${artist.playcount}</p>
+                <p>rate: ${artist.rate}</p>
+              </div>
+          </div>`;
+        }
+      }
+      else {
+        artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
       }
     }
 
@@ -377,19 +375,19 @@
                   <img src="assets/img/mainImage.png" alt="Welcome">
                 </div>
                 <div class="intro--options">
-                  <a class="randSongs">
+                  <a class="randSongs" title="click to add to your favorite">
                     <h3 class="randTitle" style="display: inline-block;"></h3>
                     <p class="randPara"></p>
                     <br>
                     <i class="fa fa-heart-o "></i>
                   </a>
-                  <a class="randSongs">
+                  <a class="randSongs" title="click to add to your favorite">
                     <h3 class="randTitle"></h3>
                     <p class="randPara"></p>
                     <br>
                     <i class="fa fa-heart-o "></i>
                   </a>
-                  <a class="randSongs">
+                  <a class="randSongs" title="click to add to your favorite">
                     <h3 class="randTitle"></h3>
                     <p class="randPara"></p>
                     <br>
@@ -454,7 +452,8 @@
                 <div>
                   <div class="work-request--information">
                     <form id="searchArtistForm">
-                      <input id="searchArtistInput" type="text" name="search" placeholder="Search">
+                      <input id="searchArtistInput" type="text" name="search" placeholder="Search"
+                        title="name must include only letters" pattern="^[a-zA-Z\s]+$" required>
                       <button class="artiststBtns" id="searchArtistBtn">Search</button>
                     </form>
                     <button class="artiststBtns" id="showAllArtistsBtn">Show All</button>
@@ -718,15 +717,36 @@
         workSlider();
       }
     }
-    function showSongPopup(songId, songName) {
-      ajaxCall("GET", baseApiOfek + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
+    function showSongPopup(songId, songName, favorite) {
+      ajaxCall("GET", baseApiOfek + `/Songs/${songName}/info`, "", function (data) { successCBSongLyrics(data, favorite) }, errorCB);
     }
-    function successCBSongLyrics(data) {
+
+    function successCBSongLyrics(data, favorite) {
+      let className;
+      let titleText;
+      let style;
+      let req;
+      let successFunc;
+
+      if (favorite === "add") {
+        className = "addToFavorites";
+        titleText = "Add to Favorites";
+        style = "color: white;";
+        req = "POST";
+        successFunc = successCBAddToFavorite;
+      }
+      else {
+        className = "removeFromFavorites";
+        titleText = "Remove from Favorites";
+        style = "color: red;";
+        req = "DELETE";
+        successFunc = successCBRemoveFromFavorite;
+      }
       Swal.fire({
         title: `${data.name} Lyrics`,
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                <br>
-               <i class="fa fa-heart-o addToFavorites" title="Add to Favorite" style="font-size: 16px; color: white;"></i>`,
+               <i class="fa fa-heart-o ${className}" title="${titleText}" style="${style}"></i>`,
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -734,7 +754,7 @@
           // Initialize the scrollable section
           $('.song-popup').scrollTop(0);
           // Add event listener to the "Add to Favorites" button
-          $('.addToFavorites').click(function () {
+          $(`.${className}`).click(function () {
             if (localStorage.user === undefined) {
               Swal.fire({
                 icon: 'error',
@@ -744,7 +764,7 @@
               })
               return;
             }
-            ajaxCall("POST", baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
+            ajaxCall(req, baseApiOfek + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successFunc, errorCB);
           });
         }
       });
