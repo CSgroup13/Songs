@@ -1921,16 +1921,16 @@ body {
 }
 
 #searchBtn,
-#searchArtistBtn {
+.artiststBtns {
     width: 40%;
 }
 
-#searchArtistInput {
+.artiststBtns {
     display: inline-block !important;
     width: 200px;
 }
 
-#searchArtistBtn {
+.artiststBtns {
     background-color: #0f33ff;
     color: white;
     border-radius: 15px;
@@ -1939,9 +1939,14 @@ body {
     height: 50px !important;
     display: inline-block !important;
     margin-left: 30px;
+    font-size: 16px !important;
 }
 
-#searchArtistBtn:hover {
+#searchArtistInput {
+    width: 210px;
+}
+
+.artiststBtns:hover {
     opacity: .9;
 }
 
@@ -2086,10 +2091,19 @@ body {
     cursor: pointer;
 }
 
-#searchArtistBtn {
+.artiststBtns {
     display: inline-block;
     width: 60px;
     background-color: #0f33ff;
     color: white;
     font-size: 20px;
+}
+
+.fa.fa-heart-o {
+    cursor: pointer;
+    font-size: 25px;
+}
+
+.fa.fa-heart-o:hover {
+    color: red !important;
 }
