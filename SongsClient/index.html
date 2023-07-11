@@ -1013,7 +1013,7 @@
       $.ajax({
         async: false,
         type: "GET",
-        url: baseApiOfek + `/Songs/randomSong`,
+        url: baseApi + `/Songs/randomSong`,
         data: "",
         cache: false,
         contentType: "application/json",
@@ -1031,14 +1031,12 @@
       return q4Arr;
     }
 
-
-
     function getQ5() {
       let q5Arr = [];
       $.ajax({
         async: false,
         type: "GET",
-        url: baseApiOfek + `/Songs/randomSong`,
+        url: baseApi + `/Songs/randomSong`,
         data: "",
         cache: false,
         contentType: "application/json",
@@ -1047,7 +1045,7 @@
 
           const randInt = Math.floor(Math.random() * 3)
           const lyrics = songs[randInt].lyrics.split('\n')
-          const songLyrics =lyrics[1].split("\n")[0];
+          const songLyrics = lyrics[1].split("\n")[0];
           const songArtist = songs[randInt].artistName
           q5Arr.push(`Who sang: ${songLyrics.split("\n")[0]} ?`, songArtist)
           q5Arr.push(...generateDiff3Artists(songArtist))
@@ -1056,12 +1054,13 @@
       });
       return q5Arr;
     }
+
     function getQ8() {
       let q6Arr = [];
       $.ajax({
         async: false,
         type: "GET",
-        url: baseApiOfek + `/Songs/randomSong`,
+        url: baseApi + `/Songs/randomSong`,
         data: "",
         cache: false,
         contentType: "application/json",
@@ -1076,16 +1075,16 @@
           q6Arr.push(`Which one of the lyrics is from: ${songName.split("\n")[0]} ?`, songLyrics)
           let diffArtist = []
           diffArtist.push(...generateDiff3Artists(songArtist))
-          const lyrics1=getArtistSongs(diffArtist[0])[0].lyrics.split('\n')
-          const lyrics2=getArtistSongs(diffArtist[1])[0].lyrics.split('\n')
-          const lyrics3=getArtistSongs(diffArtist[2])[0].lyrics.split('\n')
-          q6Arr.push(lyrics1[1].split("\n")[0],lyrics2[1].split("\n")[0],lyrics3[1].split("\n")[0])
+          const lyrics1 = getArtistSongs(diffArtist[0])[0].lyrics.split('\n')
+          const lyrics2 = getArtistSongs(diffArtist[1])[0].lyrics.split('\n')
+          const lyrics3 = getArtistSongs(diffArtist[2])[0].lyrics.split('\n')
+          q6Arr.push(lyrics1[1].split("\n")[0], lyrics2[1].split("\n")[0], lyrics3[1].split("\n")[0])
         },
         error: errorCB
       });
       return q6Arr;
     }
-//generates 3 different artst other than given songArtist
+    //generates 3 different artst other than given songArtist
     function generateDiff3Artists(songArtist) {
       const data = JSON.parse(localStorage.artists);
       const artistsArr = []
@@ -1097,7 +1096,6 @@
       }
       return ([diffArtists[arr[0]].name, diffArtists[arr[1]].name, diffArtists[arr[2]].name])
     }
-
 
   </script>
   <!-- <script src="https://apis.google.com/js/api.js"></script>
