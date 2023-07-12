@@ -2124,3 +2124,7 @@ body {
 .fa.fa-heart-o:hover {
     color: red !important;
 }
+
+#mainImage {
+    width: 41%;
+}
