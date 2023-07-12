@@ -332,24 +332,33 @@
           $("#Quiz").append(`<button id="playAgain">Play Again</button>`);
           $("#Quiz").append(`<div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
           $("#playAgain").on('click', () => manageQuiz());
+          let userId = JSON.parse(localStorage["user"]).id;
+          ajaxCall("POST", `${baseApi}/Users/${userId}/Score/${score}`, "", successCBScoreUpdate, errorCB);
           currentQuestionIndex = 0;
           score = 0
           return;
         }
         renderQuestion(questionsQueue[currentQuestionIndex++]);
       }
-
       $(".quizNav").click(() => {
+        const interval = setInterval(() => {
+          if (localStorage.artists) {
+            clearInterval(interval); // Clear the interval once localStorage.artists is available
+            renderQuizHTML();
+          }
+        }, 100); // Interval check every 100 milliseconds
+      });
+
+      function renderQuizHTML() {
         const quizDiv = $("#Quiz");
         if (localStorage.user !== undefined) {
           quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
           quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
           $("#startQuizBtn").on('click', () => manageQuiz());
-        }
-        else {
+        } else {
           quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
         }
-      })
+      }
 
     })
     ////////////////////////Favorites Songs///////////////////
@@ -468,7 +477,7 @@
                 <h4>${artist.name}</h4>
                 <p>listeners: ${artist.listeners}</p>
                 <p>playcount: ${artist.playcount}</p>
-                <p>rate: ${artist.rate}</p>
+                <p>&#x1F44D; ${artist.rate}</p>
               </div>
           </div>`;
         }
@@ -796,6 +805,9 @@
 
 
     })
+    function successCBScoreUpdate() {
+      console.log('score updated');
+    }
     function successCBAddToFavorite() {
       Swal.fire({
         icon: 'success',
@@ -1195,8 +1207,8 @@
                       <label for="text">search</label>
                     </div>
                     <button type="button" class="microphone-button" onclick="runSpeechRecog()">
-                      <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-mic" viewBox="0 0 16 16">
+                      <svg class="microphone-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                        fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
                         <path
                           d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
                         <path
@@ -1244,7 +1256,7 @@
             </li>
             <li id="quizWrapper" class="l-section section">
               <div id="Quiz">
-
+                <span class="loader"></span>
               </div>
             </li>
             <li class="l-section section">
