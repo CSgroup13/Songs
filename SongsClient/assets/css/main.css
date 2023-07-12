@@ -1979,6 +1979,49 @@ body {
     cursor: pointer;
 }
 
+.answerDiv {
+    display: inline-block;
+    border: 2px solid white;
+    padding: 8px;
+    border-radius: 10px;
+    width: 40%;
+    height: 130px;
+    cursor: pointer;
+    margin: 20px;
+    display: flex;
+    align-items: center;
+}
+.answerDiv:hover{
+    border: 2px solid  #0f33ff;
+}
+#answers{
+   position: absolute;
+   bottom: 20px;
+   
+}
+#Quiz{
+    margin: 0 auto;
+    height: 70%;
+    width: 50%;
+    display: flex;
+ position: relative;
+ text-align: center;
+ border: 3px solid  white;
+
+}
+#question{
+   
+    height: 30%;
+    margin:50px auto;
+}
+#quizWrapper{
+display: flex;
+align-items: center;
+}
+.row{
+    justify-content: center;
+    display: flex;
+}
 .rand_heart {
     color: white;
 }

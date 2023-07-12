@@ -621,12 +621,12 @@
                 </div>
               </div>
             </li>
-            <li class="l-section section">
-              <div class="about--banner">
-                <h2>Songs Quiz</h2>
-              </div>
+            <li id="quizWrapper" class="l-section section">
               <div id="Quiz">
-
+                <div class="about--banner">
+                  <h2>Songs Quiz</h2>
+                </div>
+                
               </div>
             </li>
             <li class="l-section section">
@@ -1095,6 +1095,37 @@
         if (!arr.includes(r)) arr.push(r);
       }
       return ([diffArtists[arr[0]].name, diffArtists[arr[1]].name, diffArtists[arr[2]].name])
+    }
+
+    function renderQuestion(){
+
+      `<div id="question">
+                  <h3 style="display: inline-block;">QUESTION</h3>
+                </div>
+                <div id="answers">
+                  <div id="row1" class="row">
+                    <div id="q_1" class="answerDiv">
+                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
+
+                    </div>
+                    <div id="q_2" class="answerDiv">
+                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
+
+                    </div>
+                  </div>
+                  <div id="row2" class="row">
+                    <div id="q_3" class="answerDiv">
+                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
+
+                    </div>
+                    <div id="q_4" class="answerDiv">
+                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
+
+                    </div>
+                  </div>
+
+
+                </div>`
     }
 
   </script>
