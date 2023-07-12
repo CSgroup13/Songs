@@ -229,21 +229,41 @@
           if (!randNums.includes(r)) randNums.push(r);
         }
         $("#Quiz").html(
-          `<span id="playerScore">Score: ${score} Time left: &nbsp</span>
+          `<table id="myTable">
+                  <thead>
+                    <tr>
+                      <th colspan="2">
+                        <span id="playerScore">Score: ${score} Time left: &nbsp</span>
           <span id="timer">30</span>
-        <div id="question">
+                      </th>
+                    </tr>
+                    <tr>
+                      <th colspan="2">
+                        <div id="question">
                   <h3 style="display: inline-block;">${qArr[0]}</h3>
                 </div>
-                <div id="answers">
-                  <div id="row1" class="row">
-                  ${answersArr[randNums[0]]}
-                  ${answersArr[randNums[1]]}
-                  </div>
-                  <div id="row2" class="row">
-                    ${answersArr[randNums[2]]}
-                  ${answersArr[randNums[3]]}
-                  </div>
-                </div>`)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        ${answersArr[randNums[0]]}
+                      </td>
+                      <td>
+                        ${answersArr[randNums[1]]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        ${answersArr[randNums[2]]}
+                      </td>
+                      <td>
+                        ${answersArr[randNums[3]]}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>`)
         $('#q_1').on("click", function () {
           clearInterval(interval);
           alertAnswer('Correct!', 'success')
@@ -266,7 +286,7 @@
           }
         }, 1000);
       }
-
+      //create table ?
 
       function alertAnswer(swalTitle, swalIcon) {
         if (swalIcon === "success")
@@ -1146,9 +1166,9 @@
                     <input type="submit" id="searchBtn" value="Search">
                   </div>
                 </form>
-                <!-- <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
+                <button onclick="runSpeechRecog()" style="background-color: black;">Sing</button>
                 <button onclick="authenticate().then(loadClient)">authorize and load</button>
-<button onclick="execute()">execute</button> -->
+                <button onclick="execute()">execute</button>
               </div>
               <div class="work" id="songs">
             </li>
@@ -1209,41 +1229,41 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
   <script src="assets/js/functions-min.js"></script>
-  <!-- <script src="https://apis.google.com/js/api.js"></script>
-<script>
-  /**
-   * Sample JavaScript code for youtube.search.list
-   * See instructions for running APIs Explorer code samples locally:
-   * https://developers.google.com/explorer-help/code-samples#javascript
-   */
+  <script src="https://apis.google.com/js/api.js"></script>
+  <script>
+    /**
+     * Sample JavaScript code for youtube.search.list
+     * See instructions for running APIs Explorer code samples locally:
+     * https://developers.google.com/explorer-help/code-samples#javascript
+     */
 
-  function authenticate() {
-    return gapi.auth2.getAuthInstance()
-        .signIn({scope: "https://www.googleapis.com/auth/youtube.force-ssl"})
-        .then(function() { console.log("Sign-in successful"); },
-              function(err) { console.error("Error signing in", err); });
-  }
-  function loadClient() {
-    gapi.client.setApiKey("AIzaSyA0myQXBGlJF9glTLy5OKyLna33CfgTvzA");
-    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
-        .then(function() { console.log("GAPI client loaded for API"); },
-              function(err) { console.error("Error loading GAPI client for API", err); });
-  }
-  // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute() {
-    return gapi.client.youtube.search.list({
-      "q": "dior"
-    })
-        .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-              },
-              function(err) { console.error("Execute error", err); });
-  }
-  gapi.load("client:auth2", function() {
-    gapi.auth2.init({client_id: "YOUR_CLIENT_ID"});
-  });
-</script> -->
+    function authenticate() {
+      return gapi.auth2.getAuthInstance()
+        .signIn({ scope: "https://www.googleapis.com/auth/youtube.force-ssl" })
+        .then(function () { console.log("Sign-in successful"); },
+          function (err) { console.error("Error signing in", err); });
+    }
+    function loadClient() {
+      gapi.client.setApiKey("AIzaSyA0myQXBGlJF9glTLy5OKyLna33CfgTvzA");
+      return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function () { console.log("GAPI client loaded for API"); },
+          function (err) { console.error("Error loading GAPI client for API", err); });
+    }
+    // Make sure the client is loaded and sign-in is complete before calling this method.
+    function execute(searchInput) {
+      return gapi.client.youtube.search.list({
+        "q": searchInput
+      })
+        .then(function (response) {
+          // Handle the results here (response.result has the parsed body).
+          console.log("Response", response);
+        },
+          function (err) { console.error("Execute error", err); });
+    }
+    gapi.load("client:auth2", function () {
+      gapi.auth2.init({ client_id: "YOUR_CLIENT_ID" });
+    });
+  </script>
 
 
 </body>
