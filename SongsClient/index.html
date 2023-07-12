@@ -209,7 +209,12 @@
       }
       /////QUIZ/////
       let score = 0;
-
+console.log(getQ3())
+console.log(getQ4())
+console.log(getQ5())
+console.log(getQ6())
+console.log(getQ7())
+console.log(getQ8()) //problem
       function renderQuestion(q) {
         let qArr = q();
         let answersArr = [` <div id="q_1" class="answerDiv">
@@ -452,7 +457,8 @@
       }
     }
     //////////Quiz/////////////
-
+const start=0;
+const end=50;
     //random artist
     function randomArtist() {
       if (localStorage.artists !== undefined) {
@@ -520,7 +526,7 @@
       const songs = getArtistSongs(artistName);
       const sentences = [];
       for (let song of songs) {
-        let sentence = song.lyrics.split("\n")[1];
+        let sentence = song.lyrics.substring(start, end);
         sentences.push(sentence);
       }
       return sentences;
@@ -528,7 +534,7 @@
 
     function getSongsSentenceOFDifferentArtist(artistName) {
       const song = getRandomSongOfDifferentArtist(artistName);
-      let sentence = song.lyrics.split("\n")[1];
+      let sentence = song.lyrics.substring(start, end);
 
       return sentence;
     }
@@ -600,10 +606,9 @@
         success: function (songs) {
 
           const randInt = Math.floor(Math.random() * 3)
-          const lyrics = songs[randInt].lyrics.split('\n')
-          const songLyrics = lyrics[1].split("\n")[0];
+          const songLyrics =songs[randInt].lyrics.substring(start, end)
           const songArtist = songs[randInt].artistName
-          q5Arr.push(`Who sang: ${songLyrics.split("\n")[0]} ?`, songArtist)
+          q5Arr.push(`Who sang: ${songLyrics} ?`, songArtist)
           q5Arr.push(...generateDiff3Artists(songArtist))
         },
         error: errorCB
@@ -626,7 +631,7 @@
       let q7 = [];
       const artistName = randomArtist();
       const song = getArtistSongs(artistName)[0];//random song
-      const sentence = song.lyrics.split("\n")[1];
+      const sentence = song.lyrics.substring(start, end);
       const question = `From which song is the following sentence taken? ${sentence}`;
       const answer = song.name;
       q7.push(question.split("\n")[0]);
@@ -651,16 +656,15 @@
 
           const randInt = Math.floor(Math.random() * 3)
           const songName = songs[randInt].name;
-          const lyrics = songs[randInt].lyrics.split('\n')
-          const songLyrics = lyrics[1].split("\n")[0];
+          const songLyrics = songs[randInt].lyrics.substring(start, end)
           const songArtist = songs[randInt].artistName
-          q6Arr.push(`Which one of the lyrics is from: ${songName.split("\n")[0]} ?`, songLyrics)
+          q6Arr.push(`Which one of the lyrics is from: ${songName} ?`, songLyrics)
           let diffArtist = []
           diffArtist.push(...generateDiff3Artists(songArtist))
-          const lyrics1 = getArtistSongs(diffArtist[0])[0].lyrics.split('\n')
-          const lyrics2 = getArtistSongs(diffArtist[1])[0].lyrics.split('\n')
-          const lyrics3 = getArtistSongs(diffArtist[2])[0].lyrics.split('\n')
-          q6Arr.push(lyrics1[1].split("\n")[0], lyrics2[1].split("\n")[0], lyrics3[1].split("\n")[0])
+          for (let i = 0; i < 3; i++) {
+            let lyrics = getArtistSongs(diffArtist[i])[0].lyrics.substring(start, end)
+            q6Arr.push(lyrics)
+          }
         },
         error: errorCB
       });
