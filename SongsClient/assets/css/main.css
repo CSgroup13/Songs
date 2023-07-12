@@ -2008,7 +2008,7 @@ body {
     margin: 0 auto;
     height: 70%;
     width: 55%;
-    display: flex;
+    /* display: flex; */
     position: relative;
     text-align: center;
     border: 6px solid white;
@@ -2020,8 +2020,14 @@ body {
     font-size: 70px !important;
     position: relative;
     top: 40px;
+    margin-bottom: 70px;
 }
-
+#scoreOver{
+    font-size: 35px;
+}
+#QuizoverDiv{
+    margin-bottom: 70px;
+}
 #startQuizBtn{
     background-color: white;
     border: 3px solid black;
@@ -2047,6 +2053,9 @@ body {
     align-items: center;
 }
 
+#winnerImg{
+    width: 350px;
+}
 .row {
     justify-content: center;
     display: flex;
