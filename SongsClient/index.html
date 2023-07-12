@@ -208,6 +208,87 @@
         })
       }
       /////QUIZ/////
+      let score = 0;
+      function renderQuestion(q) {
+        let qArr = q();
+        let answersArr = [` <div id="q_1" class="answerDiv">
+                      <h3 style="display: inline-block;">${qArr[1]}</h3>
+                    </div>`,
+        ` <div id="q_2" class="answerDiv wrongAns">
+                      <h3 style="display: inline-block;">${qArr[2]}</h3>
+                    </div>`,
+        ` <div id="q_3" class="answerDiv wrongAns">
+                      <h3 style="display: inline-block;">${qArr[3]}</h3>
+                    </div>`,
+        `<div id="q_4" class="answerDiv wrongAns">
+                      <h3 style="display: inline-block;">${qArr[4]}</h3>
+                    </div>`]
+        let randNums = []
+        while (randNums.length < 4) {
+          let r = Math.floor(Math.random() * answersArr.length)
+          if (!randNums.includes(r)) randNums.push(r);
+        }
+        $("#Quiz").html(
+          `<p id="timer">30</p><span id="playerScore">${score}</span>
+        <div id="question">
+                  <h3 style="display: inline-block;">${qArr[0]}</h3>
+                </div>
+                <div id="answers">
+                  <div id="row1" class="row">
+                  ${answersArr[randNums[0]]}
+                  ${answersArr[randNums[1]]}
+                  </div>
+                  <div id="row2" class="row">
+                    ${answersArr[randNums[2]]}
+                  ${answersArr[randNums[3]]}
+                  </div>
+                </div>`)
+        $('#q_1').on("click", function () {
+          alertAnswer('Correct!', 'success')
+        });
+        $('.wrongAns').on("click", function () {
+          alertAnswer('Wrong &#128531;', 'error')
+        });
+
+        const timerElement = document.getElementById('timer');
+        let timeLeft = 30;
+        timerElement.textContent = timeLeft;
+        const interval = setInterval(() => {
+          timeLeft--;
+          timerElement.textContent = timeLeft;
+          if (timeLeft === 0) {
+            clearInterval(interval);
+            timerElement.textContent = 'Time up!';
+            alertAnswer('Wrong &#128531;', 'error')
+          }
+        }, 1000);
+
+      }
+      
+      function alertAnswer(swalTitle, swalIcon) {
+        if (swalIcon === "success")
+          score += 25;
+        Swal.fire({
+          title: swalTitle,
+          icon: swalIcon,
+          timer: 2500,
+          timerProgressBar:false,
+          didOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss) {
+            manageQuiz();
+          }
+        })
+      }
+      
       let currentQuestionIndex = 0;
       let questionsQueue = [getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
       function manageQuiz() {
@@ -228,7 +309,8 @@
         const quizDiv = $("#Quiz");
         if (localStorage.user !== undefined) {
           quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
-          quizDiv.append(`<button id="startQuizBtn" onclick="manageQuiz()">Start Quiz</button>`);
+          quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
+          $(document).on('click','#startQuizBtn', ()=>manageQuiz());
         }
         else {
           quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
@@ -573,6 +655,381 @@
         background: '#171717'
       })
     }
+
+
+   /********************************************OFEK***************************************/
+    $(document).ready(() => {
+      //generate random songs
+      ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
+      //////////add filters 
+      const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
+      // Add event listener to each checkbox
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+          // Uncheck all checkboxes except the current one
+          checkboxes.forEach(function (cb) {
+            if (cb !== checkbox) {
+              cb.checked = false;
+            }
+          });
+        });
+      });
+      $(".song-option").on("click", function () {
+        if (this.value === "allSongs") {
+          $(".searchInput").hide()
+          $("#searchBtn").hide()
+        }
+        else {
+          $(".searchInput").show()
+          $("#searchBtn").show()
+        }
+      })
+      $(".allSongs").on("click", function () {
+        ajaxCall("GET", baseApi + `/Songs`, "", successCBSong, errorCB);
+      })
+      $(".allSongs").click();
+      $("#searchForm").submit(() => {
+        let checkedValue = document.querySelector('input[name="song-option"]:checked');
+        let serachApi;
+        let userInput = $('#searchInput').val();
+        if (userInput == "") {
+          Swal.fire({
+            icon: 'error',
+            text: "Please enter a valid input",
+            color: 'white',
+            background: '#171717'
+          })
+          return false;
+        }
+        if (checkedValue === null) {
+          Swal.fire({
+            icon: 'error',
+            text: "Please Select a Filter",
+            color: 'white',
+            background: '#171717'
+          });
+          return false;
+        }
+        checkedValue = checkedValue.value
+        switch (checkedValue) {
+          case "songName":
+            serachApi = baseApi + `/Songs/${userInput}/info`
+            break;
+          case "artist":
+            serachApi = baseApi + `/Artists/${userInput}/songs`
+            break;
+          case "lyrics":
+            serachApi = baseApi + `/Songs/songBylyrics?lyrics=${userInput}`
+            break;
+          case "allSongs":
+            serachApi = baseApi + `/Songs`
+            break;
+          default: return false;
+        }
+        ajaxCall("GET", serachApi, "", successCBSong, errorCB);
+        return false;
+      })
+
+      $(document).on("click", ".randSongs", function () {
+        if (localStorage.user === undefined) {
+          Swal.fire({
+            icon: 'error',
+            text: "Please Log in to add song to Favorites",
+            color: 'white',
+            background: '#171717'
+          })
+          return;
+        }
+        this.querySelector(".fa-heart-o").style.color = "red";
+        ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
+      })
+      
+     
+
+    })
+    function successCBAddToFavorite() {
+      Swal.fire({
+        icon: 'success',
+        text: "Song added to your Favorites",
+        color: 'white',
+        background: '#171717'
+      })
+    }
+    runSpeechRecog = () => {
+      var output = $("#searchInput");
+      let recognization = new webkitSpeechRecognition();
+      recognization.onstart = () => {
+        output.innerHTML = "Listening...";
+      }
+      recognization.onresult = (e) => {
+        var transcript = e.results[0][0].transcript;
+        output.val(transcript);
+      }
+      recognization.start();
+    }
+
+    function successCBSong(data) {
+      $("#songs").html("")
+      if (data.length === undefined) {//single song returned as object and not array
+        $("#songs").append(`
+                  <div class="work--lockup">
+                    <ul class="slider">
+                      <li class="slider--item slider--item-center" id="slideSong_${data.id}">
+                        <a>
+                          <div class="slider--item-image">
+                            <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+                          </div>
+                          <p class="slider--item-title">${data.name}</p>
+                          <p class="slider--item-description">${data.artistName}</p>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>`)
+        $(`#slideSong_${data.id}`).click(function () {
+          showSongPopup(data.id, data.name);
+        });
+      }
+      else {
+        $("#songs").append(`
+           <div class="work--lockup">
+            <ul class="slider"> </ul>
+              </div>`)
+        $("div.work--lockup>ul.slider").append(`
+            <li class="slider--item slider--item-center" id="slideSong_${data[0].id}">
+            <a>
+            <div class="slider--item-image">
+            <img src="assets/img/work-victory.jpg" alt="Victory">
+            </div>
+            <p class="slider--item-title">${data[0].name}</p>
+            <p class="slider--item-description">${data[0].artistName}</p>
+            </a>
+            </li>`)
+        $(`#slideSong_${data[0].id}`).click(function () {
+          showSongPopup(data[0].id, data[0].name);
+        });
+        if (data.length > 1) {
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="slideSong_${data[1].id}">
+            <a>
+              <div class="slider--item-image">
+                <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+              </div>
+             <p class="slider--item-title">${data[1].name}</p>
+             <p class="slider--item-description">${data[1].artistName}</p>
+            </a>
+          </li>`)
+          $(`#slideSong_${data[1].id}`).click(function () {
+            showSongPopup(data[1].id, data[1].name);
+          });
+        }
+        if (data.length > 2) {
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-right" id="slideSong_${data[2].id}">
+          <a>
+            <div class="slider--item-image">
+              <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+            </div>
+            <p class="slider--item-title">${data[2].name}</p>
+            <p class="slider--item-description">${data[2].artistName}</p>
+            </a>
+            </li>`)
+          $(`#slideSong_${data[2].id}`).click(function () {
+            showSongPopup(data[2].id, data[2].name);
+          });
+        }
+        for (let i = 3; i < data.length; i++) {
+          $("div.work--lockup>ul.slider").append(`<li class="slider--item" id="slideSong_${data[i].id}">
+          <a>
+            <div class="slider--item-image">
+              <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+            </div>
+            <p class="slider--item-title">${data[i].name}</p>
+            <p class="slider--item-description">${data[i].artistName}</p>
+          </a>
+             </li> `)
+          $(`#slideSong_${data[i].id}`).click(function () {
+            showSongPopup(data[i].id, data[i].name);
+          });
+        }
+        if (data.length > 2) {
+          $("div.work--lockup").append(`<div class="slider--prev">
+          <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
+                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
+                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                          <path d="M561,1169C525,1155,10,640,3,612c-3-13,1-36,8-52c8-15,134-145,281-289C527,41,562,10,590,10c22,0,41,9,61,29
+                      c55,55,49,64-163,278L296,510h575c564,0,576,0,597,20c46,43,37,109-18,137c-19,10-159,13-590,13l-565,1l182,180
+                      c101,99,187,188,193,199c16,30,12,57-12,84C631,1174,595,1183,561,1169z" />
+                        </g></svg></div>
+                        <div class="slider--next"><svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
+                        style="enable-background:new 0 0 150 118;" xml:space="preserve">
+                        <g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)">
+                          <path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" />
+                        </g></svg></div>`)
+        }
+        workSlider();
+      }
+    }
+    function showSongPopup(songId, songName) {
+      ajaxCall("GET", baseApi + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
+    }
+
+    function successCBSongLyrics(data) {
+      Swal.fire({
+        title: `${data.name} Lyrics`,
+        html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
+               <br>
+               <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>`,
+        color: 'white',
+        background: '#171717',
+        confirmButtonText: "Close",
+        didOpen: () => {
+          $('.song-popup').scrollTop(0);
+          $(`#song_${data.id}`).click(function () {
+            if (localStorage.user === undefined) {
+              Swal.fire({
+                icon: 'error',
+                text: "Please Log in to add song to Favorites",
+                color: 'white',
+                background: '#171717'
+              })
+              return;
+            }
+            ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
+          });
+        }
+      });
+    }
+
+
+    function workSlider() {
+
+      $('.slider--prev, .slider--next').click(function () {
+
+        var $this = $(this),
+          curLeft = $('.slider').find('.slider--item-left'),
+          curLeftPos = $('.slider').children().index(curLeft),
+          curCenter = $('.slider').find('.slider--item-center'),
+          curCenterPos = $('.slider').children().index(curCenter),
+          curRight = $('.slider').find('.slider--item-right'),
+          curRightPos = $('.slider').children().index(curRight),
+          totalWorks = $('.slider').children().length,
+          $left = $('.slider--item-left'),
+          $center = $('.slider--item-center'),
+          $right = $('.slider--item-right'),
+          $item = $('.slider--item');
+        $('.slider').animate({ opacity: 0 }, 400);
+
+        setTimeout(function () {
+
+          if ($this.hasClass('slider--next')) {
+            if (curLeftPos < totalWorks - 1 && curCenterPos < totalWorks - 1 && curRightPos < totalWorks - 1) {
+              $left.removeClass('slider--item-left').next().addClass('slider--item-left');
+              $center.removeClass('slider--item-center').next().addClass('slider--item-center');
+              $right.removeClass('slider--item-right').next().addClass('slider--item-right');
+            }
+            else {
+              if (curLeftPos === totalWorks - 1) {
+                $item.removeClass('slider--item-left').first().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').next().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').next().addClass('slider--item-right');
+              }
+              else if (curCenterPos === totalWorks - 1) {
+                $left.removeClass('slider--item-left').next().addClass('slider--item-left');
+                $item.removeClass('slider--item-center').first().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').next().addClass('slider--item-right');
+              }
+              else {
+                $left.removeClass('slider--item-left').next().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').next().addClass('slider--item-center');
+                $item.removeClass('slider--item-right').first().addClass('slider--item-right');
+              }
+            }
+          }
+          else {
+            if (curLeftPos !== 0 && curCenterPos !== 0 && curRightPos !== 0) {
+              $left.removeClass('slider--item-left').prev().addClass('slider--item-left');
+              $center.removeClass('slider--item-center').prev().addClass('slider--item-center');
+              $right.removeClass('slider--item-right').prev().addClass('slider--item-right');
+            }
+            else {
+              if (curLeftPos === 0) {
+                $item.removeClass('slider--item-left').last().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').prev().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').prev().addClass('slider--item-right');
+              }
+              else if (curCenterPos === 0) {
+                $left.removeClass('slider--item-left').prev().addClass('slider--item-left');
+                $item.removeClass('slider--item-center').last().addClass('slider--item-center');
+                $right.removeClass('slider--item-right').prev().addClass('slider--item-right');
+              }
+              else {
+                $left.removeClass('slider--item-left').prev().addClass('slider--item-left');
+                $center.removeClass('slider--item-center').prev().addClass('slider--item-center');
+                $item.removeClass('slider--item-right').last().addClass('slider--item-right');
+              }
+            }
+          }
+
+        }, 400);
+
+        $('.slider').animate({ opacity: 1 }, 400);
+
+      });
+
+    }
+
+    function successCBRandom(data) {
+      let songsCards = document.querySelectorAll(".randSongs");
+      let ids = [];
+      for (let i = 0; i < 3; i++) {
+        songsCards[i].id = `rand_${data[i].id}`;
+        songsCards[i].querySelector(".randTitle").innerHTML = data[i].name;
+        songsCards[i].querySelector(".randPara").innerHTML = data[i].artistName;
+        ids.push(data[i].id);
+      }
+      if (localStorage.user !== undefined) {
+        let userId = JSON.parse(localStorage["user"]).id;
+        ajaxCall("GET", `${baseApi}/Users/${userId}/songs`, "", function (responseData) {
+          successCBFavRand(ids, responseData); // Pass the responseData to successCBFavRand
+        }, errorCB);
+      }
+    }
+
+    function successCBFavRand(ids, data) {
+      const randomSongs = document.querySelectorAll(".randSongs");
+      randomSongs.forEach(song => {
+        document.getElementById(song.id).querySelector("i.fa.fa-heart-o").style.color = "white";
+      });
+      const matchingSongs = data.filter(song => ids.includes(song.id));
+      matchingSongs.forEach(matchingSong => {
+        document.getElementById(`rand_${matchingSong.id}`).querySelector("i.fa.fa-heart-o").style.color = "red";
+      });
+    }
+
+    function errorCB(error) {
+      let message = error.responseText;
+      Swal.fire({
+        icon: 'error',
+        text: message,
+        color: 'white',
+        background: '#171717'
+      })
+    }
+    ///////////QUIZ/////////
+
+    //generates 3 different artst other than given songArtist
+    function generateDiff3Artists(songArtist) {
+      const data = JSON.parse(localStorage.artists);
+      const artistsArr = []
+      const arr = []
+      const diffArtists = data.filter(artist => artist.name !== songArtist);
+      while (arr.length < 3) {
+        let r = Math.floor(Math.random() * diffArtists.length);
+        if (!arr.includes(r)) arr.push(r);
+      }
+      return ([diffArtists[arr[0]].name, diffArtists[arr[1]].name, diffArtists[arr[2]].name])
+    }
+
 
   </script>
 
