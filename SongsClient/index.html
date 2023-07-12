@@ -298,6 +298,8 @@
           timer: 2500,
           timerProgressBar: true,
           showConfirmButton: false,
+          color: 'white',
+          background: '#171717',
           didOpen: () => {
             timerInterval = setInterval(() => {
             }, 100)
@@ -330,7 +332,7 @@
         if (localStorage.user !== undefined) {
           quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
           quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
-          $(document).on('click', '#startQuizBtn', () => manageQuiz());
+          $("#startQuizBtn").on('click', () => manageQuiz());
         }
         else {
           quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
