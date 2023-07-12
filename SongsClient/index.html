@@ -55,7 +55,7 @@
         const currArtist = data.filter(artist => artist.name === name)[0];
         const swal = Swal.fire({
           title: `About ${currArtist.name}`,
-          html: `<div class="song-popup">${currArtist.summary}</div><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
+          html: `<div class="song-popup">${currArtist.summary}</div> <i id="artist_${currArtist.name}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><br><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
           color: 'white',
           background: '#171717',
           confirmButtonText: "Close",
