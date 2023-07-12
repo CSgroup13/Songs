@@ -1659,7 +1659,7 @@ body {
     margin-bottom: 30px;
     display: flex;
     justify-content: center;
-    
+
 }
 
 .work-request--information .information-name,
@@ -1991,37 +1991,65 @@ body {
     display: flex;
     align-items: center;
 }
-.answerDiv:hover{
-    border: 2px solid  #0f33ff;
+
+.answerDiv:hover {
+    border: 2px solid #0f33ff;
 }
-#answers{
-   position: absolute;
-   bottom: 20px;
-   
-}
-#Quiz{
-    margin: 0 auto;
-    height: 70%;
-    width: 50%;
-    display: flex;
- position: relative;
- text-align: center;
- border: 3px solid  white;
+
+#answers {
+    position: absolute;
+    bottom: 20px;
 
 }
-#question{
-   
+
+#Quiz {
+    margin: 0 auto;
+    height: 70%;
+    width: 55%;
+    display: flex;
+    position: relative;
+    text-align: center;
+    border: 6px solid white;
+    padding: 10px;
+    justify-content: center;
+}
+
+#quizHeader {
+    font-size: 70px !important;
+    position: relative;
+    top: 40px;
+}
+
+#startQuizBtn{
+    background-color: white;
+    border: 3px solid black;
+    color: black;
+    border-radius: 10px;
+    width: 180px;
+    height: 65px;
+    font-size: 22px;
+    position: absolute;
+    bottom: 80px;
+}
+
+#startQuizBtn:hover {
+    opacity: .8;
+}
+#question {
     height: 30%;
-    margin:50px auto;
+    margin: 50px auto;
 }
-#quizWrapper{
-display: flex;
-align-items: center;
+
+#quizWrapper {
+    display: flex;
+    align-items: center;
 }
-.row{
+
+.row {
     justify-content: center;
     display: flex;
 }
+
 .rand_heart {
     color: white;
 }
@@ -2175,3 +2203,4 @@ align-items: center;
 #logoHeader {
     text-transform: none;
 }
+

@@ -93,7 +93,7 @@
               password: password,
               regDate: "2023-06-10T12:33:08.383Z"
             }
-            ajaxCall("POST", baseApi + "Users/login", JSON.stringify(User), successCBLogin, errorCBLogin);
+            ajaxCall("POST", baseApi + "/Users/login", JSON.stringify(User), successCBLogin, errorCBLogin);
             return false;
           })
         }
@@ -207,6 +207,34 @@
           background: '#171717',
         })
       }
+      /////QUIZ/////
+      let currentQuestionIndex = 0;
+      let questionsQueue = [getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
+      function manageQuiz() {
+        if (currentQuestionIndex == questionsQueue.length) {
+          Swal.fire({
+            icon: 'success',
+            text: "Quiz Over!",
+            color: 'white',
+            background: '#171717'
+          })
+          return;
+        }
+        renderQuestion(questionsQueue[currentQuestionIndex]);
+        currentQuestionIndex++;
+      }
+
+      $(".quizNav").click(() => {
+        const quizDiv = $("#Quiz");
+        if (localStorage.user !== undefined) {
+          quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
+          quizDiv.append(`<button id="startQuizBtn" onclick="manageQuiz()">Start Quiz</button>`);
+        }
+        else {
+          quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
+        }
+      })
+
     })
 
     ////////////////////////Favorites Songs///////////////////
@@ -421,7 +449,7 @@
       return songsList;
     }
 
-    function renderQ3() {
+    function getQ3() {
       let q3 = [];
       const artistName = randomArtist();
       const question = "Which of the following songs is not by " + artistName + "?";
@@ -433,7 +461,54 @@
       return q3;
     }
 
-    function renderQ6() {
+    function getQ4() {
+      let q4Arr = [];
+      $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/randomSong`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (songs) {
+
+          const randInt = Math.floor(Math.random() * 3)
+          const songName = songs[randInt].name;
+          const songArtist = songs[randInt].artistName
+          q4Arr.push(`Who is the singer of: ${songName} ?`, songArtist)
+          q4Arr.push(...generateDiff3Artists(songArtist))
+        },
+        error: errorCB
+      });
+      return q4Arr;
+    }
+
+    function getQ5() {
+      let q5Arr = [];
+      $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/randomSong`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (songs) {
+
+          const randInt = Math.floor(Math.random() * 3)
+          const lyrics = songs[randInt].lyrics.split('\n')
+          const songLyrics = lyrics[1].split("\n")[0];
+          const songArtist = songs[randInt].artistName
+          q5Arr.push(`Who sang: ${songLyrics.split("\n")[0]} ?`, songArtist)
+          q5Arr.push(...generateDiff3Artists(songArtist))
+        },
+        error: errorCB
+      });
+      return q5Arr;
+    }
+
+    function getQ6() {
       let q6 = [];
       const artistName = randomArtist();
       const question = "Which of the following sentences is not part of " + artistName + "'s song?";
@@ -444,7 +519,7 @@
       return q6;
     }
 
-    function renderQ7() {
+    function getQ7() {
       let q7 = [];
       const artistName = randomArtist();
       const song = getArtistSongs(artistName)[0];//random song
@@ -457,6 +532,36 @@
       q7.push(songs[0].name, songs[1].name, songs[2].name);
 
       return q7;
+    }
+
+    function getQ8() {
+      let q6Arr = [];
+      $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/randomSong`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (songs) {
+
+          const randInt = Math.floor(Math.random() * 3)
+          const songName = songs[randInt].name;
+          const lyrics = songs[randInt].lyrics.split('\n')
+          const songLyrics = lyrics[1].split("\n")[0];
+          const songArtist = songs[randInt].artistName
+          q6Arr.push(`Which one of the lyrics is from: ${songName.split("\n")[0]} ?`, songLyrics)
+          let diffArtist = []
+          diffArtist.push(...generateDiff3Artists(songArtist))
+          const lyrics1 = getArtistSongs(diffArtist[0])[0].lyrics.split('\n')
+          const lyrics2 = getArtistSongs(diffArtist[1])[0].lyrics.split('\n')
+          const lyrics3 = getArtistSongs(diffArtist[2])[0].lyrics.split('\n')
+          q6Arr.push(lyrics1[1].split("\n")[0], lyrics2[1].split("\n")[0], lyrics3[1].split("\n")[0])
+        },
+        error: errorCB
+      });
+      return q6Arr;
     }
 
     function errorCB(error) {
@@ -504,7 +609,7 @@
               <li><span>Songs</span></li>
               <li onclick="renderFavorites()"><span>Favorites</span></li>
               <li><span>Artists</span></li>
-              <li><span>Quiz</span></li>
+              <li class="quizNav"><span>Quiz</span></li>
               <li id="loginLi"></li>
             </ul>
           </nav>
@@ -623,10 +728,7 @@
             </li>
             <li id="quizWrapper" class="l-section section">
               <div id="Quiz">
-                <div class="about--banner">
-                  <h2>Songs Quiz</h2>
-                </div>
-                
+
               </div>
             </li>
             <li class="l-section section">
@@ -642,7 +744,7 @@
       <li>Songs</li>
       <li onclick="renderFavorites()">Favorites</li>
       <li>Artists</li>
-      <li>Quiz</li>
+      <li class="quizNav">Quiz</li>
       <li id="outBarLogin">Login</li>
     </ul>
   </div>
@@ -1006,84 +1108,7 @@
       })
     }
     ///////////QUIZ/////////
-    ///[q,a,a,a,a]
 
-    function getQ4() {
-      let q4Arr = [];
-      $.ajax({
-        async: false,
-        type: "GET",
-        url: baseApi + `/Songs/randomSong`,
-        data: "",
-        cache: false,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (songs) {
-
-          const randInt = Math.floor(Math.random() * 3)
-          const songName = songs[randInt].name;
-          const songArtist = songs[randInt].artistName
-          q4Arr.push(`Who is the singer of: ${songName} ?`, songArtist)
-          q4Arr.push(...generateDiff3Artists(songArtist))
-        },
-        error: errorCB
-      });
-      return q4Arr;
-    }
-
-    function getQ5() {
-      let q5Arr = [];
-      $.ajax({
-        async: false,
-        type: "GET",
-        url: baseApi + `/Songs/randomSong`,
-        data: "",
-        cache: false,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (songs) {
-
-          const randInt = Math.floor(Math.random() * 3)
-          const lyrics = songs[randInt].lyrics.split('\n')
-          const songLyrics = lyrics[1].split("\n")[0];
-          const songArtist = songs[randInt].artistName
-          q5Arr.push(`Who sang: ${songLyrics.split("\n")[0]} ?`, songArtist)
-          q5Arr.push(...generateDiff3Artists(songArtist))
-        },
-        error: errorCB
-      });
-      return q5Arr;
-    }
-
-    function getQ8() {
-      let q6Arr = [];
-      $.ajax({
-        async: false,
-        type: "GET",
-        url: baseApi + `/Songs/randomSong`,
-        data: "",
-        cache: false,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (songs) {
-
-          const randInt = Math.floor(Math.random() * 3)
-          const songName = songs[randInt].name;
-          const lyrics = songs[randInt].lyrics.split('\n')
-          const songLyrics = lyrics[1].split("\n")[0];
-          const songArtist = songs[randInt].artistName
-          q6Arr.push(`Which one of the lyrics is from: ${songName.split("\n")[0]} ?`, songLyrics)
-          let diffArtist = []
-          diffArtist.push(...generateDiff3Artists(songArtist))
-          const lyrics1 = getArtistSongs(diffArtist[0])[0].lyrics.split('\n')
-          const lyrics2 = getArtistSongs(diffArtist[1])[0].lyrics.split('\n')
-          const lyrics3 = getArtistSongs(diffArtist[2])[0].lyrics.split('\n')
-          q6Arr.push(lyrics1[1].split("\n")[0], lyrics2[1].split("\n")[0], lyrics3[1].split("\n")[0])
-        },
-        error: errorCB
-      });
-      return q6Arr;
-    }
     //generates 3 different artst other than given songArtist
     function generateDiff3Artists(songArtist) {
       const data = JSON.parse(localStorage.artists);
@@ -1097,7 +1122,7 @@
       return ([diffArtists[arr[0]].name, diffArtists[arr[1]].name, diffArtists[arr[2]].name])
     }
 
-    function renderQuestion(){
+    function renderQuestion() {
 
       `<div id="question">
                   <h3 style="display: inline-block;">QUESTION</h3>
