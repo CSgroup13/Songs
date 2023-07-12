@@ -1980,47 +1980,35 @@ body {
 }
 
 .answerDiv {
-    display: inline-block;
     border: 2px solid white;
-    padding: 8px;
+    /* padding: 8px; */
     border-radius: 10px;
-    width: 40%;
-    height: 130px;
     cursor: pointer;
-    margin: 20px;
+    /* margin: 10px; */
     display: flex;
     align-items: center;
-    min-width: 150px;
     justify-content: center;
+    width: 100%;
+    /* margin: 10px; */
 }
 
 .answerDiv:hover {
     border: 2px solid #0f33ff;
 }
-#answers{
-   position: absolute;
-   bottom: 20px;
-   
+.answerTD{
+    width: 40%;
+    padding:10px;
 }
-
-
 #Quiz {
-    margin: 0 auto;
-    height: 70%;
-    width: 55%;
-    /* display: flex; */
-    position: relative;
+    margin:auto;
+    height: 50%;
     text-align: center;
-    border: 6px solid white;
-    padding: 10px;
-    justify-content: center;
+    margin-top: 90px;
 }
 
 #quizHeader {
     font-size: 70px !important;
-    position: relative;
-    top: 40px;
-    margin-bottom: 70px;
+    margin-bottom: 30px;
 }
 #scoreOver{
     font-size: 35px;
@@ -2036,25 +2024,32 @@ body {
     width: 180px;
     height: 65px;
     font-size: 22px;
-    position: absolute;
-    bottom: 80px;
+    margin-top: 10px;
 }
 
 #startQuizBtn:hover {
     opacity: .8;
 }
 #question {
-    height: 30%;
-    margin: 50px auto;
+    margin-bottom: 20px;
+    font-size: 19px;
 }
-
+#scoreTimer{
+    text-align: left;
+}
+#myTable{
+    width: 100%;
+}
 #quizWrapper {
     display: flex;
     align-items: center;
 }
-
+#tableBody{
+    text-align: center;
+    height: 50%;
+}
 #winnerImg{
-    width: 350px;
+    width: 45%;
 }
 .row {
     justify-content: center;

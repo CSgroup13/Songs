@@ -209,6 +209,7 @@
       }
       /////QUIZ/////
       let score = 0;
+
       function renderQuestion(q) {
         let qArr = q();
         let answersArr = [` <div id="q_1" class="answerDiv">
@@ -229,21 +230,41 @@
           if (!randNums.includes(r)) randNums.push(r);
         }
         $("#Quiz").html(
-          `<span id="playerScore">Score: ${score} Time left: &nbsp</span>
+          `<table id="myTable">
+                  <thead>
+                    <tr id="scoreTimer">
+                      <th colspan="2">
+                        <span id="playerScore">Score: ${score} Time left: &nbsp</span>
           <span id="timer">30</span>
-        <div id="question">
+                      </th>
+                    </tr>
+                    <tr>
+                      <th colspan="2">
+                        <div id="question">
                   <h3 style="display: inline-block;">${qArr[0]}</h3>
                 </div>
-                <div id="answers">
-                  <div id="row1" class="row">
-                  ${answersArr[randNums[0]]}
-                  ${answersArr[randNums[1]]}
-                  </div>
-                  <div id="row2" class="row">
-                    ${answersArr[randNums[2]]}
-                  ${answersArr[randNums[3]]}
-                  </div>
-                </div>`)
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="tableBody">
+                    <tr>
+                      <td class="answerTD">
+                        ${answersArr[randNums[0]]}
+                      </td>
+                      <td class="answerTD">
+                        ${answersArr[randNums[1]]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="answerTD">
+                        ${answersArr[randNums[2]]}
+                      </td>
+                      <td class="answerTD">
+                        ${answersArr[randNums[3]]}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>`)
         $('#q_1').on("click", function () {
           clearInterval(interval);
           alertAnswer('Correct!', 'success')
@@ -278,7 +299,6 @@
           timerProgressBar: true,
           showConfirmButton: false,
           didOpen: () => {
-
             timerInterval = setInterval(() => {
             }, 100)
           },
@@ -286,7 +306,6 @@
             clearInterval(timerInterval)
           }
         }).then((result) => {
-          /* Read more about handling dismissals below */
           if (result.dismiss) {
             manageQuiz();
           }
@@ -300,10 +319,10 @@
           $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>
                     <div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
           currentQuestionIndex = 0;
+          score = 0
           return;
         }
-        renderQuestion(questionsQueue[currentQuestionIndex]);
-        currentQuestionIndex++;
+        renderQuestion(questionsQueue[currentQuestionIndex++]);
       }
 
       $(".quizNav").click(() => {
