@@ -262,9 +262,8 @@
             alertAnswer('Wrong &#128531;', 'error')
           }
         }, 1000);
-
       }
-      
+
       function alertAnswer(swalTitle, swalIcon) {
         if (swalIcon === "success")
           score += 25;
@@ -272,7 +271,7 @@
           title: swalTitle,
           icon: swalIcon,
           timer: 2500,
-          timerProgressBar:false,
+          timerProgressBar: false,
           didOpen: () => {
             Swal.showLoading()
             timerInterval = setInterval(() => {
@@ -288,17 +287,13 @@
           }
         })
       }
-      
+
       let currentQuestionIndex = 0;
       let questionsQueue = [getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
       function manageQuiz() {
         if (currentQuestionIndex == questionsQueue.length) {
-          Swal.fire({
-            icon: 'success',
-            text: "Quiz Over!",
-            color: 'white',
-            background: '#171717'
-          })
+          $("#Quiz").html(`<div class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><p>Your Score: ${score}</p><img src="./img/winnerCup.png"></img></div>`);
+          currentQuestionIndex = 0;
           return;
         }
         renderQuestion(questionsQueue[currentQuestionIndex]);
@@ -310,7 +305,7 @@
         if (localStorage.user !== undefined) {
           quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
           quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
-          $(document).on('click','#startQuizBtn', ()=>manageQuiz());
+          $(document).on('click', '#startQuizBtn', () => manageQuiz());
         }
         else {
           quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
@@ -318,7 +313,6 @@
       })
 
     })
-
     ////////////////////////Favorites Songs///////////////////
 
     function renderFavorites() {
@@ -657,7 +651,7 @@
     }
 
 
-   /********************************************OFEK***************************************/
+    /********************************************OFEK***************************************/
     $(document).ready(() => {
       //generate random songs
       ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
@@ -743,8 +737,8 @@
         this.querySelector(".fa-heart-o").style.color = "red";
         ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
       })
-      
-     
+
+
 
     })
     function successCBAddToFavorite() {
@@ -1295,6 +1289,7 @@
         this.querySelector(".fa-heart-o").style.color = "red";
         ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
       })
+
       let score = 0;
       function renderQuestion(q) {
         let qArr = q();
@@ -1358,7 +1353,7 @@
           title: swalTitle,
           icon: swalIcon,
           timer: 2500,
-          timerProgressBar:false,
+          timerProgressBar: false,
           didOpen: () => {
             Swal.showLoading()
             timerInterval = setInterval(() => {
