@@ -53,13 +53,24 @@
         const name = $(event.target).closest(".artist").find("h4").text();
         const data = JSON.parse(localStorage.artists);
         const currArtist = data.filter(artist => artist.name === name)[0];
-        Swal.fire({
+        const swal = Swal.fire({
           title: `About ${currArtist.name}`,
-          html: `<div class="song-popup">${currArtist.summary}</div>`,
+          html: `<div class="song-popup">${currArtist.summary}</div><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
           color: 'white',
           background: '#171717',
           confirmButtonText: "Close",
         });
+        $("#artistSongsDetails").click(() => {
+          event.preventDefault();
+          const songsDiv = $("<div>");
+          for (let song of currArtist.songsList) {
+            songsDiv.append(`<p>${song.name}</p>`);
+          }
+          swal.update({
+            title: `Songs of ${currArtist.name}`,
+            html: songsDiv
+          });
+        })
       });
 
       ////////////////////////login and register///////////////////
@@ -318,8 +329,10 @@
       let questionsQueue = [getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
       function manageQuiz() {
         if (currentQuestionIndex == questionsQueue.length) {
-          $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>
-                    <div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
+          $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>`);
+          $("#Quiz").append(`<button id="playAgain">Play Again</button>`);
+          $("#Quiz").append(`<div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
+          $("#playAgain").on('click', () => manageQuiz());
           currentQuestionIndex = 0;
           score = 0
           return;
@@ -332,6 +345,7 @@
         if (localStorage.user !== undefined) {
           quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
           quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
+          $("#startQuizBtn").on('click', () => manageQuiz());
           $("#startQuizBtn").on('click', () => manageQuiz());
         }
         else {
@@ -405,6 +419,7 @@
 
     function successCBAllArtists(data) {
       const artistsArr = [];
+      let songsList = [];
       let count = data.length;
       for (let artist of data) {
         const api = `${lastfmBaseAPi}/?method=artist.getinfo&artist=${artist.name}&api_key=${lastfmKey}&format=json`;
@@ -416,7 +431,20 @@
           const listeners = artistObj.stats.listeners;
           const playcount = artistObj.stats.playcount;
           const rate = artist.rate;
-          const res = { name, summary, listeners, playcount, rate, image };
+          $.ajax({
+            async: false,
+            type: "GET",
+            url: baseApi + `/Artists/${name}/songs`,
+            data: "",
+            cache: false,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+              songsList = data;
+            },
+            error: errorCB
+          });
+          const res = { name, summary, listeners, playcount, rate, image, songsList };
           artistsArr.push(res);
           count -= 1;
           if (count === 0) {
@@ -451,6 +479,7 @@
         artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
       }
     }
+
     //////////Quiz/////////////
 
     //random artist

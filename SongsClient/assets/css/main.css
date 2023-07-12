@@ -1995,28 +1995,45 @@ body {
 .answerDiv:hover {
     border: 2px solid #0f33ff;
 }
-.answerTD{
+
+.answerTD {
     width: 40%;
-    padding:10px;
+    padding: 10px;
 }
+
 #Quiz {
-    margin:auto;
-    height: 50%;
+    margin: auto;
+    /* height: 50%; */
     text-align: center;
     margin-top: 90px;
+}
+
+#playAgain {
+    margin-top: 20px !important;
+    margin-bottom: 10px;
 }
 
 #quizHeader {
     font-size: 70px !important;
     margin-bottom: 30px;
 }
-#scoreOver{
+
+#scoreOver {
     font-size: 35px;
+    margin-bottom: 5px;
 }
-#QuizoverDiv{
-    margin-bottom: 70px;
+
+#artistSongsDetails {
+    cursor: pointer;
+    color: rgb(0, 242, 255);
 }
-#startQuizBtn{
+
+#artistSongsDetails:hover {
+    opacity: .7;
+}
+
+#startQuizBtn,
+#playAgain {
     background-color: white;
     border: 3px solid black;
     color: black;
@@ -2027,30 +2044,38 @@ body {
     margin-top: 10px;
 }
 
-#startQuizBtn:hover {
+#startQuizBtn:hover,
+#playAgain:hover {
     opacity: .8;
 }
+
 #question {
     margin-bottom: 20px;
     font-size: 19px;
 }
-#scoreTimer{
+
+#scoreTimer {
     text-align: left;
 }
-#myTable{
+
+#myTable {
     width: 100%;
 }
+
 #quizWrapper {
     display: flex;
     align-items: center;
 }
-#tableBody{
+
+#tableBody {
     text-align: center;
     height: 50%;
 }
-#winnerImg{
+
+#winnerImg {
     width: 45%;
 }
+
 .row {
     justify-content: center;
     display: flex;
@@ -2209,4 +2234,3 @@ body {
 #logoHeader {
     text-transform: none;
 }
-
