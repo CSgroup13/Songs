@@ -626,7 +626,7 @@
                 <div class="about--banner">
                   <h2>Songs Quiz</h2>
                 </div>
-                
+
               </div>
             </li>
             <li class="l-section section">
@@ -736,6 +736,88 @@
         this.querySelector(".fa-heart-o").style.color = "red";
         ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
       })
+      let score = 0;
+      function renderQuestion(q) {
+        let qArr = q();
+        let answersArr = [` <div id="q_1" class="answerDiv">
+                      <h3 style="display: inline-block;">${qArr[1]}</h3>
+                    </div>`,
+        ` <div id="q_2" class="answerDiv wrongAns">
+                      <h3 style="display: inline-block;">${qArr[2]}</h3>
+                    </div>`,
+        ` <div id="q_3" class="answerDiv wrongAns">
+                      <h3 style="display: inline-block;">${qArr[3]}</h3>
+                    </div>`,
+        `<div id="q_4" class="answerDiv wrongAns">
+                      <h3 style="display: inline-block;">${qArr[4]}</h3>
+                    </div>`]
+        let randNums = []
+        while (randNums.length < 4) {
+          let r = Math.floor(Math.random() * answersArr.length)
+          if (!randNums.includes(r)) randNums.push(r);
+        }
+        $("#Quiz").html(
+          `<p id="timer">30</p><span id="playerScore">${score}</span>
+        <div id="question">
+                  <h3 style="display: inline-block;">${qArr[0]}</h3>
+                </div>
+                <div id="answers">
+                  <div id="row1" class="row">
+                  ${answersArr[randNums[0]]}
+                  ${answersArr[randNums[1]]}
+                  </div>
+                  <div id="row2" class="row">
+                    ${answersArr[randNums[2]]}
+                  ${answersArr[randNums[3]]}
+                  </div>
+                </div>`)
+        $('#q_1').on("click", function () {
+          alertAnswer('Correct!', 'success')
+        });
+        $('.wrongAns').on("click", function () {
+          alertAnswer('Wrong &#128531;', 'error')
+        });
+
+        const timerElement = document.getElementById('timer');
+        let timeLeft = 30;
+        timerElement.textContent = timeLeft;
+        const interval = setInterval(() => {
+          timeLeft--;
+          timerElement.textContent = timeLeft;
+          if (timeLeft === 0) {
+            clearInterval(interval);
+            timerElement.textContent = 'Time up!';
+            alertAnswer('Wrong &#128531;', 'error')
+          }
+        }, 1000);
+
+      }
+      function alertAnswer(swalTitle, swalIcon) {
+        if (swalIcon === "success")
+          score += 25;
+        Swal.fire({
+          title: swalTitle,
+          icon: swalIcon,
+          timer: 2500,
+          timerProgressBar:false,
+          didOpen: () => {
+            Swal.showLoading()
+            timerInterval = setInterval(() => {
+            }, 100)
+          },
+          willClose: () => {
+            clearInterval(timerInterval)
+          }
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss) {
+            manageQuiz();
+          }
+        })
+      }
+
+
+      renderQuestion(getQ4);
     })
     function successCBAddToFavorite() {
       Swal.fire({
@@ -1097,36 +1179,6 @@
       return ([diffArtists[arr[0]].name, diffArtists[arr[1]].name, diffArtists[arr[2]].name])
     }
 
-    function renderQuestion(){
-
-      `<div id="question">
-                  <h3 style="display: inline-block;">QUESTION</h3>
-                </div>
-                <div id="answers">
-                  <div id="row1" class="row">
-                    <div id="q_1" class="answerDiv">
-                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
-
-                    </div>
-                    <div id="q_2" class="answerDiv">
-                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
-
-                    </div>
-                  </div>
-                  <div id="row2" class="row">
-                    <div id="q_3" class="answerDiv">
-                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
-
-                    </div>
-                    <div id="q_4" class="answerDiv">
-                      <h3 style="display: inline-block;">Lorem ipsum dolor, sit amet consectetur adipisicing elit</h3>
-
-                    </div>
-                  </div>
-
-
-                </div>`
-    }
 
   </script>
   <!-- <script src="https://apis.google.com/js/api.js"></script>
