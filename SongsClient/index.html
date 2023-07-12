@@ -273,10 +273,10 @@
           title: swalTitle,
           icon: swalIcon,
           timer: 2500,
-          timerProgressBar:true,
+          timerProgressBar: true,
           showConfirmButton: false,
           didOpen: () => {
-           
+
             timerInterval = setInterval(() => {
             }, 100)
           },
@@ -295,7 +295,8 @@
       let questionsQueue = [getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
       function manageQuiz() {
         if (currentQuestionIndex == questionsQueue.length) {
-          $("#Quiz").html(`<div class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><p>Your Score: ${score}</p><img src="./img/winnerCup.png"></img></div>`);
+          $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>
+                    <div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
           currentQuestionIndex = 0;
           return;
         }
