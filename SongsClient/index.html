@@ -209,6 +209,7 @@
       }
       /////QUIZ/////
       let score = 0;
+
       function renderQuestion(q) {
         let qArr = q();
         let answersArr = [` <div id="q_1" class="answerDiv">
@@ -231,7 +232,7 @@
         $("#Quiz").html(
           `<table id="myTable">
                   <thead>
-                    <tr>
+                    <tr id="scoreTimer">
                       <th colspan="2">
                         <span id="playerScore">Score: ${score} Time left: &nbsp</span>
           <span id="timer">30</span>
@@ -245,20 +246,20 @@
                       </th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody id="tableBody">
                     <tr>
-                      <td>
+                      <td class="answerTD">
                         ${answersArr[randNums[0]]}
                       </td>
-                      <td>
+                      <td class="answerTD">
                         ${answersArr[randNums[1]]}
                       </td>
                     </tr>
                     <tr>
-                      <td>
+                      <td class="answerTD">
                         ${answersArr[randNums[2]]}
                       </td>
-                      <td>
+                      <td class="answerTD">
                         ${answersArr[randNums[3]]}
                       </td>
                     </tr>
@@ -298,7 +299,6 @@
           timerProgressBar: true,
           showConfirmButton: false,
           didOpen: () => {
-
             timerInterval = setInterval(() => {
             }, 100)
           },
@@ -306,7 +306,6 @@
             clearInterval(timerInterval)
           }
         }).then((result) => {
-          /* Read more about handling dismissals below */
           if (result.dismiss) {
             manageQuiz();
           }
@@ -320,10 +319,10 @@
           $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>
                     <div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
           currentQuestionIndex = 0;
+          score = 0
           return;
         }
-        renderQuestion(questionsQueue[currentQuestionIndex]);
-        currentQuestionIndex++;
+        renderQuestion(questionsQueue[currentQuestionIndex++]);
       }
 
       $(".quizNav").click(() => {
