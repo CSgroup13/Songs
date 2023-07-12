@@ -725,10 +725,12 @@
         if (this.value === "allSongs") {
           $(".searchInput").hide()
           $("#searchBtn").hide()
+          $(".microphone-button").hide()
         }
         else {
           $(".searchInput").show()
           $("#searchBtn").show()
+          $(".microphone-button").show()
         }
       })
       $(".allSongs").on("click", function () {

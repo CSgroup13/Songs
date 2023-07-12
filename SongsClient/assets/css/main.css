@@ -952,7 +952,11 @@ body {
         max-width: 100%
     }
 }
-
+@media only screen and (min-width: 1500px)  {
+    .work--lockup{
+    margin-top: 100px !important;
+}
+}
 .work h2 {
     margin: 0 0 20px 0;
     font-size: 30px;
