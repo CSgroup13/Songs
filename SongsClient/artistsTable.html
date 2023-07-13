@@ -33,6 +33,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./assets/js/ajaxCallsStub.js"></script>
     <script src="./assets/js/ajaxCalls.js"></script>
+    <link rel="stylesheet" href="./assets/css/tablesStyles.css">
 
     <script>
         $(document).ready(function () {
@@ -55,7 +56,6 @@
         }
 
         function showDetails(artistName) {
-            console.log(artistName);
             ajaxCall("GET", `${baseApi}/Artists/${artistName}/songs`, "", function (data) {
                 const songsDiv = $("<div>");
                 for (let song of data) {

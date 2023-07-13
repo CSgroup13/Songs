@@ -1,0 +1,36 @@
+
+#lyricsAdminDiv {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    text-align: left;
+    font-weight: 100;
+}
+
+/* Responsive Styles */
+
+@media screen and (max-width: 1500px) {
+    #lyricsAdminDiv {
+        max-height: 200px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    #lyricsAdminDiv {
+        max-height: 150px;
+    }
+}
+
+#lyricsAdminDiv::-webkit-scrollbar {
+    width: 10px;
+    /* Set the width of the scrollbar */
+    background-color: transparent;
+    /* Set the background color of the scrollbar */
+}
+
+#lyricsAdminDiv::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.5);
+    /* Set the color of the scrollbar thumb */
+    border-radius: 5px;
+    /* Round the corners of the scrollbar thumb */
+}
