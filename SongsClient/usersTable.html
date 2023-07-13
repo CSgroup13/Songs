@@ -32,8 +32,7 @@
     <script src="./assets/js/ajaxCalls.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="./assets/js/main.js"></script>
-
-
+    <link rel="stylesheet" href="./assets/css/tablesStyles.css">
 
     <script>
 
@@ -49,7 +48,7 @@
                 markSelected(this);
                 $("#editDiv").show();
                 $("#editDiv :input").prop("disabled", false);
-                populateFields(this.getAttribute('data-userId')); 
+                populateFields(this.getAttribute('data-userId'));
             });
 
             $(document).on("click", ".songsBtn", function () {
@@ -98,13 +97,13 @@
         function onSubmitFunc() {
             let userAfterEdit = {
                 id: user.id,
-                name:$("#userName").val(),
+                name: $("#userName").val(),
                 email: $("#email").val(),
                 password: $("#password").val(),
                 regDate: user.regDate,
                 score: $("#score").val()
             }
-            ajaxCall("PUT", baseApi+"/Users/update", JSON.stringify(userAfterEdit), updateSuccess, errorCB);
+            ajaxCall("PUT", baseApi + "/Users/update", JSON.stringify(userAfterEdit), updateSuccess, errorCB);
             return false;
         }
 
@@ -113,23 +112,23 @@
             $("#userName").val(user.name);
             $("#email").val(user.email);
             $("#password").val(user.password);
-            $("#score").val(user.score); 
+            $("#score").val(user.score);
         }
 
         function updateSuccess(userdata) {
             tbl.clear();
-            ajaxCall("GET", baseApi + "/Users", "", function(data){
+            ajaxCall("GET", baseApi + "/Users", "", function (data) {
                 redrawTable(tbl, data);
             }, errorCB);
 
             buttonEvents();
             $("#editDiv").hide();
             Swal.fire({
-                    icon: 'success',
-                    text: `User ${userdata.name} Updated Successfuly!`,
-                    color: 'white',
-                    background: '#171717'
-                })
+                icon: 'success',
+                text: `User ${userdata.name} Updated Successfuly!`,
+                color: 'white',
+                background: '#171717'
+            })
         }
 
         // // // success callback function after delete
@@ -147,12 +146,12 @@
                 tbl.row.add(data[i]);
             }
             tbl.draw();
-            users=data
+            users = data
         }
 
         function getSuccess(usersData) {
-            usersData=usersData.filter(user => user.email !== "admin@gmail.com");
-            users=usersData;
+            usersData = usersData.filter(user => user.email !== "admin@gmail.com");
+            users = usersData;
             try {
                 tbl = $('#usersTable').DataTable({
                     responsive: true,
@@ -256,8 +255,8 @@
                 <div class="form-group row">
                     <div class="form-group col-sm-3">
                         <label for="userName"><span class="red-star">★ </span>User Name</label>
-                        <input type="text" class="form-control" id="userName"
-                            placeholder="Enter the User Name name" required>
+                        <input type="text" class="form-control" id="userName" placeholder="Enter the User Name name"
+                            required>
                     </div>
 
 
@@ -270,7 +269,7 @@
                     <div class="form-group col-sm-3">
                         <label for="password"><span class="red-star">★ </span>Password</label>
                         <input type="text" class="form-control" id="password" placeholder="Enter the Password" required>
-                    
+
                     </div>
 
                     <div class="form-group col-sm-3">
