@@ -25,6 +25,13 @@ namespace SongsServer.Controllers
             return UserClass.getSongsByUser(userId);
         }
 
+        // GET: api/<UsersController>/
+        [HttpGet("{userId}/artists")]
+        public List<Artist> getArtistsByUser(int userId)
+        {
+            return UserClass.getArtistsByUser(userId);
+        }
+
         // POST api/<UsersController>/register
         [HttpPost("register")]
         public IActionResult Register([FromBody] UserClass u)

@@ -19,6 +19,12 @@
             DBservices dbs = new DBservices();
             return dbs.getSongsByUser(userId);
         }
+
+        public static List<Artist> getArtistsByUser(int userId)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getArtistsByUser(userId);
+        }
         public UserClass Register()
         {
 
