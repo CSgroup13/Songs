@@ -134,6 +134,13 @@ $(document).ready(() => {
     let updateLoginPage = (page) => {
         $("#mainFormDiv").html("");
         if (page === "logout") {//logout page
+            if (JSON.parse(localStorage.user).email === "admin@gmail.com") {
+                console.log("admin");
+                $("#adminBtns").html(`<span>Access to data Tables: </span><a class="adminButton" href="./usersTable.html" target="_blank">Users Data</a>
+                <a class="adminButton" href="./songsTable.html" target="_blank">Songs Data</a>
+                <a class="adminButton" href="./artistsTable.html" target="_blank">Artists Data</a>`);
+                $("#mainPageHeader").html("Hello Admin");
+            }
             $("#mainFormDiv").append('<h2 id="formHeader1" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
             $("#logoutBtn").click(() => {
                 localStorage.removeItem("user");
@@ -150,8 +157,7 @@ $(document).ready(() => {
         }
         else if (page === "login") { //login page
             $("#mainFormDiv").append('<h2 id="formHeader2">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
-            $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
-            $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
+            $('#logEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
             $('#loginForm').submit(function () {
                 let email = $("#logEmailInp").val();
                 let password = $("#logPassInp").val();
