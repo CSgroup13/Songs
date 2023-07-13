@@ -1569,7 +1569,9 @@ body {
     border: none;
     border-radius: 0;
 }
-
+.searchInput{
+    margin-right: 50px;
+}
 /* //////// */
 .microphone-button {
     display: flex;
