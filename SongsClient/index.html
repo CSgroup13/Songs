@@ -366,10 +366,10 @@
         timerElement.textContent = timeLeft;
         const interval = setInterval(() => {
           timeLeft--;
-          if ($(".quizNav.is-active").length === 0) { 
+          if ($(".quizNav.is-active").length === 0) {
             clearInterval(interval);
             return;
-           }
+          }
           timerElement.textContent = timeLeft;
           if (timeLeft === 0) {
             clearInterval(interval);
@@ -432,7 +432,7 @@
           quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
           $("#startQuizBtn").on('click', () => {
             if (localStorage.artists === undefined) {
-              quizDiv.html(`<span class="loader"></span>`)
+              quizDiv.html(`<h1 id="Preparing">Preparing Your Quiz...</h1><span class="loader"></span>`)
               const interval = setInterval(() => {
                 if (localStorage.artists) {
                   clearInterval(interval); // Clear the interval once localStorage.artists is available
@@ -1346,7 +1346,6 @@
             </li>
             <li id="quizWrapper" class="l-section section">
               <div id="Quiz">
-                <span class="loader"></span>
               </div>
             </li>
             <li class="l-section section">
