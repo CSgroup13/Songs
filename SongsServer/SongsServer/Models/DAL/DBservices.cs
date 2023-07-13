@@ -103,6 +103,7 @@ public class DBservices
                 u.email = dataReader["email"].ToString();
                 u.password = dataReader["password"].ToString();
                 u.regDate = Convert.ToDateTime(dataReader["regDate"]);
+                u.score = Convert.ToInt32(dataReader["score"]);
                 usersList.Add(u);
             }
             return usersList;
@@ -300,6 +301,70 @@ public class DBservices
         }
     }
 
+   //--------------------------------------------------------------------------------------------------
+    // This method updates User details
+    //--------------------------------------------------------------------------------------------------
+    public UserClass updateUserDetails(UserClass user)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@id", user.id);
+        paramDic.Add("@name", user.name);
+        paramDic.Add("@email", user.email);
+        paramDic.Add("@password", user.password);
+        paramDic.Add("@regDate", user.regDate);
+        paramDic.Add("@score", user.score);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_UpdateUserDetails", con, paramDic);             // create the command
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                UserClass u = new UserClass();
+                u.id = Convert.ToInt32(dataReader["id"]);
+                u.name = dataReader["name"].ToString();
+                u.email = dataReader["email"].ToString();
+                u.password = dataReader["password"].ToString();
+                u.regDate = Convert.ToDateTime(dataReader["regDate"]);
+                u.score = Convert.ToInt32(dataReader["score"]);
+                return u;
+            }
+            throw new Exception("User with this email is already exits.");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     //--------------------------------------------------------------------------------------------------
     // This method Check If Exists User by Email
     //--------------------------------------------------------------------------------------------------

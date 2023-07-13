@@ -105,6 +105,18 @@ namespace SongsServer.Controllers
                 return Ok(true);
             return BadRequest("Artist is not in favorites");
         }
-
+        // POST api/<UsersController>/register
+        [HttpPut("update")]
+        public IActionResult updateUserDetails([FromBody] UserClass u)
+        {
+            try
+            {
+                return Ok(u.updateUserDetails());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

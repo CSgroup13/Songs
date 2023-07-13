@@ -75,6 +75,11 @@
             DBservices dbs = new DBservices();
             return dbs.deleteArtistFromFav(userId, artistId);
         }
+        public UserClass updateUserDetails()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.updateUserDetails(this);
+        }
 
     }
 }

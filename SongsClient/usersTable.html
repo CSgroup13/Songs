@@ -21,7 +21,6 @@
         }
     </style>
 
-
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -38,25 +37,20 @@
 
     <script>
 
-        // will run when the document is ready
         $(document).ready(function () {
-
-            // once the document is ready we fetch a list of cars from the server
-            ajaxCall("GET", baseApi + "/Users", "", getSuccess, errorCB);
-
-            // $("#carForm").submit(onSubmitFunc); // wire the submit event to a function called f1
             $("#editDiv").hide();
+            ajaxCall("GET", baseApi + "/Users", "", getSuccess, errorCB);
+            $("#userForm").submit(onSubmitFunc);
         });
 
-        // wire all the buttons to their functions
         function buttonEvents() {
 
-            // $(document).on("click", ".editBtn", function () {
-            //     markSelected(this);
-            //     $("#editDiv").show();
-            //     $("#editDiv :input").prop("disabled", false); // edit mode: enable all controls in the form
-            //     populateFields(this.getAttribute('data-userId')); // fill the form fields according to the selected row
-            // });
+            $(document).on("click", ".editBtn", function () {
+                markSelected(this);
+                $("#editDiv").show();
+                $("#editDiv :input").prop("disabled", false); // edit mode: enable all controls in the form
+                populateFields(this.getAttribute('data-userId')); // fill the form fields according to the selected row
+            });
 
             $(document).on("click", ".songsBtn", function () {
                 markSelected(this);
@@ -101,65 +95,51 @@
         //     ajaxCall("DELETE", "../api/cars/" + id, "", deleteSuccess, error);
         // }
 
-        // function onSubmitFunc() {
-        //     let carAfterEdit = {
-        //         Id: car.Id,
-        //         Image: car.Image, // for now we do not change the image
-        //         Manufacturer: $("#manufacturer").val(),
-        //         Model: $("#model").val(),
-        //         Year: $("#year").val(),
-        //         Price: $("#price").val(),
-        //         Color: $("#color").val(),
-        //         Hand: $("#hand").val(),
-        //         Description: $("#description").val(),
-        //         Automatic: $("#automatic").is(":checked")
-        //     }
+        function onSubmitFunc() {
+            let userAfterEdit = {
+                id: user.id,
+                name:$("#userName").val(),
+                email: $("#email").val(),
+                password: $("#password").val(),
+                regDate: user.regDate,
+                score: $("#score").val()
+            }
+            ajaxCall("PUT", baseApi+"/Users/update", JSON.stringify(userAfterEdit), updateSuccess, errorCB);
+            return false;
+        }
 
-        //     // update a new Car record to the server
-        //     ajaxCall("PUT", "../api/cars", JSON.stringify(carAfterEdit), updateSuccess, error);
-        //     return false;
-        // }
+        function populateFields(userId) {
+            user = getUser(userId);
+            $("#userName").val(user.name);
+            $("#email").val(user.email);
+            $("#password").val(user.password);
+            $("#score").val(user.score); 
+        }
 
-        // // fill the form fields
-        // function populateFields(carId) {
-        //     car = getCar(carId);
-        //     $("#manufacturer").val(car.Manufacturer);
-        //     $("#model").val(car.Model);
-        //     $("#year").val(car.Year);
-        //     $("#price").val(car.Price);
-        //     $("#color").val(car.Color);
-        //     $("#hand").val(car.Hand);
-        //     $("#description").val(car.Description);
-        //     $("#automatic").prop('checked', car.Automatic);
-        //     $("#image").attr("src", "images/" + car.Image);
-        // }
+        function updateSuccess(userdata) {
+            tbl.clear();
+            ajaxCall("GET", baseApi + "/Users", "", function(data){
+                redrawTable(tbl, data);
+            }, errorCB);
 
-        // // get a car according to its Id
-        // function getCar(id) {
-        //     for (i in cars) {
-        //         if (cars[i].Id == id)
-        //             return cars[i];
-        //     }
-        //     return null;
-        // }
+            buttonEvents();
+            $("#editDiv").hide();
+            Swal.fire({
+                    icon: 'success',
+                    text: `User ${userdata.name} Updated Successfuly!`,
+                    color: 'white',
+                    background: '#171717'
+                })
+        }
 
-        // // success callback function after update
-        // function updateSuccess(carsdata) {
+        // // // success callback function after delete
+        // function deleteSuccess(carsdata) {
         //     tbl.clear();
         //     redrawTable(tbl, carsdata);
-        //     buttonEvents();
+        //     buttonEvents(); // after redrawing the table, we must wire the new buttons
         //     $("#editDiv").hide();
-        //     swal("Updated Successfuly!", "Great Job", "success");
+        //     swal("Deleted Successfuly!", "Great Job", "success");
         // }
-
-        // // success callback function after delete
-        function deleteSuccess(carsdata) {
-            tbl.clear();
-            redrawTable(tbl, carsdata);
-            buttonEvents(); // after redrawing the table, we must wire the new buttons
-            $("#editDiv").hide();
-            swal("Deleted Successfuly!", "Great Job", "success");
-        }
 
         // redraw a datatable with new data
         function redrawTable(tbl, data) {
@@ -168,11 +148,12 @@
                 tbl.row.add(data[i]);
             }
             tbl.draw();
+            users=data
         }
 
-        // this function is activated in case of a success
         function getSuccess(usersData) {
-            users = usersData; // keep the cars array in a global variable;
+            usersData=usersData.filter(user => user.email !== "admin@gmail.com");
+            users=usersData;
             try {
                 tbl = $('#usersTable').DataTable({
                     data: usersData,
@@ -208,7 +189,13 @@
             }
         }
 
-
+        function getUser(id) {
+            for (i in users) {
+                if (users[i].id == id)
+                    return users[i];
+            }
+            return null;
+        }
         function getUserSongsSuccess(userSongs) {
             let strToRender = ""
             for (let song of userSongs) {
@@ -265,83 +252,32 @@
         </form>
 
         <div id="editDiv">
-            <form id="carForm">
+            <form id="userForm">
                 <div class="form-group row">
                     <div class="form-group col-sm-3">
-                        <label for="manufacturer"><span class="red-star">★ </span>Manufacturer</label>
-                        <input type="text" class="form-control" id="manufacturer"
-                            placeholder="Enter the manufacturer name" required>
+                        <label for="userName"><span class="red-star">★ </span>User Name</label>
+                        <input type="text" class="form-control" id="userName"
+                            placeholder="Enter the User Name name" required>
                     </div>
 
 
                     <div class="form-group col-sm-3">
-                        <label for="model"><span class="red-star">★ </span>Model</label>
-                        <input type="text" class="form-control" id="model" placeholder="Enter the model name" required>
+                        <label for="email"><span class="red-star">★ </span>Email</label>
+                        <input type="text" class="form-control" id="email" placeholder="Enter the Email" required>
                     </div>
 
 
                     <div class="form-group col-sm-3">
-                        <label for="year"><span class="red-star">★ </span>Year</label>
-                        <select id="year" class="form-control" required>
-                            <option value="">Choose Year</option>
-                            <option value="2019">2019</option>
-                            <option value="2018">2018</option>
-                            <option value="2017">2017</option>
-                            <option value="2016">2016</option>
-                        </select>
+                        <label for="password"><span class="red-star">★ </span>Password</label>
+                        <input type="text" class="form-control" id="password" placeholder="Enter the Password" required>
+                    
                     </div>
 
                     <div class="form-group col-sm-3">
-                        <label for="price"><span class="red-star">★ </span>Price</label>
-                        <input type="number" class="form-control" id="price" placeholder="Enter the price" required />
+                        <label for="score"><span class="red-star">★ </span>Score</label>
+                        <input type="number" class="form-control" id="score" placeholder="Enter the Score" required />
                     </div>
 
-
-                </div>
-
-                <div class="form-group row">
-
-
-                    <div class="form-group col-sm-3">
-                        <label for="color"><span class="red-star">★ </span>Color</label>
-                        <select class="form-control" id="color" required>
-                            <option value="">Choose Color</option>
-                            <option value="White"> White </option>
-                            <option value="Blue"> Blue </option>
-                            <option value="Black"> Black </option>
-                            <option value="Red"> Red </option>
-                            <option value="Grey"> Grey </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-sm-3">
-                        <label for="hand"><span class="red-star">★ </span>Hand</label>
-                        <select class="form-control" id="hand" required>
-                            <option value="">Choose Hand</option>
-                            <option value="1"> 1 </option>
-                            <option value="2"> 2 </option>
-                            <option value="3"> 3 </option>
-                            <option value="4"> 4 </option>
-                            <option value="5"> 5 </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group col-sm-3">
-                        <label for="automatic"><span class="red-star">★ </span>Automatic?</label>
-                        <input type="checkbox" class="form-control" id="automatic" checked />
-                    </div>
-
-                </div>
-                <div class="form-group row">
-                    <div class="form-group col-sm-8">
-                        <label for="description">Description</label>
-                        <textarea rows="6" class="form-control" id="description"
-                            placeholder="Enter the description"></textarea>
-                    </div>
-
-                    <div class="form-group col-sm-4">
-                        <img src="images/car.jpg" id="image" />
-                    </div>
 
                 </div>
 
