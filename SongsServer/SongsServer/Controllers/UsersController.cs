@@ -63,7 +63,15 @@ namespace SongsServer.Controllers
             
             
         }
+        [HttpPost("{userId}/Score/{userScore}")]
+        public IActionResult updateUserScore(int userId, int userScore)
+        {
+            if (UserClass.updateUserScore(userId, userScore))
+                return Ok(true);
+            return BadRequest("Couldn't update score");
 
+
+        }
         // DELETE api/<UsersController>/5
         [HttpDelete("{userId}/{songId}")]
         public IActionResult deleteSongFromFav(int userId, int songId)

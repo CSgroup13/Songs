@@ -952,7 +952,11 @@ body {
         max-width: 100%
     }
 }
-
+@media only screen and (min-width: 1500px)  {
+    .work--lockup{
+    margin-top: 100px !important;
+}
+}
 .work h2 {
     margin: 0 0 20px 0;
     font-size: 30px;
@@ -1560,9 +1564,36 @@ body {
     text-transform: uppercase;
     background-color: #0f33ff;
     border: none;
-    border-radius: 0
+    border-radius: 0;
+    margin-left: 50px;
 }
 
+/* //////// */
+.microphone-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    border: 1px solid white;
+    border-radius: 60px;
+    background-color: black;
+    cursor: pointer;
+    transition: transform 0.3s;
+    position: absolute;
+    z-index: 1;
+    margin-left: 40px;
+  }
+  
+  .microphone-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .microphone-icon {
+    width: 100%;
+    height: 100%;
+  }
+  /* //////////////// */
 .work-request input[type="submit"]:focus {
     outline: none
 }
@@ -1931,6 +1962,9 @@ body {
 
 #searchBtn {
     width: 20%;
+    line-height: 30px;
+    height: 90%;
+    border-radius: 20px;
 }
 
 .artiststBtns {
@@ -2234,3 +2268,22 @@ body {
 #logoHeader {
     text-transform: none;
 }
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #FFF;
+    border-bottom-color: #0f33ff;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+    } 

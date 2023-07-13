@@ -7,6 +7,7 @@
         public string email { get; set; }
         public string password { get; set; }
         public DateTime regDate { get; set; }
+        public int score { get; set; }
 
         static public List<UserClass> getAllUsers()
         {
@@ -41,7 +42,12 @@
                     return u;
             }
         }
+        public static bool updateUserScore(int id,int score)
+        {
 
+            DBservices dbs = new DBservices();
+            return dbs.updateUserScore(id, score);
+        }
         public static bool addSongToFav(int userId, int songId)
         {
             DBservices dbs = new DBservices();

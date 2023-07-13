@@ -223,6 +223,7 @@ public class DBservices
                 u.email = dataReader["email"].ToString();
                 u.password = dataReader["password"].ToString();
                 u.regDate = Convert.ToDateTime(dataReader["regDate"]);
+                u.score= Convert.ToInt32(dataReader["score"]);
                 return u;
             }
             throw new Exception("User with this email is already exits.");
@@ -344,7 +345,52 @@ public class DBservices
         }
 
     }
+    //--------------------------------------------------------------------------------------------------
+    // This method updates User Score
+    //--------------------------------------------------------------------------------------------------
+    public bool updateUserScore(int id,int score)
+    {
 
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@id", id);
+        paramDic.Add("@score", score);
+
+        cmd = CreateCommandWithStoredProcedure("SP_updateScore", con, paramDic);
+        UserClass u = new UserClass();
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected > 0;
+         }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
     //--------------------------------------------------------------------------------------------------
     // This method Insert a song to userSongs table
     //--------------------------------------------------------------------------------------------------
