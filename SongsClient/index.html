@@ -297,7 +297,6 @@
           }
         }, 1000);
       }
-      //create table ?
 
       function alertAnswer(swalTitle, swalIcon) {
         if (swalIcon === "success")
@@ -341,12 +340,7 @@
         renderQuestion(questionsQueue[currentQuestionIndex++]);
       }
       $(".quizNav").click(() => {
-        const interval = setInterval(() => {
-          if (localStorage.artists) {
-            clearInterval(interval); // Clear the interval once localStorage.artists is available
-            renderQuizHTML();
-          }
-        }, 100); // Interval check every 100 milliseconds
+        renderQuizHTML();
       });
 
       function renderQuizHTML() {
@@ -354,7 +348,20 @@
         if (localStorage.user !== undefined) {
           quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
           quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
-          $("#startQuizBtn").on('click', () => manageQuiz());
+          $("#startQuizBtn").on('click', () => {
+            if(localStorage.artists===undefined){
+              quizDiv.html(`<span class="loader"></span>`)
+              const interval = setInterval(() => {
+                if (localStorage.artists) {
+                  clearInterval(interval); // Clear the interval once localStorage.artists is available
+                  manageQuiz();
+                }
+              }, 100);
+            }
+            else{
+              manageQuiz();
+            }
+          });
         } else {
           quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
         }
@@ -438,7 +445,7 @@
           const listeners = artistObj.stats.listeners;
           const playcount = artistObj.stats.playcount;
           const rate = artist.rate;
-          const artistId=artist.id;
+          const artistId = artist.id;
           $.ajax({
             async: false,
             type: "GET",
@@ -452,7 +459,7 @@
             },
             error: errorCB
           });
-          const res = { artistId,name, summary, listeners, playcount, rate, image, songsList };
+          const res = { artistId, name, summary, listeners, playcount, rate, image, songsList };
           artistsArr.push(res);
           count -= 1;
           if (count === 0) {
