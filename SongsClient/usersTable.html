@@ -183,7 +183,7 @@
                                 let dataUser = "data-userId='" + row.id + "'";
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataUser + "> Edit </button>";
                                 songsBtn = "<button type='button' class = 'songsBtn btn btn-info' " + dataUser + ">Songs </button>";
-                                artistBtn = "<button type='button' class = 'artistBtn btn btn-info' " + dataUser + "> Artists</button>";
+                                artistBtn = "<button type='button' class = 'artistsBtn btn btn-info' " + dataUser + "> Artists</button>";
                                 return editBtn + songsBtn + artistBtn;
                             }
                         },
@@ -191,7 +191,12 @@
                         { data: "name" },
                         { data: "email" },
                         { data: "password" },
-                        { data: "regDate" },
+                        {
+                            data: "regDate", render: function (data, type, row) {
+                                const date = new Date(data);
+                                return date.toLocaleDateString(); // Convert to a normal date format
+                            }
+                        },
                         { data: "score" }
                     ],
                 });
@@ -203,7 +208,7 @@
             }
         }
 
-        
+
         function getUserSongsSuccess(userSongs) {
             let strToRender = ""
             for (let song of userSongs) {
