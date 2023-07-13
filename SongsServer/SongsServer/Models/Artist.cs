@@ -17,5 +17,11 @@
             DBservices dbs = new DBservices();
             return dbs.getSongsByArtist(artistName);
         }
+
+        public static Artist getArtistById(int id)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getArtistById(id);
+        }
     }
 }

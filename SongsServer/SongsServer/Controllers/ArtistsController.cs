@@ -37,11 +37,18 @@ namespace SongsServer.Controllers
             }
         }
 
-        // GET api/<ArtistsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        // GET api/<ArtistsController>
+        [HttpGet("{id}/info")]
+        public IActionResult getArtistById(int id)
         {
-            return "value";
+            try
+            {
+                return Ok(Artist.getArtistById(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // POST api/<ArtistsController>

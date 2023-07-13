@@ -484,6 +484,100 @@ public class DBservices
         }
 
     }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Insert artist to UserArtists table
+    //--------------------------------------------------------------------------------------------------
+    public bool addArtistToFav(int userId, int artistId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@userId", userId);
+        paramDic.Add("@artistId", artistId);
+
+        cmd = CreateCommandWithStoredProcedure("SP_addArtistToFav", con, paramDic);// create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected > 0;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Delete artist from UserArtists table
+    //--------------------------------------------------------------------------------------------------
+    public bool deleteArtistFromFav(int userId, int artistId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@userId", userId);
+        paramDic.Add("@artistId", artistId);
+
+        cmd = CreateCommandWithStoredProcedure("SP_deleteArtistFromFav", con, paramDic);// create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected > 0;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
     //*****************************************************Songs Methods*********************************************************************************
     //--------------------------------------------------------------------------------------------------
     // This method add new song to db
@@ -834,6 +928,63 @@ public class DBservices
 
     }
     //*****************************************************Artists Methods*********************************************************************************
+    //--------------------------------------------------------------------------------------------------
+    // This method return artist by id
+    //--------------------------------------------------------------------------------------------------
+    public Artist getArtistById(int id)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@id", id);
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_getArtistById", con, paramDic);// create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            if (dataReader.Read())
+            {
+                Artist a = new Artist();
+                a.id = Convert.ToInt32(dataReader["id"]);
+                a.name = dataReader["name"].ToString();
+                a.rate = Convert.ToInt32(dataReader["rate"]);
+
+                return a;
+            }
+            throw new Exception("could not find Artist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     //--------------------------------------------------------------------------------------------------
     // This method Returns all Artists
     //--------------------------------------------------------------------------------------------------

@@ -2235,7 +2235,12 @@ body {
 .back>h4 {
     color: #fc42ea;
 }
-
+#removeArtistFromFav{
+    font-size: 26px;
+    display: inline-block;
+    margin: 15px;
+    cursor: pointer;
+}
 .artist:hover {
     transform: rotateY(180deg);
 }

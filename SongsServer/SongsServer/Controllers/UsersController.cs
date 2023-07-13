@@ -53,16 +53,6 @@ namespace SongsServer.Controllers
             }
         }
 
-        // POST api/<UsersController>/login/1/1
-        [HttpPost("{userId}/{songId}")]
-        public IActionResult addSongToFav(int userId, int songId)
-        {
-            if(UserClass.addSongToFav(userId, songId))
-                return Ok(true);
-                return BadRequest("Song is already in favorites");
-            
-            
-        }
         [HttpPost("{userId}/Score/{userScore}")]
         public IActionResult updateUserScore(int userId, int userScore)
         {
@@ -72,6 +62,16 @@ namespace SongsServer.Controllers
 
 
         }
+
+        // POST api/<UsersController>
+        [HttpPost("{userId}/{songId}")]
+        public IActionResult addSongToFav(int userId, int songId)
+        {
+            if (UserClass.addSongToFav(userId, songId))
+                return Ok(true);
+            return BadRequest("Song is already in favorites");
+        }
+
         // DELETE api/<UsersController>/5
         [HttpDelete("{userId}/{songId}")]
         public IActionResult deleteSongFromFav(int userId, int songId)
@@ -80,5 +80,24 @@ namespace SongsServer.Controllers
                 return Ok(true);
             return BadRequest("Song is not in favorites");
         }
+
+        // POST api/<UsersController>
+        [HttpPost("{userId}/addArtistToFav/{artistId}")]
+        public IActionResult addArtistToFav(int userId, int artistId)
+        {
+            if (UserClass.addArtistToFav(userId, artistId))
+                return Ok(true);
+            return BadRequest("Artist is already in favorites");
+        }
+
+        // DELETE api/<UsersController>
+        [HttpDelete("{userId}/removeArtistFromFav/{artistId}")]
+        public IActionResult deleteArtistFromFav(int userId, int artistId)
+        {
+            if (UserClass.deleteArtistFromFav(userId, artistId))
+                return Ok(true);
+            return BadRequest("Artist is not in favorites");
+        }
+
     }
 }

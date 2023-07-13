@@ -27,13 +27,14 @@
         renderArtists();
       })
       function renderArtists() {
-        if (localStorage.artists == undefined)
-          ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
-        else {
-          const artistsDiv = document.getElementById("artists");
-          const data = JSON.parse(localStorage.artists);
-          addArtistsToDiv(data);
-        }
+        // if (localStorage.artists == undefined)
+        ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
+
+        // else {
+        //   const artistsDiv = document.getElementById("artists");
+        //   const data = JSON.parse(localStorage.artists);
+        //   addArtistsToDiv(data);
+        // }
       }
       renderArtists();
 
@@ -45,8 +46,35 @@
         if (inputVal !== '') {
           filteredData = data.filter(artist => artist.name.toLowerCase().startsWith(inputVal));
         }
-        addArtistsToDiv(filteredData);
+        const artistsDiv = document.getElementById("artists");
+        artistsDiv.innerHTML = "";
+        if (data.length > 0) {
+          for (let artist of filteredData) {
+            addArtistsToDiv(artist);
+          }
+        }
+        else {
+          artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
+        }
       })
+
+      function getArtist(id) {
+        let artist;
+        $.ajax({
+          async: false,
+          type: "GET",
+          url: baseApi + `/Artists/${id}/info`,
+          data: "",
+          cache: false,
+          contentType: "application/json",
+          dataType: "json",
+          success: function (data) {
+            artist = data;
+          },
+          error: errorCB
+        });
+        return artist;
+      }
 
       $(document).on("click", ".back", function (event) {
         event.preventDefault();
@@ -55,7 +83,7 @@
         const currArtist = data.filter(artist => artist.name === name)[0];
         const swal = Swal.fire({
           title: `About ${currArtist.name}`,
-          html: `<div class="song-popup">${currArtist.summary}</div> <i id="artist_${currArtist.artistId}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><br><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
+          html: `<div class="song-popup">${currArtist.summary}</div> <i id="artist_${currArtist.artistId}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
           color: 'white',
           background: '#171717',
           confirmButtonText: "Close",
@@ -71,6 +99,55 @@
             html: songsDiv
           });
         })
+        $(`#artist_${currArtist.artistId}`).click(() => {
+          if (localStorage.user === undefined) {
+            Swal.fire({
+              icon: 'error',
+              text: "Please Log in to add artist to Favorites",
+              color: 'white',
+              background: '#171717'
+            })
+            return;
+          }
+          ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/addArtistToFav/${currArtist.artistId}`, "", function () {
+            Swal.fire({
+              icon: 'success',
+              text: "Artist added to your Favorites",
+              color: 'white',
+              background: '#171717'
+            })
+            const artistDiv = $(".back").filter(function () {
+              return $(this).find("h4").text() === currArtist.name;
+            });
+            let artist = getArtist(currArtist.artistId);
+            artistDiv.find("p").last().html(`&#x1F44D; ${artist.rate}`);
+          }, errorCB);
+        })
+
+        $('#removeArtistFromFav').click(() => {
+          if (localStorage.user === undefined) {
+            Swal.fire({
+              icon: 'error',
+              text: "Please Log in to remove artist from Favorites",
+              color: 'white',
+              background: '#171717'
+            })
+            return;
+          }
+          ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/removeArtistFromFav/${currArtist.artistId}`, "", function () {
+            Swal.fire({
+              icon: 'success',
+              text: "Artist removed from your Favorites",
+              color: 'white',
+              background: '#171717'
+            })
+            const artistDiv = $(".back").filter(function () {
+              return $(this).find("h4").text() === currArtist.name;
+            });
+            let artist = getArtist(currArtist.artistId);
+            artistDiv.find("p").last().html(`&#x1F44D; ${artist.rate}`);
+          }, errorCB);
+        })
       });
 
       ////////////////////////login and register///////////////////
@@ -84,10 +161,11 @@
               icon: 'success',
               text: "You Logged Out!",
               color: 'white',
-              background: '#171717'
+              background: '#171717',
+            }).then(() => {
+              updateLoginBtns();
+              window.location.href = "./index.html";
             })
-            updateLoginBtns();
-            window.location.href = "./index.html";
           })
         }
         else if (page === "login") { //login page
@@ -425,52 +503,58 @@
     const lastfmKey = "d6293ebc904c9f3e71bf638f0b55a5f6";
 
     function successCBAllArtists(data) {
+      const artistsDiv = document.getElementById("artists");
+      artistsDiv.innerHTML = "";
       const artistsArr = [];
       let songsList = [];
       let count = data.length;
-      for (let artist of data) {
-        const api = `${lastfmBaseAPi}/?method=artist.getinfo&artist=${artist.name}&api_key=${lastfmKey}&format=json`;
-        ajaxCall("GET", api, "", function (data) {
-          const artistObj = data.artist;
-          const name = artistObj.name;
-          const summary = artistObj.bio.summary;
-          const image = artistObj.image[2]["#text"];
-          const listeners = artistObj.stats.listeners;
-          const playcount = artistObj.stats.playcount;
-          const rate = artist.rate;
-          const artistId=artist.id;
-          $.ajax({
-            async: false,
-            type: "GET",
-            url: baseApi + `/Artists/${name}/songs`,
-            data: "",
-            cache: false,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-              songsList = data;
-            },
-            error: errorCB
+      if (count > 0) {
+        for (let artist of data) {
+          const api = `${lastfmBaseAPi}/?method=artist.getinfo&artist=${artist.name}&api_key=${lastfmKey}&format=json`;
+          ajaxCall("GET", api, "", function (data) {
+            const artistObj = data.artist;
+            const name = artistObj.name;
+            const summary = artistObj.bio.summary;
+            const image = artistObj.image[2]["#text"];
+            const listeners = artistObj.stats.listeners;
+            const playcount = artistObj.stats.playcount;
+            const rate = artist.rate;
+            const artistId = artist.id;
+            $.ajax({
+              async: false,
+              type: "GET",
+              url: baseApi + `/Artists/${name}/songs`,
+              data: "",
+              cache: false,
+              contentType: "application/json",
+              dataType: "json",
+              success: function (data) {
+                songsList = data;
+              },
+              error: errorCB
+            });
+            const res = { artistId, name, summary, listeners, playcount, rate, image, songsList };
+            $("#artistLoader").hide();
+            addArtistsToDiv(res);
+            artistsArr.push(res);
+            count -= 1;
+            if (count === 0) {
+              localStorage.artists = JSON.stringify(artistsArr);
+            }
+          }, function (error) {
+            errorCB(error);
           });
-          const res = { artistId,name, summary, listeners, playcount, rate, image, songsList };
-          artistsArr.push(res);
-          count -= 1;
-          if (count === 0) {
-            localStorage.artists = JSON.stringify(artistsArr);
-            addArtistsToDiv(artistsArr);
-          }
-        }, function (error) {
-          errorCB(error);
-        });
+        }
+      }
+      else {
+        $("#artistLoader").hide();
+        artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
       }
     }
 
-    function addArtistsToDiv(data) {
+    function addArtistsToDiv(artist) {
       const artistsDiv = document.getElementById("artists");
-      artistsDiv.innerHTML = "";
-      if (data.length !== 0) {
-        for (let artist of data) {
-          artistsDiv.innerHTML += `<div class="artist">
+      artistsDiv.innerHTML += `<div class="artist">
               <div class="front">
                 <img src=${artist.image}>
               </div>
@@ -481,11 +565,6 @@
                 <p>&#x1F44D; ${artist.rate}</p>
               </div>
           </div>`;
-        }
-      }
-      else {
-        artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
-      }
     }
 
     //////////Quiz/////////////
@@ -1248,9 +1327,9 @@
                     <button class="artiststBtns" id="showAllArtistsBtn">Show All</button>
                   </div>
                 </div>
+                <span id="artistLoader" class="loader"></span>
                 <div id="artistsContainer">
                   <div id="artists">
-
                   </div>
                 </div>
               </div>
