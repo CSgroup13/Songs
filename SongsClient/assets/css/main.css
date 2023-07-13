@@ -1568,7 +1568,6 @@ body {
     background-color: #0f33ff;
     border: none;
     border-radius: 0;
-    margin-left: 50px;
 }
 
 /* //////// */
@@ -1659,6 +1658,10 @@ body {
     -webkit-transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
     transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
     border-radius: 10px;
+}
+
+#formDiv {
+    text-align: center;
 }
 
 .work-request--options label svg {

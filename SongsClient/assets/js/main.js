@@ -6,6 +6,23 @@ $(document).ready(() => {
         $("#searchArtistInput").val("");
         renderArtists();
     })
+
+    $("#showFavoritesArtists").click(function () {
+        $("#searchArtistInput").val("");
+        if (localStorage.user !== undefined) {
+            const userId = JSON.parse(localStorage.user).id;
+            ajaxCall("GET", baseApi + `/Users/${userId}/artists`, "", successCBAllArtists, errorCB);
+        }
+        else {
+            Swal.fire({
+                icon: 'error',
+                text: "You need to login first to see your favorites artists",
+                color: 'white',
+                background: '#171717'
+            })
+        }
+    })
+
     function renderArtists() {
         // if (localStorage.artists == undefined)
         ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
@@ -156,7 +173,7 @@ $(document).ready(() => {
             })
         }
         else if (page === "login") { //login page
-            $("#mainFormDiv").append('<h2 id="formHeader2">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required><label for="email">Email</label></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">password</label></div></div><input type="submit" value="Log In"></form>');
+            $("#mainFormDiv").append('<h2 id="formHeader2">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" placeHolder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" placeholder="Password" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Log In"></form>');
             $('#logEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
             $('#loginForm').submit(function () {
                 let email = $("#logEmailInp").val();
@@ -173,7 +190,7 @@ $(document).ready(() => {
             })
         }
         else { //signup page
-            $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" title="name must include only letters" required ><label for="name">Name</label></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" title="example12@example.exapmle" required ><label for="email">Email</label></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required><label for="password">Password</label></div></div><input type="submit" value="Sign Up"></form>');
+            $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" placeholder="Name" title="name must include only letters" required ></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" placeholder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" placeholder="Password" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Sign Up"></form>');
             $('#regNameInp').attr('pattern', '[a-zA-Z]+');
             $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
             $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
