@@ -951,6 +951,7 @@ body {
     .work {
         max-width: 100%
     }
+    
 }
 @media only screen and (min-width: 1500px)  {
     .work--lockup{
@@ -1582,7 +1583,7 @@ body {
     transition: transform 0.3s;
     position: absolute;
     z-index: 1;
-    margin-left: 40px;
+    margin-left: 3%;
   }
   
   .microphone-button:hover {
@@ -1764,7 +1765,8 @@ body {
         -webkit-box-pack: justify;
         -webkit-justify-content: space-between;
         -ms-flex-pack: justify;
-        justify-content: space-between
+        justify-content: center;
+        
     }
 }
 
@@ -1961,7 +1963,7 @@ body {
 }
 
 #searchBtn {
-    width: 20%;
+    width: 22%;
     line-height: 30px;
     height: 90%;
     border-radius: 20px;
@@ -2165,10 +2167,12 @@ body {
     overflow-y: auto;
     padding: 10px;
     text-align: left;
+    font-weight: 100;
 }
 
 /* Responsive Styles */
-@media screen and (max-width: 600px) {
+
+@media screen and (max-width: 1500px) {
     .song-popup {
         max-height: 200px;
     }
