@@ -1,3 +1,39 @@
+body {
+    background-color: #333;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  th, td {
+    padding: 10px;
+    border: 1px solid #555!important;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #555!important;
+  }
+  tr:nth-child(even) {
+    background-color: #444!important;
+  }
+  
+  tr:nth-child(odd) {
+    background-color: #333!important;
+  }
+  
+  tr:hover {
+    background-color: #555!important;
+  }
+  label{
+    color: #fff;
+  }
 
 #lyricsAdminDiv {
     max-height: 300px;
