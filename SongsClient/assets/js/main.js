@@ -135,7 +135,7 @@ $(document).ready(() => {
         $("#mainFormDiv").html("");
         if (page === "logout") {//logout page
             if (JSON.parse(localStorage.user).email === "admin@gmail.com") {
-                console.log("admin");
+
                 $("#adminBtns").html(`<span>Access to data Tables: </span><a class="adminButton" href="./usersTable.html" target="_blank">Users Data</a>
                 <a class="adminButton" href="./songsTable.html" target="_blank">Songs Data</a>
                 <a class="adminButton" href="./artistsTable.html" target="_blank">Artists Data</a>`);
@@ -397,8 +397,12 @@ $(document).ready(() => {
         if (currentQuestionIndex == questionsQueue.length) {
             $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>`);
             $("#Quiz").append(`<button id="playAgain">Play Again</button>`);
+            $("#Quiz").append(`<button id="leaderBoard">Leaders Board</button>`);
             $("#Quiz").append(`<div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
             $("#playAgain").on('click', () => manageQuiz());
+            $("#leaderBoard").on('click', () => {
+                ajaxCall("GET", `${baseApi}/Users/leaders`, "", showLeadersboard, errorCB);
+            });
             let userId = JSON.parse(localStorage["user"]).id;
             ajaxCall("POST", `${baseApi}/Users/${userId}/Score/${score}`, "", successCBScoreUpdate, errorCB);
             currentQuestionIndex = 0;
@@ -410,7 +414,19 @@ $(document).ready(() => {
     $(".quizNav").click(() => {
         renderQuizHTML();
     });
+    function showLeadersboard(leaders) {
+        const leadersDiv = $("<div>");
+        for (let leader of leaders) {
+            leadersDiv.append(`<p>${leader.name}   -   ${leader.score}</p>`);
+        }
+        Swal.fire({
+            icon: 'info',
+            html: leadersDiv,
+            color: 'white',
+            background: '#171717'
+        })
 
+    }
     function renderQuizHTML() {
         const quizDiv = $("#Quiz");
         if (localStorage.user !== undefined) {
@@ -459,8 +475,7 @@ function successCBFavorites(data) {
             let songDiv = `<a id="a_${song.id}" class="favSong" title="Click to see song details">
             <h3 class="favTitle" style="display: inline-block;">${song.name}</h3>
             <p class="favP">${song.artistName}</p>
-          </a>
-          `;
+          </a>`;
             favoritesDiv.append(songDiv);
             $(`#a_${song.id}`).on("click", function () {
                 Swal.fire({
@@ -552,16 +567,16 @@ function successCBAllArtists(data) {
 function addArtistsToDiv(artist) {
     const artistsDiv = document.getElementById("artists");
     artistsDiv.innerHTML += `<div class="artist">
-              <div class="front">
-                <img src=${artist.image}>
-              </div>
-              <div class="back">
-                <h4>${artist.name}</h4>
-                <p>listeners: ${artist.listeners}</p>
-                <p>playcount: ${artist.playcount}</p>
-                <p>&#x1F44D; ${artist.rate}</p>
-              </div>
-          </div>`;
+                 <div class="front">
+                 <img src=${artist.image}>
+             </div>
+             <div class="back">
+                 <h4>${artist.name}</h4>
+                 <p>listeners: ${artist.listeners}</p>
+                 <p>playcount: ${artist.playcount}</p>
+                 <p>&#x1F44D; ${artist.rate}</p>
+             </div>
+             </div>`;
 }
 
 //////////Quiz/////////////
@@ -933,15 +948,15 @@ function successCBSong(data) {
             <ul class="slider"> </ul>
               </div>`)
         $("div.work--lockup>ul.slider").append(`
-            <li class="slider--item slider--item-center" id="slideSong_${data[0].id}">
-            <a>
+    <li class="slider--item slider--item-center" id="slideSong_${data[0].id}">
+        <a>
             <div class="slider--item-image">
-            <img src="assets/img/work-victory.jpg" alt="Victory">
+                <img src="assets/img/work-victory.jpg" alt="Victory">
             </div>
             <p class="slider--item-title">${data[0].name}</p>
             <p class="slider--item-description">${data[0].artistName}</p>
-            </a>
-            </li>`)
+        </a>
+    </li>`)
         $(`#slideSong_${data[0].id}`).click(function () {
             showSongPopup(data[0].id, data[0].name);
         });

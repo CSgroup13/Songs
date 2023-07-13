@@ -124,7 +124,60 @@ public class DBservices
         }
 
     }
+    //--------------------------------------------------------------------------------------------------
+    // This method return top 5 leaders by score in quiz
+    //--------------------------------------------------------------------------------------------------
+    public List<UserClass> getTop5()
+    {
 
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_GetTop5", con, null);             // create the command
+
+
+        List<UserClass> usersList = new List<UserClass>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                UserClass u = new UserClass();
+                u.name = dataReader["name"].ToString();
+                u.score = Convert.ToInt32(dataReader["score"]);
+                usersList.Add(u);
+            }
+            return usersList;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
     //--------------------------------------------------------------------------------------------------
     // This method reads all songs of specific user
     //--------------------------------------------------------------------------------------------------

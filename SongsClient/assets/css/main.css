@@ -2047,7 +2047,7 @@ body {
     margin-top: 90px;
 }
 
-#playAgain {
+#playAgain,#leaderBoard {
     margin-top: 20px !important;
     margin-bottom: 10px;
 }
@@ -2072,7 +2072,7 @@ body {
 }
 
 #startQuizBtn,
-#playAgain {
+#playAgain,#leaderBoard {
     background-color: white;
     border: 3px solid black;
     color: black;
@@ -2084,7 +2084,8 @@ body {
 }
 
 #startQuizBtn:hover,
-#playAgain:hover {
+#playAgain:hover,
+#leaderBoard:hover {
     opacity: .8;
 }
 

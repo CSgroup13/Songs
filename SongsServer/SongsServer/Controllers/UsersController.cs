@@ -25,12 +25,19 @@ namespace SongsServer.Controllers
             return UserClass.getSongsByUser(userId);
         }
 
-        // GET: api/<UsersController>/
+        // GET: api/<UsersController>/userId/artists
         [HttpGet("{userId}/artists")]
         public List<Artist> getArtistsByUser(int userId)
         {
             return UserClass.getArtistsByUser(userId);
         }
+        // GET: api/<UsersController>/leaders
+        [HttpGet("leaders")]
+        public List<UserClass> getTop5()
+        {
+            return UserClass.getTop5();
+        }
+
 
         // POST api/<UsersController>/register
         [HttpPost("register")]

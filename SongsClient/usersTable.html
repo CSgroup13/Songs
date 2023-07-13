@@ -48,8 +48,8 @@
             $(document).on("click", ".editBtn", function () {
                 markSelected(this);
                 $("#editDiv").show();
-                $("#editDiv :input").prop("disabled", false); // edit mode: enable all controls in the form
-                populateFields(this.getAttribute('data-userId')); // fill the form fields according to the selected row
+                $("#editDiv :input").prop("disabled", false);
+                populateFields(this.getAttribute('data-userId')); 
             });
 
             $(document).on("click", ".songsBtn", function () {
@@ -141,7 +141,6 @@
         //     swal("Deleted Successfuly!", "Great Job", "success");
         // }
 
-        // redraw a datatable with new data
         function redrawTable(tbl, data) {
             tbl.clear();
             for (var i = 0; i < data.length; i++) {
@@ -156,6 +155,7 @@
             users=usersData;
             try {
                 tbl = $('#usersTable').DataTable({
+                    responsive: true,
                     data: usersData,
                     pageLength: 5,
                     columns: [
@@ -175,7 +175,7 @@
                         {
                             data: "regDate", render: function (data, type, row) {
                                 const date = new Date(data);
-                                return date.toLocaleDateString(); // Convert to a normal date format
+                                return date.toLocaleDateString();
                             }
                         },
                         { data: "score" }

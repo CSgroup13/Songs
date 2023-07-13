@@ -45,6 +45,7 @@
             $(document).on("click", ".viewBtn", function () {
                 markSelected(this);
                 row.className = 'selected';
+                showDetails((this.getAttribute('data-songName')))
             });
         }
 
@@ -78,18 +79,17 @@
                     data: songsData,
                     pageLength: 5,
                     columns: [
-                        {
-                            render: function (data, type, row, meta) {
-                                let dataSongs = "data-artistId='" + row.id + "'";
-                                viewBtn = `<button type='button' id="rowSong_${row.id}" class = 'viewBtn btn btn-info' ` + dataSongs + ` > Lyrics </button>`;
-                                $(`#rowSong_${row.id}`).click(() => showDetails(row.id));
-                                return viewBtn;
-                            }
-                        },
                         { data: "id" },
                         { data: "name" },
                         { data: "artistName" },
                         { data: "rate" },
+                        {
+                            render: function (data, type, row, meta) {
+                                let dataSongs = "data-songName='" + row.name + "'";
+                                viewBtn = `<button type='button' id="rowSong_${row.id}" class = 'viewBtn btn btn-info' ` + dataSongs + ` > Lyrics </button>`;
+                                return viewBtn;
+                            }
+                        },
                     ],
                 });
                 buttonEvents();
@@ -114,11 +114,11 @@
             <table id="songsTable" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Id</th>
                         <th>Name</th>
                         <th>Artist</th>
                         <th>Rate</th>
+                        <th></th>
                     </tr>
                 </thead>
             </table>

@@ -80,6 +80,11 @@
             DBservices dbs = new DBservices();
             return dbs.updateUserDetails(this);
         }
+        public static List<UserClass> getTop5()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getTop5();
+        }
 
     }
 }

@@ -45,6 +45,7 @@
             $(document).on("click", ".viewBtn", function () {
                 markSelected(this);
                 row.className = 'selected';
+                showDetails(this.getAttribute("data-artistName"))
             });
         }
 
@@ -64,6 +65,8 @@
                 Swal.fire({
                     title: `Songs of ${artistName}`,
                     html: songsDiv,
+                    color: 'white',
+                    background: '#171717',
                 })
             }, error);
         }
@@ -76,17 +79,16 @@
                     data: artistData,
                     pageLength: 5,
                     columns: [
-                        {
-                            render: function (data, type, row, meta) {
-                                let dataArtist = "data-artistId='" + row.id + "'";
-                                viewBtn = `<button type='button' id="rowArtist_${row.id}" class = 'viewBtn btn btn-info' ` + dataArtist + ` > Songs List </button>`;
-                                $(`#rowArtist_${row.id}`).click(() => showDetails(row.name));
-                                return viewBtn;
-                            }
-                        },
                         { data: "id" },
                         { data: "name" },
                         { data: "rate" },
+                        {
+                            render: function (data, type, row, meta) {
+                                let dataArtist = "data-artistName='" + row.name + "'";
+                                viewBtn = `<button type='button' id="rowArtist_${row.id}" class = 'viewBtn btn btn-info' ` + dataArtist + ` > Songs List </button>`;
+                                return viewBtn;
+                            }
+                        }
                     ],
                 });
                 buttonEvents();
@@ -111,10 +113,10 @@
             <table id="artistTable" class="display nowrap" style="width:100%">
                 <thead>
                     <tr>
-                        <th></th>
                         <th>Id</th>
                         <th>Name</th>
                         <th>Rate</th>
+                        <th></th>
                     </tr>
                 </thead>
             </table>
