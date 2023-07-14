@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 using SongsServer.Models;
 using System;
+using System.Collections;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,7 +16,10 @@ namespace SongsServer.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
-        public string deezerApi = "http://api.deezer.com/search/";
+        //public string deezerApi = "http://api.deezer.com/search/";
+        //public string lastfmBaseAPi = "http://ws.audioscrobbler.com/2.0";
+        //public string lastfmKey = "d6293ebc904c9f3e71bf638f0b55a5f6";
+        //private HttpWebRequest request;
 
         // GET: api/<ArtistsController>
         [HttpGet]
@@ -22,7 +27,7 @@ namespace SongsServer.Controllers
         {
             try
             {
-                return Ok(Artist.getAllArtists());
+                return (Ok(Artist.getAllArtists()));
             }
             catch (Exception ex)
             {
@@ -45,62 +50,32 @@ namespace SongsServer.Controllers
 
         // GET api/<ArtistsController>
         [HttpGet("{id}/info")]
-        public async Task<IActionResult> getArtistById(int id)
+        public IActionResult getArtistById(int id)
         {
             try
             {
-                Artist a = Artist.getArtistById(id);
-                string apiUrl = deezerApi + "artist/?q=" + a.name + "&index=0&limit=1&output=json";
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
-                request.Method = "GET";
+                //Artist a = Artist.getArtistById(id);
+                //string lastFmApi = lastfmBaseAPi + "/?method=artist.getinfo&artist="+a.name+"&api_key="+lastfmKey+"&format=json";
+                //request = (HttpWebRequest)WebRequest.Create(lastFmApi);
+                //request.Method = "GET";
 
-                // Get the response from the Deezer API
-                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-                using (Stream stream = response.GetResponseStream())
-                using (StreamReader reader = new StreamReader(stream))
-                {
-                    string jsonResponse = await reader.ReadToEndAsync();
-                    var res=JsonConvert.DeserializeObject<dynamic>(jsonResponse);
-                    a.numOfAlbums = res.data[0].nb_album;
-                    a.image = res.data[0].picture_medium;
-                    return Ok(a);
-                }
+                //// Get the response from the Last.fm API
+                //using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                //using (Stream stream = response.GetResponseStream())
+                //using (StreamReader reader = new StreamReader(stream))
+                //{
+                //    string jsonResponse = await reader.ReadToEndAsync();
+                //    var res = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                //    a.summary = res.artist.bio.summary;
+                //    a.listeners = res.artist.stats.listeners;
+                //    a.playcount = res.artist.stats.playcount;
+                //}
+                return Ok(getArtistById(id));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-
         }
-
-        //// GET: api/Artists/{artistName}/image
-        //[HttpGet("{artistName}/image")]
-        //public async Task<IActionResult> GetArtistImage(string artistName)
-        //{
-        //    try
-        //    {
-        //        string apiUrl = deezerApi+"artist/?q=" +artistName+"&index=0&limit=1&output=json";
-        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
-        //        request.Method = "GET";
-
-        //        // Get the response from the Deezer API
-        //        using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
-        //        using (Stream stream = response.GetResponseStream())
-        //        using (StreamReader reader = new StreamReader(stream))
-        //        {
-        //            string jsonResponse = await reader.ReadToEndAsync();
-
-
-        //            // Return the Deezer API response as the result
-        //            return Content(jsonResponse, "application/json");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
-
-      
     }
 }
