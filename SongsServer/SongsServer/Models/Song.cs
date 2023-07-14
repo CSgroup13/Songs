@@ -42,5 +42,11 @@
             DBservices dbs = new DBservices();
             return dbs.getByLyrics(lyrics);
         }
+
+        public static Song getSongByDiffArtist(string artistName)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getSongByDiffArtist(artistName);
+        }
     }
 }

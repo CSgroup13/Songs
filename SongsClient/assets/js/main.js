@@ -641,21 +641,16 @@ function getArtistSongs(artistName) {
 //song of different artist
 function getRandomSongOfDifferentArtist(artistName) {
     let song;
-    const artists = JSON.parse(localStorage.artists);
-    const filteredArtists = artists.filter(artist => artist.name !== artistName);
-    const rand = Math.floor(Math.random() * filteredArtists.length);
-    const differentArtist = filteredArtists[rand].name;
     $.ajax({
         async: false,
         type: "GET",
-        url: baseApi + `/Artists/${differentArtist}/songs`,
+        url: baseApi + `/Songs/getSongByDiffArtist/${artistName}`,
         data: "",
         cache: false,
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            const rand = Math.floor(Math.random() * data.length);
-            song = data[rand];
+            song = data;
         },
         error: errorCB
     });
@@ -931,7 +926,7 @@ runSpeechRecog = () => {
     var output = $("#searchInput");
     let recognization = new webkitSpeechRecognition();
     recognization.onstart = () => {
-        output.val("Listening...");
+        output.val("");
     }
     recognization.onresult = (e) => {
         var transcript = e.results[0][0].transcript;

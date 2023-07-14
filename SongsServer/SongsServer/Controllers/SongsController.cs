@@ -115,16 +115,18 @@ namespace SongsServer.Controllers
             }
         }
 
-        // PUT api/<SongsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        // GET: api/<SongsController>/randomSong
+        [HttpGet("getSongByDiffArtist/{artistName}")]
+        public IActionResult getSongByDiffArtist(String artistName)
         {
-        }
-
-        // DELETE api/<SongsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            try
+            {
+                return Ok(Song.getSongByDiffArtist(artistName));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

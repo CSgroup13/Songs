@@ -1372,6 +1372,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image= dataReader["image"].ToString();
                 songList.Add(s);
             }
             if(songList.Count > 0)
@@ -1379,6 +1380,62 @@ public class DBservices
             return songList;
             }
             throw new Exception("No Songs from this Artist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    //--------------------------------------------------------------------------------------------------
+    // This method return song by different artist
+    //--------------------------------------------------------------------------------------------------
+    public Song getSongByDiffArtist(string artistName)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@artistName", artistName);
+
+        cmd = CreateCommandWithStoredProcedure("SP_getDiffArtistSong", con, paramDic);// create the command
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            if (dataReader.Read())
+            {
+                Song s = new Song();
+                s.id = Convert.ToInt32(dataReader["id"]);
+                s.name = dataReader["name"].ToString();
+                s.artistName = dataReader["artistName"].ToString();
+                s.link = dataReader["link"].ToString();
+                s.lyrics = dataReader["lyrics"].ToString();
+                s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image = dataReader["image"].ToString();
+                return s;
+            }
+           
+            throw new Exception("No Song from this Different Artist");
         }
         catch (Exception ex)
         {
