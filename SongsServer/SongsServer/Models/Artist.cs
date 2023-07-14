@@ -25,5 +25,11 @@
             DBservices dbs = new DBservices();
             return dbs.getArtistById(id);
         }
+
+        public static Artist getArtistByName(string artistName)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getArtistByName(artistName);
+        }
     }
 }
