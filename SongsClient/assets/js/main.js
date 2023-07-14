@@ -1,25 +1,4 @@
 const baseApi = 'https://localhost:7091/api';
-let artistsImagesApi;
-function getArtistImageApi(artistName) {
-    artistsImagesApi = `http://api.deezer.com/search/artist/?q=${artistName}&index=0&limit=2&output=json&app_id=620084&redirect_uri=https%3A%2F%2Flocalhost%3A7091%2Fapi&perms=b7fdc6a413671b16b4e93c5db407b740`
-    let image;
-    // ajaxCall("GET", artistsImagesApi, "", function(artistData){
-    //     const image=artistData.data[0].picture_medium;
-    $.ajax({
-        async: false,
-        type: "GET",
-        url: artistsImagesApi,
-        data: "",
-        cache: false,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (artistData) {
-            image = artistData.data[0].picture_medium;
-        },
-        error: errorCB
-    });
-    return image;
-}
 
 $(document).ready(() => {
     ///Artists////
@@ -47,8 +26,7 @@ $(document).ready(() => {
 
     function renderArtists() {
         // if (localStorage.artists == undefined)
-        ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
-
+            ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
         // else {
         //   const artistsDiv = document.getElementById("artists");
         //   const data = JSON.parse(localStorage.artists);
@@ -561,17 +539,16 @@ function successCBAllArtists(data) {
     let count = data.length;
     if (count > 0) {
         for (let artist of data) {
-            // const image = getArtistImageApi(artist.name);
             const api = `${lastfmBaseAPi}/?method=artist.getinfo&artist=${artist.name}&api_key=${lastfmKey}&format=json`;
             ajaxCall("GET", api, "", function (data) {
                 const artistObj = data.artist;
                 const name = artistObj.name;
                 const summary = artistObj.bio.summary;
                 const listeners = artistObj.stats.listeners;
-                const image=artistObj.image;
                 const playcount = artistObj.stats.playcount;
                 const rate = artist.rate;
                 const artistId = artist.id;
+                let image;
                 $.ajax({
                     async: false,
                     type: "GET",
@@ -585,7 +562,20 @@ function successCBAllArtists(data) {
                     },
                     error: errorCB
                 });
-                const res = { artistId, name, summary, listeners, playcount, rate, image, songsList };
+                $.ajax({
+                    async: false,
+                    type: "GET",
+                    url: baseApi + `/Artists/${name}/image`,
+                    data: "",
+                    cache: false,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (artistD) {
+                        image = artistD.data[0].picture_medium;
+                    },
+                    error: errorCB
+                });
+                const res = { artistId, name, summary, listeners, playcount, rate, image, songsList};
                 $("#artistLoader").hide();
                 addArtistsToDiv(res);
                 artistsArr.push(res);

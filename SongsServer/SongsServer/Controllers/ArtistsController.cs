@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SongsServer.Models;
+using System;
+using System.IO;
+using System.Net;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -44,6 +48,33 @@ namespace SongsServer.Controllers
             try
             {
                 return Ok(Artist.getArtistById(id));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET: api/Artists/{artistName}/image
+        [HttpGet("{artistName}/image")]
+        public async Task<IActionResult> GetArtistImage(string artistName)
+        {
+            try
+            {
+                string apiUrl = "http://api.deezer.com/search/artist/?q=" +artistName+"&index=0&limit=1&output=json";
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
+                request.Method = "GET";
+
+                // Get the response from the Deezer API
+                using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+                using (Stream stream = response.GetResponseStream())
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    string jsonResponse = await reader.ReadToEndAsync();
+
+                    // Return the Deezer API response as the result
+                    return Content(jsonResponse, "application/json");
+                }
             }
             catch (Exception ex)
             {
