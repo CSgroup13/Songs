@@ -8,6 +8,7 @@ using System.Text;
 using System.Net;
 using System.Diagnostics.Metrics;
 using SongsServer.Models;
+using System.Data.Common;
 
 /// <summary>
 /// DBServices is a class created by me to provides some DataBase Services
@@ -665,7 +666,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method Insert artist to UserArtists table
     //--------------------------------------------------------------------------------------------------
-    public bool addArtistToFav(int userId, int artistId)
+    public Artist addArtistToFav(int userId, int artistId)
     {
         SqlConnection con;
         SqlCommand cmd;
@@ -689,8 +690,20 @@ public class DBservices
 
         try
         {
-            int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            return numEffected > 0;
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                Artist a = new Artist();
+                a.id = Convert.ToInt32(dataReader["id"]);
+                a.name = dataReader["name"].ToString();
+                a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
+
+                return a;
+            }
+            throw new Exception("Artist already in your favorite");
+        
         }
         catch (Exception ex)
         {
@@ -712,7 +725,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method Delete artist from UserArtists table
     //--------------------------------------------------------------------------------------------------
-    public bool deleteArtistFromFav(int userId, int artistId)
+    public Artist deleteArtistFromFav(int userId, int artistId)
     {
         SqlConnection con;
         SqlCommand cmd;
@@ -736,8 +749,19 @@ public class DBservices
 
         try
         {
-            int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            return numEffected > 0;
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                Artist a = new Artist();
+                a.id = Convert.ToInt32(dataReader["id"]);
+                a.name = dataReader["name"].ToString();
+                a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
+
+                return a;
+            }
+            throw new Exception("Artist is not in your favorite");
         }
         catch (Exception ex)
         {

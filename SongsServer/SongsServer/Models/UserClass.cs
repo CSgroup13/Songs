@@ -65,12 +65,12 @@
             return dbs.deleteSongFromFav(userId, songId);
         }
 
-        public static bool addArtistToFav(int userId, int artistId)
+        public static Artist addArtistToFav(int userId, int artistId)
         {
             DBservices dbs = new DBservices();
             return dbs.addArtistToFav(userId, artistId);
         }
-        public static bool deleteArtistFromFav(int userId, int artistId)
+        public static Artist deleteArtistFromFav(int userId, int artistId)
         {
             DBservices dbs = new DBservices();
             return dbs.deleteArtistFromFav(userId, artistId);
