@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using SongsServer.Models;
 using System;
 using System.IO;
@@ -44,25 +45,12 @@ namespace SongsServer.Controllers
 
         // GET api/<ArtistsController>
         [HttpGet("{id}/info")]
-        public IActionResult getArtistById(int id)
+        public async Task<IActionResult> getArtistById(int id)
         {
             try
             {
-                return Ok(Artist.getArtistById(id));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        // GET: api/Artists/{artistName}/image
-        [HttpGet("{artistName}/image")]
-        public async Task<IActionResult> GetArtistImage(string artistName)
-        {
-            try
-            {
-                string apiUrl = deezerApi+"artist/?q=" +artistName+"&index=0&limit=1&output=json";
+                Artist a = Artist.getArtistById(id);
+                string apiUrl = deezerApi + "artist/?q=" + a.name + "&index=0&limit=1&output=json";
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
                 request.Method = "GET";
 
@@ -72,33 +60,47 @@ namespace SongsServer.Controllers
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     string jsonResponse = await reader.ReadToEndAsync();
-
-                    // Return the Deezer API response as the result
-                    return Content(jsonResponse, "application/json");
+                    var res=JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    a.numOfAlbums = res.data[0].nb_album;
+                    a.image = res.data[0].picture_medium;
+                    return Ok(a);
                 }
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
+
         }
 
-        // POST api/<ArtistsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+        //// GET: api/Artists/{artistName}/image
+        //[HttpGet("{artistName}/image")]
+        //public async Task<IActionResult> GetArtistImage(string artistName)
+        //{
+        //    try
+        //    {
+        //        string apiUrl = deezerApi+"artist/?q=" +artistName+"&index=0&limit=1&output=json";
+        //        HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
+        //        request.Method = "GET";
 
-        // PUT api/<ArtistsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+        //        // Get the response from the Deezer API
+        //        using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+        //        using (Stream stream = response.GetResponseStream())
+        //        using (StreamReader reader = new StreamReader(stream))
+        //        {
+        //            string jsonResponse = await reader.ReadToEndAsync();
 
-        // DELETE api/<ArtistsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
+        //            // Return the Deezer API response as the result
+        //            return Content(jsonResponse, "application/json");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+      
     }
 }

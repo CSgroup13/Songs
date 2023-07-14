@@ -8,7 +8,7 @@
         public string link { get; set; }
         public string lyrics { get; set; }
         public int rate { get; set; }
-
+        public string image { get; set; }
         public bool InsertSong()
         {
             DBservices dbs = new DBservices();
