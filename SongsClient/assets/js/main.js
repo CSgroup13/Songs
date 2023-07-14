@@ -159,6 +159,7 @@ $(document).ready(() => {
                 return;
             }
             ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/removeArtistFromFav/${currArtist.id}`, "", function (data) {
+                console.log(data);
                 Swal.fire({
                     icon: 'success',
                     text: "Artist removed from your Favorites",
@@ -169,7 +170,7 @@ $(document).ready(() => {
                     return $(this).find("h4").text() === currArtist.name;
                 });
                 artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
-                $("#showFavoritesArtists").click();
+                // $("#showFavoritesArtists").click();
             }, errorCB);
         })
     });
