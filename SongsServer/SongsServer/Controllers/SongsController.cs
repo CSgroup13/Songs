@@ -94,13 +94,6 @@ namespace SongsServer.Controllers
             }
         }
 
-        // GET api/<SongsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<SongsController>
         [HttpPost]
         public IActionResult Post([FromBody] Song s)

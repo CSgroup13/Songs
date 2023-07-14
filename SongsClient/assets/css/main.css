@@ -2239,6 +2239,7 @@ body {
 
 .back {
     transform: rotateY(180deg);
+    height: 90%;
 }
 
 .front>img {

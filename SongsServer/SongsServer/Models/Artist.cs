@@ -36,5 +36,11 @@
             DBservices dbs = new DBservices();
             return dbs.getArtistByName(artistName);
         }
+
+        public static List<Artist> getDiffRandomArtists(String artistName)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getDiffRandomArtists(artistName);
+        }
     }
 }
