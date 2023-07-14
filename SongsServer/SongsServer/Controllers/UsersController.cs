@@ -90,18 +90,28 @@ namespace SongsServer.Controllers
         [HttpDelete("{userId}/{songId}")]
         public IActionResult deleteSongFromFav(int userId, int songId)
         {
-            if (UserClass.deleteSongFromFav(userId, songId))
-                return Ok(true);
-            return BadRequest("Song is not in favorites");
+            try
+            {
+                return Ok(UserClass.deleteSongFromFav(userId, songId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // POST api/<UsersController>
         [HttpPost("{userId}/addArtistToFav/{artistId}")]
         public IActionResult addArtistToFav(int userId, int artistId)
         {
-            if (UserClass.addArtistToFav(userId, artistId))
-                return Ok(true);
-            return BadRequest("Artist is already in favorites");
+            try
+            {
+                return Ok(UserClass.addArtistToFav(userId, artistId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // DELETE api/<UsersController>
