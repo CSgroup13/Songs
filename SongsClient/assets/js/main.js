@@ -1219,7 +1219,7 @@ function errorCB(error) {
 
 //generates 3 different artist other than given songArtist
 function generateDiff3Artists(songArtist) {
-    let diffArtists;
+    let diffArtists=[];
     $.ajax({
         async: false,
         type: "GET",
@@ -1229,7 +1229,9 @@ function generateDiff3Artists(songArtist) {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            diffArtists = data;
+            for (const artist of data) {
+                diffArtists.push(artist.name)
+            }
         },
         error: errorCB
     });
