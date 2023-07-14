@@ -9,6 +9,8 @@ namespace SongsServer.Controllers
     [ApiController]
     public class SongsController : ControllerBase
     {
+        public string deezerApi = "http://api.deezer.com/search/";
+
         // GET: api/<SongsController>
         [HttpGet]
         public IActionResult getAllSongs()

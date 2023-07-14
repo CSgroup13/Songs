@@ -13,11 +13,12 @@ namespace SongsServer.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
+        public string deezerApi = "http://api.deezer.com/search/";
+
         // GET: api/<ArtistsController>
         [HttpGet]
         public IActionResult getAllArtists()
         {
-
             try
             {
                 return Ok(Artist.getAllArtists());
@@ -61,7 +62,7 @@ namespace SongsServer.Controllers
         {
             try
             {
-                string apiUrl = "http://api.deezer.com/search/artist/?q=" +artistName+"&index=0&limit=1&output=json";
+                string apiUrl = deezerApi+"artist/?q=" +artistName+"&index=0&limit=1&output=json";
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
                 request.Method = "GET";
 
