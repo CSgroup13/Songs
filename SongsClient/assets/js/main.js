@@ -63,9 +63,21 @@ $(document).ready(() => {
     $(document).on("click", ".back", function (event) {
         event.preventDefault();
         const name = $(event.target).closest(".artist").find("h4").text();
-        let id = event.currentTarget.id.split("_")[1];
-        const rate = $(event.currentTarget).children().last().text();
-        let lastFmApi = lastfmBaseAPi + "/?method=artist.getinfo&artist=" + name + "&api_key=" + lastfmKey + "&format=json";
+        let currArtist;
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: `${baseApi}/Artists/byName/${name}/info`,
+            data: "",
+            cache: false,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                currArtist = data[0];
+            },
+            error: errorCB
+        });
+        let lastFmApi = lastfmBaseAPi + "/?method=artist.getinfo&artist=" + currArtist.name + "&api_key=" + lastfmKey + "&format=json";
         let summary;
         $.ajax({
             async: false,
@@ -81,8 +93,8 @@ $(document).ready(() => {
             error: errorCB
         });
         const swal = Swal.fire({
-            title: `About ${name}`,
-            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${name}</a>`,
+            title: `About ${currArtist.name}`,
+            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
             color: 'white',
             background: '#171717',
             confirmButtonText: "Close",
@@ -93,7 +105,7 @@ $(document).ready(() => {
             $.ajax({ //get artist songs list
                 async: false,
                 type: "GET",
-                url: baseApi + `/Artists/${name}/songs`,
+                url: baseApi + `/Artists/${currArtist.name}/songs`,
                 data: "",
                 cache: false,
                 contentType: "application/json",
@@ -108,11 +120,11 @@ $(document).ready(() => {
                 songsDiv.append(`<p>${song.name}</p>`);
             }
             swal.update({
-                title: `Songs of ${name}`,
+                title: `Songs of ${currArtist.name}`,
                 html: songsDiv
             });
         })
-        $(document).on('click', `#artistHeart_${id}`, () => {
+        $(document).on('click', `#artistHeart_${currArtist.id}`, () => {
             if (localStorage.user === undefined) {
                 Swal.fire({
                     icon: 'error',
@@ -122,7 +134,7 @@ $(document).ready(() => {
                 })
                 return;
             }
-            ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/addArtistToFav/${id}`, "", function () {
+            ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/addArtistToFav/${currArtist.id}`, "", function (data) {
                 Swal.fire({
                     icon: 'success',
                     text: "Artist added to your Favorites",
@@ -130,10 +142,9 @@ $(document).ready(() => {
                     background: '#171717'
                 })
                 const artistDiv = $(".back").filter(function () {
-                    return $(this).find("h4").text() === name;
+                    return $(this).find("h4").text() === currArtist.name;
                 });
-                let artist = getArtist(id);
-                artistDiv.find("p").last().html(`${rate}`);
+                artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
             }, errorCB);
         })
 
@@ -147,7 +158,7 @@ $(document).ready(() => {
                 })
                 return;
             }
-            ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/removeArtistFromFav/${id}`, "", function () {
+            ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/removeArtistFromFav/${currArtist.id}`, "", function (data) {
                 Swal.fire({
                     icon: 'success',
                     text: "Artist removed from your Favorites",
@@ -155,10 +166,9 @@ $(document).ready(() => {
                     background: '#171717'
                 })
                 const artistDiv = $(".back").filter(function () {
-                    return $(this).find("h4").text() === name;
+                    return $(this).find("h4").text() === currArtist.name;
                 });
-                let artist = getArtist(id);
-                artistDiv.find("p").last().html(`${rate}`);
+                artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
                 $("#showFavoritesArtists").click();
             }, errorCB);
         })
