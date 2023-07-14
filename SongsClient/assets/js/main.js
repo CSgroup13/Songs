@@ -22,28 +22,26 @@ $(document).ready(() => {
             })
         }
     })
-
+    $("#searchArtistBtn").click(() => {
+        let inputName = $("#searchArtistInput").val();
+        ajaxCall("GET", baseApi + `/Artists/byName/${inputName}/info`, "", function (data) {
+            const artistsDiv = document.getElementById("artists");
+            artistsDiv.innerHTML = "";
+            if (data.length > 0) {
+                addArtistsToDiv(data);
+            }
+            else {
+                artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
+            }
+        }, errorCB);
+        return false;
+    })
     renderArtists();
 });
 
 function renderArtists() {
     ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
 }
-
-$("#searchArtistForm").submit((event) => {
-    event.preventDefault();
-    var inputName = $("#searchArtistInput").val().toLowerCase();
-    ajaxCall("GET", baseApi + `/Artists/${inputName}/info`, "", function (data) {
-        const artistsDiv = document.getElementById("artists");
-        artistsDiv.innerHTML = "";
-        if (data.length > 0) {
-            addArtistsToDiv(data);
-        }
-        else {
-            artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
-        }
-    }, errorCB);
-})
 
 function getArtist(id) {
     let artist;
@@ -606,7 +604,7 @@ function randomArtist() {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            randArtist=data
+            randArtist = data
         },
         error: errorCB
     });

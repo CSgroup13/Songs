@@ -1223,7 +1223,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method return artist by Name
     //--------------------------------------------------------------------------------------------------
-    public Artist getArtistByName(string artistName)
+    public List<Artist> getArtistByName(string artistName)
     {
 
         SqlConnection con;
@@ -1240,25 +1240,25 @@ public class DBservices
         }
         Dictionary<string, object> paramDic = new Dictionary<string, object>();
 
-        paramDic.Add("@artistName", artistName);
+        paramDic.Add("@name", artistName);
 
 
         cmd = CreateCommandWithStoredProcedure("SP_getArtistByName", con, paramDic);// create the command
 
-
+        List<Artist> artistsList=new List<Artist>();
         try
         {
             SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            if (dataReader.Read())
+            while (dataReader.Read())
             {
                 Artist a = new Artist();
                 a.id = Convert.ToInt32(dataReader["id"]);
                 a.name = dataReader["name"].ToString();
                 a.rate = Convert.ToInt32(dataReader["rate"]);
                 a.image = dataReader["image"].ToString();
-
-                return a;
+                artistsList.Add(a);
             }
+            return artistsList;
             throw new Exception("could not find Artist");
         }
         catch (Exception ex)
