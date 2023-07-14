@@ -90,11 +90,12 @@ $(document).on("click", ".back", function (event) {
     });
     const swal = Swal.fire({
         title: `About ${name}`,
-        html: `<div class="song-popup">${summary}</div> <i id="artist_${id} class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${name}</a>`,
+        html: `<div class="song-popup">${summary}</div><i id="artist_${id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${name}</a>`,
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
     });
+    console.log(swal.params.html)
     $("#artistSongsDetails").click(() => {
         event.preventDefault();
         let songsList = [];
