@@ -1205,7 +1205,7 @@ function errorCB(error) {
 
 //generates 3 different artist other than given songArtist
 function generateDiff3Artists(songArtist) {
-    const diffArtists;
+    let diffArtists;
     $.ajax({
         async: false,
         type: "GET",
