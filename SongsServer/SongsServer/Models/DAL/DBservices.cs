@@ -1142,6 +1142,7 @@ public class DBservices
                 a.id = Convert.ToInt32(dataReader["id"]);
                 a.name = dataReader["name"].ToString();
                 a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
 
                 return a;
             }
@@ -1198,6 +1199,7 @@ public class DBservices
                 a.id = Convert.ToInt32(dataReader["Id"]);
                 a.name = dataReader["name"].ToString();
                 a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
                 artistList.Add(a);
             }
             return artistList;

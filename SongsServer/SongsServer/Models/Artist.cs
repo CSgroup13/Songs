@@ -7,7 +7,6 @@
         public int rate { get; set; }
         public string image { get; set; }
 
-        public int numOfAlbums { get; set; }
 
         public static List<Artist> getAllArtists()
         {
