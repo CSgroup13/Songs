@@ -485,6 +485,7 @@ $(document).ready(() => {
             quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
         }
     }
+
 });
 ////////////////////////Favorites Songs///////////////////
 
@@ -497,6 +498,8 @@ function renderFavorites() {
         $("#favoriteSongs").html("<h3>You should login first to see your favorite songs</h3>");
     }
 }
+
+
 
 function successCBFavorites(data) {
     if (data.length === 0) {
@@ -1210,7 +1213,7 @@ function errorCB(error) {
 
 //generates 3 different artist other than given songArtist
 function generateDiff3Artists(songArtist) {
-    const diffArtists;
+    let diffArtists;
     $.ajax({
         async: false,
         type: "GET",
