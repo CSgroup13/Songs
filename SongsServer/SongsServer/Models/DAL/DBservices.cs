@@ -273,6 +273,8 @@ public class DBservices
                 a.id = Convert.ToInt32(dataReader["id"]);
                 a.name = dataReader["name"].ToString();
                 a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
+
                 artistsList.Add(a);
             }
             return artistsList;
@@ -1162,6 +1164,66 @@ public class DBservices
 
     }
     //*****************************************************Artists Methods*********************************************************************************
+    //--------------------------------------------------------------------------------------------------
+    // This method return 3 random songs that are different from input value
+    //--------------------------------------------------------------------------------------------------
+    public List<Artist> getDiffRandomArtists(String artistName)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@artistName", artistName);
+
+        cmd = CreateCommandWithStoredProcedure("SP_getDiffRandomArtists", con, paramDic);// create the command
+
+        List<Artist> artistsList = new List<Artist>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                Artist a = new Artist();
+                a.id = Convert.ToInt32(dataReader["Id"]);
+                a.name = dataReader["name"].ToString();
+                a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
+                artistsList.Add(a);
+            }
+            return artistsList;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+
+
     //--------------------------------------------------------------------------------------------------
     // This method return artist by id
     //--------------------------------------------------------------------------------------------------

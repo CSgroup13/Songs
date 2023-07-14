@@ -94,13 +94,6 @@ namespace SongsServer.Controllers
             }
         }
 
-        // GET api/<SongsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<SongsController>
         [HttpPost]
         public IActionResult Post([FromBody] Song s)
@@ -113,18 +106,6 @@ namespace SongsServer.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        // PUT api/<SongsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<SongsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
