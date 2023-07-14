@@ -22,28 +22,26 @@ $(document).ready(() => {
             })
         }
     })
-
+    $("#searchArtistBtn").click(() => {
+        let inputName = $("#searchArtistInput").val();
+        ajaxCall("GET", baseApi + `/Artists/byName/${inputName}/info`, "", function (data) {
+            const artistsDiv = document.getElementById("artists");
+            artistsDiv.innerHTML = "";
+            if (data.length > 0) {
+                addArtistsToDiv(data);
+            }
+            else {
+                artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
+            }
+        }, errorCB);
+        return false;
+    })
     renderArtists();
 });
 
 function renderArtists() {
     ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
 }
-
-$("#searchArtistForm").submit((event) => {
-    event.preventDefault();
-    var inputName = $("#searchArtistInput").val().toLowerCase();
-    ajaxCall("GET", baseApi + `/Artists/${inputName}/info`, "", function (data) {
-        const artistsDiv = document.getElementById("artists");
-        artistsDiv.innerHTML = "";
-        if (data.length > 0) {
-            addArtistsToDiv(data);
-        }
-        else {
-            artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
-        }
-    }, errorCB);
-})
 
 function getArtist(id) {
     let artist;
@@ -85,12 +83,7 @@ $(document).on("click", ".back", function (event) {
     });
     const swal = Swal.fire({
         title: `About ${name}`,
-<<<<<<< HEAD
-        html: `<div class="song-popup">${summary}</div> <i id="artist_${id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>
-        <p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${name}</a>`,
-=======
         html: `<div class="song-popup">${summary}</div><i id="artist_${id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${name}</a>`,
->>>>>>> f6a7e9feff7ac5cc87794f34532943369e5066a5
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -611,7 +604,7 @@ function randomArtist() {
         contentType: "application/json",
         dataType: "json",
         success: function (data) {
-            randArtist=data
+            randArtist = data
         },
         error: errorCB
     });

@@ -59,18 +59,19 @@ namespace SongsServer.Controllers
         }
 
         // GET api/<ArtistsController>
-        [HttpGet("{artistName}/info")]
+        [HttpGet("byName/{artistName}/info")]
         public IActionResult getArtistByName(string artistName)
         {
             try
             {
-                return Ok(getArtistByName(artistName));
+                return Ok(Artist.getArtistByName(artistName));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+
         // GET api/<ArtistsController>
         [HttpGet("randomArtist")]
         public IActionResult getRandomArtist()

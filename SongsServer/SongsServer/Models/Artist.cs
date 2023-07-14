@@ -30,7 +30,8 @@
         {
             DBservices dbs = new DBservices();
             return dbs.getRandomArtist();
-        public static Artist getArtistByName(string artistName)
+        }
+        public static List<Artist> getArtistByName(string artistName)
         {
             DBservices dbs = new DBservices();
             return dbs.getArtistByName(artistName);
