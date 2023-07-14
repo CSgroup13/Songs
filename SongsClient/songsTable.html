@@ -35,10 +35,1024 @@
     <script src="./assets/js/ajaxCalls.js"></script>
     <link rel="stylesheet" href="./assets/css/tablesStyles.css">
     <script>
+       
         $(document).ready(function () {
             ajaxCall("GET", baseApi + "/Songs", "", getSuccess, error);
-        });
 
+// //          writeSQL([
+// //   {
+// //     "id": 1,
+// //     "name": "ABBA",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/1cd9c41f13f3114367692383758be3c1/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 23,
+// //     "summary": "ABBA is a Swedish pop group formed in Stockholm in  1972 by Agnetha Fältskog, Björn Ulvaeus, Benny Andersson, and Anni-Frid Lyngstad. The group's name is an acronym of the first letters of their first names. They became one of the most commercially successful acts in the history of popular music, topping the charts worldwide from 1974 to 1982. ABBA won the Eurovision Song Contest 1974 at The Dome in Brighton, UK, giving Sweden its first triumph in the contest. They are the most successful group to have taken part in the competition. <a href=\"https://www.last.fm/music/ABBA\">Read more on Last.fm</a>",
+// //     "listeners": 2842499,
+// //     "playcount": 97193077
+// //   },
+// //   {
+// //     "id": 2,
+// //     "name": "Ace Of Base",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/038b073fec58dc1783f64f96ba2ef14d/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 56,
+// //     "summary": "Swedish pop group Ace of Base was formed in Göteborg, Sweden  in 1990.\n\nThe band's original lineup consisted of Ulf Ekberg (Buddha), and siblings Jonas Berggren (Joker), Linn Berggren and Jenny Berggren; the two Berggren sisters left in 2007 and 2009 respectively, and were replaced with  Clara Hagman and Julia Williamson.\n\nAce Of Base broke through internationally in 1993 with the hit 'All That She Wants' and one year later with 'The Sign' worldwide. <a href=\"https://www.last.fm/music/Ace+of+Base\">Read more on Last.fm</a>",
+// //     "listeners": 1191373,
+// //     "playcount": 15236877
+// //   },
+// //   {
+// //     "id": 3,
+// //     "name": "Adam Sandler",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/1907c0b7283500b2538e36ff5cfc189b/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 16,
+// //     "summary": "Adam Richard Sandler (born September 9, 1966 in Brooklyn, New York) is an American comedian, actor, musician, screenwriter and film producer. After becoming a Saturday Night Live cast member in 1991, he went on to star in several Hollywood feature films that have grossed over US$100 million at the box office. He released his first album, They're All Gonna Laugh at You!, in 1993 and it recieved a a Grammy award nomination for Best Comedy Album. He has since released 1996's What the Hell Happened to Me? <a href=\"https://www.last.fm/music/Adam+Sandler\">Read more on Last.fm</a>",
+// //     "listeners": 322290,
+// //     "playcount": 2156148
+// //   },
+// //   {
+// //     "id": 4,
+// //     "name": "Adele",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e5fc443d2abc03b487234ba4de65a001/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 20,
+// //     "summary": "Adele Laurie Blue Adkins MBE (born May 5, 1988) is an English singer and songwriter. After graduating in arts from the BRIT School in 2006, Adele signed a record deal with XL Recordings. Her debut album, 19, was released in 2008 and spawned the UK top-five singles \"Chasing Pavements\" and \"Make You Feel My Love\". The album was certified 8× platinum in the UK and triple platinum in the US. Adele was honoured with the Brit Award for Rising Star as well as the Grammy Award for Best New Artist. <a href=\"https://www.last.fm/music/Adele\">Read more on Last.fm</a>",
+// //     "listeners": 4146243,
+// //     "playcount": 208244152
+// //   },
+// //   {
+// //     "id": 5,
+// //     "name": "Aerosmith",
+// //     "rate": 1,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3a9c77d76f6782dbebb507cdd0ad5616/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 39,
+// //     "summary": "Aerosmith is an American rock band formed in Boston in 1970. The group consists of Steven Tyler (lead vocals), Joe Perry (guitar), Tom Hamilton (bass), Joey Kramer (drums) and Brad Whitford (guitar). Their style, which is rooted in blues-based hard rock, has also incorporated elements of pop rock, heavy metal, glam metal, and rhythm and blues, and has inspired many subsequent rock artists. They are sometimes referred to as \"the Bad Boys from Boston\" and \"America's Greatest Rock and Roll Band\". <a href=\"https://www.last.fm/music/Aerosmith\">Read more on Last.fm</a>",
+// //     "listeners": 3636395,
+// //     "playcount": 90405228
+// //   },
+// //   {
+// //     "id": 6,
+// //     "name": "Air Supply",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/14b0ca6fd924d2284593dd46d7dcb99a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 34,
+// //     "summary": "Air Supply is an Australian soft rock duo, consisting of Graham Russell as guitarist and singer-songwriter and Russell Hitchcock as lead vocalist. They had a succession of hits worldwide, including eight Top Ten hits in the United States, in the early 1980s. They formed in Melbourne, Australia in 1975 and have included various accompanying musicians and singers.\n\nThe two met in May 1975 while performing in the Australian production of the Andrew Lloyd Webber/Tim Rice musical, Jesus Christ Superstar. <a href=\"https://www.last.fm/music/Air+Supply\">Read more on Last.fm</a>",
+// //     "listeners": 694898,
+// //     "playcount": 7232578
+// //   },
+// //   {
+// //     "id": 7,
+// //     "name": "Aiza Seguerra",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/7de7c2987e70e1376a43fe2cdc8bf060/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 20,
+// //     "summary": "Ice (formerly Aiza) Seguerra (born 17 September 1983) is a Filipino actor, singer-songwriter and guitarist.\n\nSeguera started his career as a child comedian. After a colorful TV stint, he penned one of the country's most memorable ditties, \"Pagdating ng Panahon.\" He began to identify publicly as a trans man in 2017, changing his name to Ice and requesting that others refer to him by male pronouns only.\n\n2009\tAIZA SEGUERRA: Live!\n2008\tOpen Arms\n2007\tPara Lang Sa'Yo <a href=\"https://www.last.fm/music/Aiza+Seguerra\">Read more on Last.fm</a>",
+// //     "listeners": 20522,
+// //     "playcount": 179232
+// //   },
+// //   {
+// //     "id": 8,
+// //     "name": "Alabama",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/f0dd6370fc4fed1f66cbd559e352da10/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 39,
+// //     "summary": "Alabama is a country music band from Fort Payne, Alabama. The band has over 41 #1 country records on the Billboard charts to their credit and have sold over 75 million records, making them the most successful band in country music history. AllMusic credited the band with popularizing the idea of a country band and wrote that \"It's unlikely that any other country group will be able to surpass the success of Alabama.\"\n\nThe band was founded by Randy Owen (lead vocals, rhythm guitar) and his cousin Teddy Gentry (bass, backing vocals). <a href=\"https://www.last.fm/music/Alabama\">Read more on Last.fm</a>",
+// //     "listeners": 446666,
+// //     "playcount": 4926829
+// //   },
+// //   {
+// //     "id": 9,
+// //     "name": "Alan Parsons Project",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/586f60e99c528920dcc69c8a73a098fb/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 41,
+// //     "summary": "Please fix your tags:\n\nThe Alan parsons project\n\n\nBorn in Britain on 20 December 1948, Alan soon found that his interests lay in music. He studied piano and flute as a child and was always intrigued by gadgetry. He picked up the guitar in his early teens and played as a soloist as well as with various bands at school. \n\nOne of his first jobs was at an EMI tape duplication facility in West London. At this time he was fortunate enough to experience the master tape of the Beatles Sgt. <a href=\"https://www.last.fm/music/+noredirect/Alan+Parsons+Project\">Read more on Last.fm</a>",
+// //     "listeners": 5264,
+// //     "playcount": 86792
+// //   },
+// //   {
+// //     "id": 10,
+// //     "name": "Aled Jones",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/2cb6ad9b6f63f0862568b7ddaec26460/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 6,
+// //     "summary": "Aled Jones, (born 29 December 1970, St David's Hospital, Bangor, Wales) is a Welsh singer, Christian and television personality who first came to fame as a boy soprano. He is the only child of Nest and Derek Jones, and was raised in a Welsh-speaking community in the small Anglesey village of Llandegfan.\n\nHe is best known for singing \"Walking in the Air\", the song from Channel 4's animated film \"The Snowman\", based on the book by Raymond Briggs. The song reached No. <a href=\"https://www.last.fm/music/Aled+Jones\">Read more on Last.fm</a>",
+// //     "listeners": 128132,
+// //     "playcount": 584478
+// //   },
+// //   {
+// //     "id": 11,
+// //     "name": "Alice Cooper",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/8c68bba1eea36673be89de554e897bc6/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 78,
+// //     "summary": "Alice Cooper (born Vincent Damon Furnier, February 4, 1948) is an American rock singer whose career spans over five decades. With a raspy voice and a stage show that features numerous props and stage illusions, including pyrotechnics, guillotines, electric chairs, fake blood, reptiles, baby dolls, and dueling swords, Cooper is considered by many music journalists and peers to be \"The Godfather of Shock Rock\". He has drawn equally from horror films <a href=\"https://www.last.fm/music/Alice+Cooper\">Read more on Last.fm</a>",
+// //     "listeners": 1695394,
+// //     "playcount": 38452100
+// //   },
+// //   {
+// //     "id": 12,
+// //     "name": "Alice In Chains",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/70f9145e51c4a982f068f9bdd1f0d3a2/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 24,
+// //     "summary": "Alice in Chains is an American grunge/ alternative metal band from Seattle, Washington, formed in 1987 by guitarist/vocalist Jerry Cantrell and drummer Sean Kinney, who then recruited bassist Mike Starr and lead vocalist Layne Staley. Starr was replaced by Mike Inez in 1993. William DuVall joined the band in 2006 as co-lead vocalist and rhythm guitarist, replacing Staley, who died in 2002. The band took its name from Staley's previous group, the glam metal band Alice N' Chains. <a href=\"https://www.last.fm/music/Alice+in+Chains\">Read more on Last.fm</a>",
+// //     "listeners": 2464830,
+// //     "playcount": 118052040
+// //   },
+// //   {
+// //     "id": 13,
+// //     "name": "Alison Krauss",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/47a3f88385963f39c5ca5f7c79ab3084/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 24,
+// //     "summary": "Alison Krauss (born July 23, 1971) is an American bluegrass-country  singer, songwriter and fiddler. Signed to Rounder Records as a 14-year-old fiddler from Champaign, Illinois, she has become the most recognized face in contemporary bluegrass, a critically acclaimed artist who has brought modern sophistication to the genre while respecting its traditions. Songfacts reports that in 2011 Krauss recorded her first ever number one country album in her home country with Paper Airplane. <a href=\"https://www.last.fm/music/Alison+Krauss\">Read more on Last.fm</a>",
+// //     "listeners": 498926,
+// //     "playcount": 5430060
+// //   },
+// //   {
+// //     "id": 14,
+// //     "name": "Allman Brothers Band",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e6e510685a90247006b49a3bc5fbfc48/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 53,
+// //     "summary": "The Allman Brothers Band, formed in 1969 in Macon, Georgia blended strains of Southern Rock music - Blues, R&B, Country, Jazz, and Gospel - into a flexible, jam-oriented style of Rock and Roll that reflected the emergence of the “New South” and set the style for Lynyrd Skynyrd, the Marshall Tucker Band, and countless other Southern rockers. Oddly - or eerily, some would say - the band’s unusual string of untimely deaths has been repeated in other Southern-rock bands. <a href=\"https://www.last.fm/music/+noredirect/Allman+Brothers+Band\">Read more on Last.fm</a>",
+// //     "listeners": 252340,
+// //     "playcount": 2703605
+// //   },
+// //   {
+// //     "id": 15,
+// //     "name": "Alphaville",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/138c476ed4122b7d40dd09d3b1f9498a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 32,
+// //     "summary": "Alphaville is a German synthpop/new wave group which gained popularity in the 80s. The founding members were Marian Gold (real name Hartwig Schierbaum, born May 26, 1954 in Herford), Bernhard Lloyd (real name Bernhard Gößling, born June 6th, 1960 in Enger, Bielefeld) and Frank Mertens (real name Frank Sorgatz, born October 26, 1961 in Enger, Bielefeld). The band was at first named Forever Young. The band is best known for its two biggest hits, \"Big in Japan\" and \"Forever Young\", which was the theme for many high school proms in the 1980s. <a href=\"https://www.last.fm/music/Alphaville\">Read more on Last.fm</a>",
+// //     "listeners": 1118243,
+// //     "playcount": 13720457
+// //   },
+// //   {
+// //     "id": 16,
+// //     "name": "America",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/dcc08fdd81736bb93c12f00ba82b4e9f/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 31,
+// //     "summary": "America is a rock band, most popular in the early and mid 1970s and now best known for their #1 hits \"A Horse With No Name\" and \"Sister Golden Hair.\" Comprised of Gerry Beckley (September 12, 1952 - ), Dewey Bunnell (January 19,1952 - ), and Dan Peek (November 1, 1950 - July 24, 2011), they were seldom a favorite with critics, but were exceptionally successful commercially selling both singles and albums. Despite the presence of other heavyweight acts like James Taylor and Rod Stewart on their roster <a href=\"https://www.last.fm/music/America\">Read more on Last.fm</a>",
+// //     "listeners": 1287489,
+// //     "playcount": 17217963
+// //   },
+// //   {
+// //     "id": 17,
+// //     "name": "Amy Grant",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/bc5eb8c53f09d190c7401939f070cc13/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 92,
+// //     "summary": "Amy Lee Grant (born November 25, 1960 in Augusta, GA) is an American Christian and pop singer-songwriter and has done some television. She has also sold 30 million albums world wide during her career.\n\nGrant made her debut in 1977 under the guidance of Myrrh Records, and became the first Christian recording act to have an album be certified platinum. Following her marriage to Gary Chapman in 1982 and a subsequent deal between her record company and A&M Records <a href=\"https://www.last.fm/music/Amy+Grant\">Read more on Last.fm</a>",
+// //     "listeners": 347154,
+// //     "playcount": 3336264
+// //   },
+// //   {
+// //     "id": 18,
+// //     "name": "Andrea Bocelli",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/d093a07695eeb32c6a7b9dbeb5f2b32e/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 89,
+// //     "summary": "Andrea Bocelli (born in 1958 in Lajatico, Tuscany, Italy) is an Italian tenor, multi-instrumentalist and classical crossover artist. Born with poor eyesight, he became blind at the age of twelve following a football accident.\n\nA disciple of Luciano Pavarotti and Zucchero Fornaciari, the blind, Tuscany-born, vocalist has emerged as one of the most exciting voices in contemporary opera. His participation in Pavarotti's 1992 hit, Miserere, and Fornaciari's 1993 world tour brought him international attention. <a href=\"https://www.last.fm/music/Andrea+Bocelli\">Read more on Last.fm</a>",
+// //     "listeners": 801803,
+// //     "playcount": 11323121
+// //   },
+// //   {
+// //     "id": 19,
+// //     "name": "Andy Williams",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/04801d476ec2447e3d5c785bda76b7f3/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 61,
+// //     "summary": "Howard Andrew Williams (born December 3, 1927 in Wall Lake, Iowa, died September 26, 2012), known as Andy Williams, was an American pop singer.\n\nHe first performed in a children's choir at his local Presbyterian church. Williams and his three older brothers Bob, Dick, and Don, formed a quartet, the Williams Brothers, in the late 1930s.  The brothers performed on radio in the Midwest, first at WHO in Des Moines, Iowa, and later at WLS in Chicago and WLW in Cincinnati. <a href=\"https://www.last.fm/music/Andy+Williams\">Read more on Last.fm</a>",
+// //     "listeners": 1244184,
+// //     "playcount": 10221367
+// //   },
+// //   {
+// //     "id": 20,
+// //     "name": "Annie",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/9c4157b92606f41dd9513b049fa2375e/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 51,
+// //     "summary": "Annie is the stage name of the Norwegian pop artist Anne Lilia Berge Strand (born 21 November 1977 in Trondheim). She currently resides in Berlin. Her debut album, Anniemal, was released in 2004. The name originally was an idea of her late boyfriend Tore Kroknes, who produced her 1999 single \"Greatest Hit\". Annie worked with Timo Kaukolampi (ex-Op:l Bastards), as well as Richard X, who produced and co-write the single \"Chewing Gum\" and the Geri Halliwell diss \"Me Plus One\". <a href=\"https://www.last.fm/music/Annie\">Read more on Last.fm</a>",
+// //     "listeners": 595531,
+// //     "playcount": 8436079
+// //   },
+// //   {
+// //     "id": 21,
+// //     "name": "Ariana Grande",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3b99aa38bc4f58b05d6671c918eeb03e/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 35,
+// //     "summary": "Ariana Grande-Butera  is an American singer, songwriter and actress. She is a multi-platinum, Grammy Award-winning recording artist. Born in Boca Raton, Florida, Grande began her career in 2008 in the Broadway musical, 13. She rose to prominence for her role as Cat Valentine in the Nickelodeon television series, Victorious (2010–2013) and in its spin-off, Sam & Cat (2013–2014). As she grew interested in pursuing a music career, Grande recorded <a href=\"https://www.last.fm/music/Ariana+Grande\">Read more on Last.fm</a>",
+// //     "listeners": 2726143,
+// //     "playcount": 441533629
+// //   },
+// //   {
+// //     "id": 22,
+// //     "name": "Ariel Rivera",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3c69a558c9cdbd2c99515d5db93ba18f/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 5,
+// //     "summary": "Jose Ariel Jimenez Rivera was born on September 1, 1966 in Manila, Philippines but has since migrated with his family to Canada. Rivera was an architect in Canada before his singing talent was accidentally discovered while vacationing in the Philippines. He has since become a successful singer-songwriter, actor, and Aliw award-winning artist. He is dubbed as \"Kilabot ng Kolehiyala\".  <a href=\"https://www.last.fm/music/Ariel+Rivera\">Read more on Last.fm</a>",
+// //     "listeners": 12482,
+// //     "playcount": 95739
+// //   },
+// //   {
+// //     "id": 23,
+// //     "name": "Arlo Guthrie",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/ed7e9ab96f3d36e4b40cc715535a8cda/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 30,
+// //     "summary": "Arlo Guthrie (born 10th July 1947, Brooklyn, New York ) is an American folk singer who is the son of folk singer and composer Woody Guthrie and his wife Marjorie Mazia Guthrie, a one-time professional dancer with the Martha Graham Company and founder of The Committee to Combat Huntington's Disease. He graduated from the Stockbridge School of Massachusetts in 1965, and briefly attended Rocky Mountain College.\n\nHis most famous work is Alice's Restaurant <a href=\"https://www.last.fm/music/Arlo+Guthrie\">Read more on Last.fm</a>",
+// //     "listeners": 282983,
+// //     "playcount": 1847271
+// //   },
+// //   {
+// //     "id": 24,
+// //     "name": "Arrogant Worms",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/fcb7acd28889fcf4dd1f56b06a25b9e5/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 15,
+// //     "summary": "Canada's Secret Weapon #1.\n\nThe Arrogant Worms are a Canadian musical comedy trio that parodies many musical genres. They are well known for their humorous on-stage banter in addition to their music.\n\nThe Worms came together in 1991 to do a few spots on campus radio station CFRC in Kingston, Ontario, and quickly moved to doing spots on the CBC Radio One. Since 1992, the troupe has released 11 albums on their own label and one compilation album under Oglio Records. <a href=\"https://www.last.fm/music/+noredirect/Arrogant+Worms\">Read more on Last.fm</a>",
+// //     "listeners": 5191,
+// //     "playcount": 44258
+// //   },
+// //   {
+// //     "id": 25,
+// //     "name": "Avril Lavigne",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/d023a1ee7ed842b304f36aef210c5aba/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 38,
+// //     "summary": "Avril Ramona Lavigne (born September 27, 1984) is a Canadian singer and songwriter. At age 16, she signed a two-album recording contract with Arista Records. Her debut studio album, Let Go (2002), is the best-selling album of the 21st century by a Canadian artist. It yielded the singles \"Complicated\" and \"Sk8er Boi\", which emphasized a skate punk persona and earned her the title \"Pop Punk Queen\" from music publications. She is considered a key musician in the development of pop punk music since she paved the way for female-driven <a href=\"https://www.last.fm/music/Avril+Lavigne\">Read more on Last.fm</a>",
+// //     "listeners": 3644803,
+// //     "playcount": 167686277
+// //   },
+// //   {
+// //     "id": 26,
+// //     "name": "Backstreet Boys",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/6560429ca706ad5114e1167b49bafe9a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 28,
+// //     "summary": "Backstreet Boys (often abbreviated as BSB) are an American vocal group consisting of Nick Carter, Howie Dorough, AJ McLean, and cousins Brian Littrell and Kevin Richardson. Lou Pearlman formed the group in 1993 in Orlando, Florida. The group rose to fame with their international debut album, Backstreet Boys (1996). In the following year, they released their second international album Backstreet's Back (1997), along with their self-titled U.S. debut album, Backstreet Boys (1997), which continued the group's success worldwide. <a href=\"https://www.last.fm/music/Backstreet+Boys\">Read more on Last.fm</a>",
+// //     "listeners": 2084128,
+// //     "playcount": 43736494
+// //   },
+// //   {
+// //     "id": 27,
+// //     "name": "Barbie",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/a3637460afc61a6def0986862a1e672f/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 47,
+// //     "summary": "Barbie as an artist name can refer to four different artists:\n\n1. Barbie (the doll) who has starred in many CG movies, the soundtracks of which are generally available separately and widely accepted as some of the best music ever composed.\n\n2. Barbie was the 1985-1987 solo project of Alexander Bard, of Bodies Without Organs fame. Dressed up as a transvestite prostitute he shocked an entire nation on swedish state television and released an album and five singles. <a href=\"https://www.last.fm/music/Barbie\">Read more on Last.fm</a>",
+// //     "listeners": 52081,
+// //     "playcount": 1266550
+// //   },
+// //   {
+// //     "id": 28,
+// //     "name": "Barbra Streisand",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/1ca987674020fb1465dd970745898697/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 98,
+// //     "summary": "Barbra Streisand (born Barbara Joan Streisand; April 24, 1942  Brooklyn, New York),  is an Academy Award-winning American singer, theater and film actress, composer, film producer, and director. She has won Oscars for Best Actress and Best Original Song as well as multiple Emmy Awards, Grammy Awards, Golden Globe Awards and an honorary Tony Award. She received the prestigious Kennedy Center Honor on December 7, 2008. She is the most successful female recording artist according to the Recording Industry Assoc. of America (RIAA). <a href=\"https://www.last.fm/music/Barbra+Streisand\">Read more on Last.fm</a>",
+// //     "listeners": 750278,
+// //     "playcount": 10189386
+// //   },
+// //   {
+// //     "id": 29,
+// //     "name": "Beach Boys",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/2d37c2819523fac354a7065d22aa024a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 87,
+// //     "summary": "Incorrect tag for The Beach Boys. Keep stats clean by fixing your ID3 tags, or leave auto-correction on. Don't cheat the artist of plays and listeners... <a href=\"https://www.last.fm/music/+noredirect/Beach+Boys\">Read more on Last.fm</a>",
+// //     "listeners": 6847,
+// //     "playcount": 89566
+// //   },
+// //   {
+// //     "id": 30,
+// //     "name": "The Beatles",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/895c65537c74c2014b459f73e84bccb0/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 33,
+// //     "summary": "The Beatles were an English rock band formed in Liverpool in 1960. With the line-up comprising John Lennon, Paul McCartney,  George Harrison and Ringo Starr, they are regarded as one of the most influential bands of all time. The group was integral to the development of 1960s counterculture and popular music's recognition as an art form. Rooted in skiffle, beat and 1950s rock and roll, their sound incorporated elements of classical music and traditional <a href=\"https://www.last.fm/music/The+Beatles\">Read more on Last.fm</a>",
+// //     "listeners": 4913135,
+// //     "playcount": 701711570
+// //   },
+// //   {
+// //     "id": 31,
+// //     "name": "Beautiful South",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/a1ed2d0af152879fdd0ccead34e4fa09/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 19,
+// //     "summary": "The Beautiful South were an English pop group formed at the end of the 1980s by former members of Hull group The Housemartins - Paul Heaton and Dave Hemingway. The duo were initially joined by Sean Welch (bass), Dave Stead (drums) and Dave Rotheray (guitar), all of whom stayed with the group throughout their 19-year career. Later additions included female vocalist Briana Corrigan; she was replaced by Jacqui Abbott, who in turn was replaced by Alison Wheeler. <a href=\"https://www.last.fm/music/+noredirect/Beautiful+South\">Read more on Last.fm</a>",
+// //     "listeners": 1129,
+// //     "playcount": 12348
+// //   },
+// //   {
+// //     "id": 32,
+// //     "name": "Beauty And The Beast",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist//250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 0,
+// //     "summary": "This is an incorrect tag for a musical soundtrack composed by Alan Menken.  If this non-artist appears in your charts, please fix your tags. <a href=\"https://www.last.fm/music/+noredirect/Beauty+And+The+Beast\">Read more on Last.fm</a>",
+// //     "listeners": 603,
+// //     "playcount": 2676
+// //   },
+// //   {
+// //     "id": 33,
+// //     "name": "Bee Gees",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/d63e0ef6e23b50ed467ece472d4dfdb9/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 42,
+// //     "summary": "The Bee Gees, originally made up of three brothers: Barry Gibb, Robin Gibb (died 2012), and Maurice Gibb (died 2003), have been successful for most of their 40-plus years of recording music. They had two distinct periods of exceptional success: as a pop act in the late 1960s and early 1970s, and as a foremost act of the disco music era in the late 1970s.\n\nThe Gibb brothers were born on the Isle of Man, UK to English parents in 1946 (Barry Alan Crompton Gibb <a href=\"https://www.last.fm/music/Bee+Gees\">Read more on Last.fm</a>",
+// //     "listeners": 2359007,
+// //     "playcount": 40401050
+// //   },
+// //   {
+// //     "id": 34,
+// //     "name": "Bette Midler",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/4d16114ff2e65e4453ec67d8f3a9f60b/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 28,
+// //     "summary": "Bette Midler (December 1, 1945) is an American singer, actress, and comedian, also known to her fans and especially in gay culture, as The Divine Miss M. She was born in Honolulu, Hawaii, to Jewish parents from New Jersey, and raised there.  Midler relocated to New York City to pursue acting on stage, and in 1970 she began singing at the Continental Baths, a gay bathhouse in the city, where she became close to her piano accompanist, Barry Manilow, who produced her first major album, The Divine Miss M in 1973. <a href=\"https://www.last.fm/music/Bette+Midler\">Read more on Last.fm</a>",
+// //     "listeners": 474249,
+// //     "playcount": 3727136
+// //   },
+// //   {
+// //     "id": 35,
+// //     "name": "Bill Withers",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/9cdd47ff0c56cf792a8b646772d676e2/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 16,
+// //     "summary": "William Harrison \"Bill\" Withers Jr. (July 4, 1938 – March 30, 2020) was an American singer-songwriter and musician. He had several hits over a relatively short career of fifteen years, including \"Ain't No Sunshine\" (1971), \"Grandma's Hands\" (1971), \"Use Me\" (1972), \"Lean on Me\" (1972), \"Lovely Day\" (1977), and \"Just the Two of Us\" (1981). Withers won three Grammy Awards and was nominated for six more. His life was the subject of the 2009 documentary film Still Bill. <a href=\"https://www.last.fm/music/Bill+Withers\">Read more on Last.fm</a>",
+// //     "listeners": 1784170,
+// //     "playcount": 22941199
+// //   },
+// //   {
+// //     "id": 36,
+// //     "name": "Billie Holiday",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/6ef0c8b38d744ab219951165cd52e595/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 26,
+// //     "summary": "Billie Holiday (Eleanora Fagan Gough, Philadelphia, PA, April 7, 1915 – New York City, NY, July 17, 1959) was an American jazz singer and songwriter.\n\nNicknamed Lady Day by her loyal friend and musical partner Lester Young, Holiday was a highly original influence on jazz and pop singing. Her vocal style, strongly inspired by jazz instrumentalists, pioneered a new way of manipulating phrasing and tempo. Above all, she was admired for her deeply personal and intimate approach to singing. <a href=\"https://www.last.fm/music/Billie+Holiday\">Read more on Last.fm</a>",
+// //     "listeners": 1777998,
+// //     "playcount": 37466666
+// //   },
+// //   {
+// //     "id": 37,
+// //     "name": "Billy Joel",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/365f2c1bbab41e0b0606879563a49a50/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 37,
+// //     "summary": "Billy Joel (born William Martin Joel on May 9, 1949 in Bronx, New York, USA) is an American pianist, singer-songwriter, and composer. Since releasing his first hit song, \"Piano Man,\" in 1973, Joel has become a multi-million-selling recording artist. Joel recorded many popular hit songs and albums from 1971 until he stopped recording pop/rock music in 1993. He is one of the very few rock (or even pop) artists to have Top 10 hits in the '70s, '80s, and '90s. <a href=\"https://www.last.fm/music/Billy+Joel\">Read more on Last.fm</a>",
+// //     "listeners": 2681477,
+// //     "playcount": 62342310
+// //   },
+// //   {
+// //     "id": 38,
+// //     "name": "Bing Crosby",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/55e39cea61bea8afcd6f784140110221/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 50,
+// //     "summary": "Harry Lillis \"Bing\" Crosby Jr. (/ˈkrɒzbi/; May 3, 1903 – October 14, 1977) was an American singer, comedian and actor. The first multimedia star, Crosby was a leader in record sales, radio ratings, and motion picture grosses from 1931 to 1954. His early career coincided with recording innovations that allowed him to develop an intimate singing style that influenced many male singers who followed him, including Perry Como, Frank Sinatra, Dick Haymes, and Dean Martin. <a href=\"https://www.last.fm/music/Bing+Crosby\">Read more on Last.fm</a>",
+// //     "listeners": 1465763,
+// //     "playcount": 17313629
+// //   },
+// //   {
+// //     "id": 39,
+// //     "name": "Black Sabbath",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/91ab912207e1dc0b20ef53dc751e4aff/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 64,
+// //     "summary": "Black Sabbath was an English heavy metal band formed in Birmingham in 1968 by guitarist Tony Iommi, drummer Bill Ward, bassist Geezer Butler and vocalist Ozzy Osbourne. They are often cited as pioneers of heavy metal music. The band helped define the genre with releases such as Black Sabbath (1970), Paranoid (1970) and Master of Reality (1971). The band had multiple line-up changes following Osbourne's departure in 1979 and Iommi is the only constant member throughout their history.  <a href=\"https://www.last.fm/music/Black+Sabbath\">Read more on Last.fm</a>",
+// //     "listeners": 3202196,
+// //     "playcount": 137046201
+// //   },
+// //   {
+// //     "id": 40,
+// //     "name": "Blur",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e1fe5cc77138cba2bff3a26efeb8f5c6/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 29,
+// //     "summary": "Blur is an English rock band formed in London in 1988. The band consists of singer Damon Albarn, guitarist Graham Coxon, bassist Alex James and drummer Dave Rowntree. Their debut album, Leisure (1991), incorporated the sounds of Madchester and shoegazing. Following a stylistic change influenced by English guitar pop groups such as the Kinks, Depeche Mode and Radiohead, Blur released Modern Life Is Rubbish (1993), Parklife (1994) and The Great Escape (1995). <a href=\"https://www.last.fm/music/Blur\">Read more on Last.fm</a>",
+// //     "listeners": 3638884,
+// //     "playcount": 124269079
+// //   },
+// //   {
+// //     "id": 41,
+// //     "name": "Bob Dylan",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/0842f856bd667eb14d23c887c8c9a470/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 96,
+// //     "summary": "Bob Dylan (born Robert Allen Zimmerman on May 24, 1941 in Duluth, Minnesota, United States)  is an American singer-songwriter. Often regarded as one of the greatest songwriters of all time, Dylan has been a major figure in popular culture during a career spanning more than 60 years.\nDylan started his musical odyssey in 1959 when he began playing in Dinkytown, Minneapolis while attending the University of Minnesota. Shortly after starting to play he changed his stage name to Bob Dylan <a href=\"https://www.last.fm/music/Bob+Dylan\">Read more on Last.fm</a>",
+// //     "listeners": 3217639,
+// //     "playcount": 194472153
+// //   },
+// //   {
+// //     "id": 42,
+// //     "name": "Bob Marley",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/c8241e15efdefa9465c7b470643efb3b/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 72,
+// //     "summary": "Bob Marley (February 6, 1945 – May 11, 1981), born Nesta Robert Marley which was later to be changed by passport officials to Robert Nesta Marley, was a Jamaican singer-songwriter, guitarist, and activist. He was the most widely known writer and performer of Reggae, and more specifically Roots Reggae.  He is famous for popularising the genre outside of Jamaica and the Caribbean. Much of his music dealt with the struggles of the spiritually wealthy rasta and/or spiritually powerful Jah Rastafari. <a href=\"https://www.last.fm/music/Bob+Marley\">Read more on Last.fm</a>",
+// //     "listeners": 2038638,
+// //     "playcount": 64560788
+// //   },
+// //   {
+// //     "id": 43,
+// //     "name": "Bob Rivers",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3c862a3a27ac72ea457bdaae03e85dab/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 11,
+// //     "summary": "Bob Rivers is probably the best-known rock and roll radio DJ in the greater Seattle area of the northwestern United States, as well as a prolific producer of parody songs that often are mistakenly attributed to \"Weird Al\" Yankovic\n\nBob Rivers is a well known American rock and roll radio on air personality in the Pacific Northwest as well as a prolific producer of parody songs, most famous for his Christmas song parodies.\n\nRivers' radio program, The Bob Rivers Show, is broadcast on Seattle rock station KZOK-FM. <a href=\"https://www.last.fm/music/Bob+Rivers\">Read more on Last.fm</a>",
+// //     "listeners": 94388,
+// //     "playcount": 543972
+// //   },
+// //   {
+// //     "id": 44,
+// //     "name": "Bob Seger",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/f35468aba29b76443526af2d62760f4d/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 50,
+// //     "summary": "Robert Clark Seger (/ˈsiːɡər/, born May 6, 1945) is an American singer-songwriter, guitarist and pianist. As a locally successful Detroit-area artist, he performed and recorded as Bob Seger and the Last Heard and Bob Seger System throughout the 1960s. By the early 1970s, he had dropped the 'System' from his recordings and continued to strive for broader success with various other bands. In 1973, he put together the Silver Bullet Band, with a group of Detroit-area musicians <a href=\"https://www.last.fm/music/Bob+Seger\">Read more on Last.fm</a>",
+// //     "listeners": 910442,
+// //     "playcount": 9106531
+// //   },
+// //   {
+// //     "id": 45,
+// //     "name": "Bon Jovi",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/27200c8f8d4b4a721b2efc65e329795a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 56,
+// //     "summary": "Bon Jovi is an American rock band formed in 1983 in Sayreville, New Jersey. It consists of singer Jon Bon Jovi, keyboardist David Bryan, drummer Tico Torres, guitarist Phil X, and bassist Hugh McDonald. Original bassist Alec John Such quit the band in 1994, and longtime guitarist and co-songwriter Richie Sambora left in 2013. The band has been credited with \"[bridging] the gap between heavy metal and pop with style and ease\".\n\nIn 1984 and 1985, Bon <a href=\"https://www.last.fm/music/Bon+Jovi\">Read more on Last.fm</a>",
+// //     "listeners": 3099869,
+// //     "playcount": 82861123
+// //   },
+// //   {
+// //     "id": 46,
+// //     "name": "Boney M.",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/15e32e0e3ff02495b664785196822343/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 60,
+// //     "summary": "Boney M. was a German-Caribbean vocal group that specialized in disco and funk created by German record producer Frank Farian, who was the group's primary songwriter. Originally based in West Germany, the four original members of the group's official line-up were Liz Mitchell and Marcia Barrett from Jamaica, Maizie Williams from Montserrat, and Bobby Farrell from Aruba. The group was formed in 1976 and achieved popularity during the disco era of the late 1970s. <a href=\"https://www.last.fm/music/Boney+M.\">Read more on Last.fm</a>",
+// //     "listeners": 1399870,
+// //     "playcount": 15895469
+// //   },
+// //   {
+// //     "id": 47,
+// //     "name": "Bonnie Raitt",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/27b9db3be31b77737029586cf3e1dfa5/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 71,
+// //     "summary": "Bonnie Raitt, (born November 8, 1949) is an American blues and R&B singer, songwriter, and guitarist who was born in Burbank, California, the daughter of Broadway musical star John Raitt.\n\nRaitt began playing guitar at an early age, something not a lot of her high school girlfriends did. \"I had played a little at school and at camp,\" she later recalled in a July 2002 interview. \"My parents would drag me out to perform for my family, like all parents do, but it was a hobby—nothing more. <a href=\"https://www.last.fm/music/Bonnie+Raitt\">Read more on Last.fm</a>",
+// //     "listeners": 627103,
+// //     "playcount": 6169488
+// //   },
+// //   {
+// //     "id": 48,
+// //     "name": "Bosson",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e7b275f6000d61f6577f8a0f50d9b0c1/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 17,
+// //     "summary": "Bosson,  was born Staffan Olsson in Särö outside of Gothenburg, Sweden.  He has traveled the world, lived in other countries like Brazil, and he is a megastar in Russia and Asia.\n \nBosson began to sing along with the radio as a toddler and, at the age of six, he began singing in front of audiences.  His stage name of \"Bosson\" comes from the fact that his father's first name is Bo, and the singer is Bo's son.\n \nBosson's first band was called Elevate <a href=\"https://www.last.fm/music/Bosson\">Read more on Last.fm</a>",
+// //     "listeners": 83361,
+// //     "playcount": 751382
+// //   },
+// //   {
+// //     "id": 49,
+// //     "name": "Bread",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/a6c0e9d0fe97bd573ce78e2ec6838aae/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 16,
+// //     "summary": "Bread was a 1970s rock and roll band from Los Angeles, California. They are a prime example of what later was labeled as \"soft rock.\"\n\nDavid Gates (guitar, keyboards, bass and vocals) and Jimmy Griffin (guitar and vocals) formed the group in 1968, adding Robb Royer (guitar, bass and vocals of Pleasure Faire) before signing to Elektra Records. Bread, the band's debut album as a trio, was a failure. The band became a quartet beginning with their second album, On The Waters, bringing in Mike Botts as permanent drummer. <a href=\"https://www.last.fm/music/Bread\">Read more on Last.fm</a>",
+// //     "listeners": 498063,
+// //     "playcount": 5689039
+// //   },
+// //   {
+// //     "id": 50,
+// //     "name": "Britney Spears",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/caea45732bb52679494602c60430435a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 17,
+// //     "summary": "Britney Jean Spears  (born December 2, 1981 in McComb, MS) is an American singer, songwriter and dancer. She is credited with influencing the revival of teen pop during the late 1990s and early 2000s, for which she is referred to as the \"Princess of Pop\". Regarded as a pop icon, Spears has sold nearly 150 million records worldwide, including over 70 million solely in the United States, making her one of the world's best-selling music artists.\n\nShe has officially released nine studio albums to date: . <a href=\"https://www.last.fm/music/Britney+Spears\">Read more on Last.fm</a>",
+// //     "listeners": 4526256,
+// //     "playcount": 283689698
+// //   },
+// //   {
+// //     "id": 51,
+// //     "name": "Bruce Springsteen",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/7003fc8e2a26471a8bf000b10eff8698/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 68,
+// //     "summary": "Bruce Frederick Joseph Springsteen (born September 23, 1949) is an American singer and songwriter. He has released 21 studio albums, most of which feature his backing band, the E Street Band. Originally from the Jersey Shore, he is an originator of heartland rock, combining mainstream rock musical styles with narrative songs about working class American life. Nicknamed \"the Boss\", his career has spanned six decades. Springsteen is known for his poetic <a href=\"https://www.last.fm/music/Bruce+Springsteen\">Read more on Last.fm</a>",
+// //     "listeners": 2725547,
+// //     "playcount": 104153311
+// //   },
+// //   {
+// //     "id": 52,
+// //     "name": "Bruno Mars",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/7f3c0956357c326b2db2cf436f1dc8c5/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 22,
+// //     "summary": "Peter Gene Hernandez (born October 8, 1985 in Honolulu, HI, USA), known professionally as Bruno Mars, is a Filipino-American singer, songwriter, record producer, musician, and dancer. He is known for his stage performances, retro showmanship, and for performing in a wide range of musical styles, including pop, R&B, funk, soul, reggae, disco, and rock. Mars is accompanied by his band, the Hooligans, who play a variety of instruments, such as electric guitar, bass, piano, keyboards, drums, and horns, and also serve as backup singers and dancers. <a href=\"https://www.last.fm/music/Bruno+Mars\">Read more on Last.fm</a>",
+// //     "listeners": 3417386,
+// //     "playcount": 138333027
+// //   },
+// //   {
+// //     "id": 53,
+// //     "name": "Bryan White",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/07808da2fdb157a4f8b58cfe1190b860/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 34,
+// //     "summary": "Bryan White was born February 17, 1974 in Lawton, Oklahoma. In the mid 1990s, when Bryan was only in his early twenties, he quickly became one of country music's hottest young stars earning number one singles on the Billboard country chart with his songs \"Someone Else's Star\" and \"Rebecca Lynn\" from his debut album. \"I'm Not Supposed to Love You Anymore\" reached fourth, and then he had numbers with \"So Much For Pretending\" and \"Sittin' On Go\" from his second album. <a href=\"https://www.last.fm/music/Bryan+White\">Read more on Last.fm</a>",
+// //     "listeners": 31516,
+// //     "playcount": 264684
+// //   },
+// //   {
+// //     "id": 54,
+// //     "name": "Cake",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/2394e45b86166429d94fb9d9db3aee0b/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 12,
+// //     "summary": "At least 2 bands have the name “Cake”.\n1.) 90s alternative rock band 2.) 60s Girl pop band 3.) Underground 70s pop/funk band. 1.) Best-known for their ubiquitous hit \"The Distance,\" Cake epitomized the postmodern, irony-drenched aesthetic of '90s geek rock. Their sound freely mixed and matched pastiches of widely varying genres -- white-boy funk, hip-hop, country, new wave pop, jazz, college rock, and guitar rock -- with a particular delight in the clashes that resulted. <a href=\"https://www.last.fm/music/Cake\">Read more on Last.fm</a>",
+// //     "listeners": 1909292,
+// //     "playcount": 50973448
+// //   },
+// //   {
+// //     "id": 55,
+// //     "name": "Carly Simon",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/4cf85783c3283455df0b2e855ea531f6/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 35,
+// //     "summary": "Carly Simon (born Carly Elisabeth Simon on 25 June 1945 - New York City, USA) is an American singer, musician, songwriter, and children's author. She rose to fame in the 1970s with a string of hit records, and has since been the recipient of two Grammy Awards, an Academy Award, and a Golden Globe Award for her work. Throughout her career, she has amassed a total of 13 Top 40 Hits including \"You're So Vain\", \"Nobody Does It Better\" and \"Coming Around Again\". <a href=\"https://www.last.fm/music/Carly+Simon\">Read more on Last.fm</a>",
+// //     "listeners": 900643,
+// //     "playcount": 7818217
+// //   },
+// //   {
+// //     "id": 56,
+// //     "name": "Carol Banawa",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/722a2dcfe6e5137308f91026aff666d0/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 14,
+// //     "summary": "Carol Claire Aguilar Banawa (born March 4, 1981, in Pasay City, Philippines), better known in the Philippines as Carol Banawa, is a Filipina singer and actress. She was born in Pasay City to Albino and Cirila Banawa. She has two siblings, Alexander and Cherry. She was raised in Batangas. Self-confessed as an \"ugly-duckling\", Carol dreamt of having a musical career at a very young age. Having a thought that her dream would never come true, her family chose to believe in her drive for success. <a href=\"https://www.last.fm/music/Carol+Banawa\">Read more on Last.fm</a>",
+// //     "listeners": 12973,
+// //     "playcount": 100075
+// //   },
+// //   {
+// //     "id": 57,
+// //     "name": "Carpenters",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/a19961024ec700314817d1a07cf261e8/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 27,
+// //     "summary": "The Carpenters were an American vocal and instrumental duo consisting of siblings Karen and Richard Carpenter. With their light, airy melodies and meticulously crafted, clean arrangements, the duo stood in direct contrast with the excessive, gaudy pop/rock of the '70s; yet they became one of the most popular artists of the decade, scoring 12 Top Ten hits, including three number one singles. \n\nKaren Carpenter's calm, often somber voice was the most distinctive element of their music <a href=\"https://www.last.fm/music/Carpenters\">Read more on Last.fm</a>",
+// //     "listeners": 1214746,
+// //     "playcount": 18535541
+// //   },
+// //   {
+// //     "id": 58,
+// //     "name": "Cat Stevens",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/4e454130cd82fd46d56faeec42dbd20e/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 40,
+// //     "summary": "Cat Stevens is the former stage name of Steven Demetre Georgiou (born in London on 21 July 1948). He is a British singer-songwriter, multi-instrumentalist, humanitarian and education philanthropist. In December 1977, Stevens converted to Islam and adopted the name Yusuf Islam the following year. He began releasing music as Yusuf in 2006.\n\nStevens' albums Tea for the Tillerman (1970) and Teaser and the Firecat (1971) were both certified triple platinum in the US by the RIAA. <a href=\"https://www.last.fm/music/Cat+Stevens\">Read more on Last.fm</a>",
+// //     "listeners": 1341735,
+// //     "playcount": 25368176
+// //   },
+// //   {
+// //     "id": 59,
+// //     "name": "Celine Dion",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e89cdd01e8fd49d0ab914387418d10ec/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 85,
+// //     "summary": "Céline Marie Claudette Dion, (born March 30, 1968 in Charlemagne, Quebec) is a Canadian singer, songwriter, and actress. Born to a large, impoverished family, Dion emerged as a teenage star in the French-speaking world after her manager and future husband René Angélil mortgaged his home to finance her first record.  In 1990, she released the anglophone album Unison, establishing herself as a viable pop artist in North America and other English-speaking areas of the world. <a href=\"https://www.last.fm/music/+noredirect/Celine+Dion\">Read more on Last.fm</a>",
+// //     "listeners": 19087,
+// //     "playcount": 358579
+// //   },
+// //   {
+// //     "id": 60,
+// //     "name": "Chaka Khan",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/444564f9858895c52204164eb50c256f/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 31,
+// //     "summary": "Yvette Marie Stevens (born March 23, 1953), better known as Chaka Khan, and frequently referred to as the \"Queen of Funk\", is a 10-time Grammy Award winning American singer-songwriter from Chicago, Illinois who gained fame in the 1970s as the frontwoman and focal point of the funk band Rufus.\n\nIn  1964, at the age of 11, Khan formed her first musical group, the Crystalettes. While still in high school, she joined the Afro-Arts Theater, a group which toured with Motown great Mary Wells; a few years later <a href=\"https://www.last.fm/music/Chaka+Khan\">Read more on Last.fm</a>",
+// //     "listeners": 901300,
+// //     "playcount": 7606381
+// //   },
+// //   {
+// //     "id": 61,
+// //     "name": "Cheap Trick",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/9d164a8175c4c074bd096612d4924c47/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 37,
+// //     "summary": "Cheap Trick is an American power pop/rock n roll band from Rockford, Illinois that's played for over four decades, and in 2016 was inducted into the Rock & Roll Hall of Fame. Having gained popularity in the late-70s centered within the Midwest and within Japan, the band members are Rick Nielsen (guitarist and main songwriter), Bun E. Carlos (born Brad Carlson) (drums), Robin Zander (vocals and guitars), and Tom Petersson (bass guitar). Though they <a href=\"https://www.last.fm/music/Cheap+Trick\">Read more on Last.fm</a>",
+// //     "listeners": 1075580,
+// //     "playcount": 11864152
+// //   },
+// //   {
+// //     "id": 62,
+// //     "name": "Cher",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/06b2ee6553bf7504c1426a593ccb1bc3/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 68,
+// //     "summary": "Cher (born Cherilyn Sarkisian; May 20, 1946) is an American singer, actress and television personality. Often referred to by the media as the \"Goddess of Pop\", she has been described as embodying female autonomy in a male-dominated industry. Cher is known for her distinctive contralto singing voice and for having worked in numerous areas of entertainment, as well as adopting a variety of styles and appearances throughout her six-decade-long career. <a href=\"https://www.last.fm/music/Cher\">Read more on Last.fm</a>",
+// //     "listeners": 1515457,
+// //     "playcount": 24057718
+// //   },
+// //   {
+// //     "id": 63,
+// //     "name": "Chicago",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/0df0ab3fc0ce75874ad28d3952bbd366/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 57,
+// //     "summary": "Chicago is an American rock band formed in 1967 in Chicago, Illinois. The self-described \"rock and roll band with horns\" began as a politically charged, sometimes experimental, rock band and later moved to a predominantly softer sound, generating several hit ballads. They had a steady stream of hits throughout the 1970s and 1980s. Second only to The Beach Boys in Billboard singles and albums chart success among American bands, Chicago is one of the longest-running and most successful rock groups in history. <a href=\"https://www.last.fm/music/Chicago\">Read more on Last.fm</a>",
+// //     "listeners": 1321056,
+// //     "playcount": 17031826
+// //   },
+// //   {
+// //     "id": 64,
+// //     "name": "Children",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/4bad1eda352927616355617db7a2e802/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 36,
+// //     "summary": "There have been a number of artists going by the name of Children\n\n(1) A US thrash metal band founded 2007 in New York\n(2) A new popular indie band from Berlin\n(3) A 90's metallic hardcore band from France.\n(4) A psychedelic rock band from Los Angeles, CA. <a href=\"https://www.last.fm/music/Children\">Read more on Last.fm</a>",
+// //     "listeners": 17443,
+// //     "playcount": 122093
+// //   },
+// //   {
+// //     "id": 65,
+// //     "name": "Chris Brown",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/ed15b84067164aa25701fdd30cc34d33/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 95,
+// //     "summary": "\nThere is more than one artist with this name:\n\n1) Christopher Maurice Brown (born May 5, 1989) from Tappahannock, Virginia.\n\nIn late 2005, he released his first studio album, Chris Brown, which spawned the Billboard Hot 100 number-one debut single, \"Run It!\" which was produced by Scott Storch and featured Juelz Santana. The album also produced two other top ten singles: \"Yo (Excuse Me Miss)\" and \"Say Goodbye.\" Brown's second studio album, Exclusive was released worldwide in November 2007. <a href=\"https://www.last.fm/music/Chris+Brown\">Read more on Last.fm</a>",
+// //     "listeners": 3587997,
+// //     "playcount": 83405036
+// //   },
+// //   {
+// //     "id": 66,
+// //     "name": "Chris Rea",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/651852cdfed34807b5c336b2ea5175ab/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 50,
+// //     "summary": "Christopher Anton Rea (born 4 March 1951) is an English rock and blues singer and guitarist from Middlesbrough. A \"gravel-voiced guitar stalwart\" known for his slide guitar playing, Rea has recorded twenty five solo albums, two of which topped the UK Albums Chart. Described as \"rock's ultimate survivor\", given his recovery from several bouts of serious illness, Rea was \"a major European star by the time he finally cracked the UK Top 10\" with his single \"The Road to Hell (Part 2)\". <a href=\"https://www.last.fm/music/Chris+Rea\">Read more on Last.fm</a>",
+// //     "listeners": 985892,
+// //     "playcount": 11979069
+// //   },
+// //   {
+// //     "id": 67,
+// //     "name": "Christina Aguilera",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/417414383f32817dd531e121743c5757/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 22,
+// //     "summary": "Christina Maria Aguilera (born December 18, 1980 in Staten Island, New York, United States) is a pop and RnB singer, producer, and songwriter who debuted in 1998 with the song Reflection for the soundtrack to the Disney film, Mulan.  She has since sold over 90 million records worldwide. She has won seven Grammy Awards, including two Latin Grammy Awards. She has also received a star on the Hollywood Walk of Fame and holds the prestigious honor of being <a href=\"https://www.last.fm/music/Christina+Aguilera\">Read more on Last.fm</a>",
+// //     "listeners": 3396062,
+// //     "playcount": 153037815
+// //   },
+// //   {
+// //     "id": 68,
+// //     "name": "Christina Perri",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/4bbcf3791360edb33fede271b84266a6/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 26,
+// //     "summary": "\nChristina Perri, born August 19, 1986 in Philadelphia, Pennsylvania, United States, is a singer-songwriter, guitarist, and pianist. She initially rose to fame with her 2010 debut single \"Jar of Hearts,\" which charted in the top 20 on the Billboard Hot 100 chart after being used in the popular television show, \"So You Think You Can Dance.\"\n\nPerri grew up in Bensalem, Pennsylvania (a suburb of Philadelphia) with her older brother, Nick Perri, who formerly played guitar with Shinedown, among other artists. <a href=\"https://www.last.fm/music/Christina+Perri\">Read more on Last.fm</a>",
+// //     "listeners": 1352330,
+// //     "playcount": 18980916
+// //   },
+// //   {
+// //     "id": 69,
+// //     "name": "Christmas Songs",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/bd82a3a34be65693e81f7906b0cfad36/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 500,
+// //     "summary": " <a href=\"https://www.last.fm/music/Christmas+Songs\">Read more on Last.fm</a>",
+// //     "listeners": 114247,
+// //     "playcount": 671763
+// //   },
+// //   {
+// //     "id": 70,
+// //     "name": "Christy Moore",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/571ae8ba6c0cf3d927fe913eab7cff9e/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 43,
+// //     "summary": "Christy Moore, a native of Co. Kildare, Ireland, found fame as a member of the legendary tradition folk band Planxty. Since then he has carved out his own career as a consummate solo performer. In the 1980s Christy teamed up with Donal Lunny to form the innovative Moving Hearts.\n\nChristy Moore started in the music business in the mid-sixties, when his life as a bank clerk was interrupted by a bank strike, and he moved to England. There he became involved in the folk music scene at the time <a href=\"https://www.last.fm/music/Christy+Moore\">Read more on Last.fm</a>",
+// //     "listeners": 130466,
+// //     "playcount": 1879709
+// //   },
+// //   {
+// //     "id": 71,
+// //     "name": "Chuck Berry",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/1e7d5347e14403c43d1c74a7ddb3e776/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 33,
+// //     "summary": "Charles Edward Anderson \"Chuck\" Berry (October 18, 1926 – March 18, 2017) was an American songwriter, guitarist, and singer. He is one of the pioneers of rock and roll music.\n\nChuck Berry remains an influential figure and one of the pioneers of rock and roll music who first began performing in 1953.  Cub Koda wrote, \"Of all the early breakthrough rock & roll artists, none is more important to the development of the music than Chuck Berry. He is its greatest songwriter <a href=\"https://www.last.fm/music/Chuck+Berry\">Read more on Last.fm</a>",
+// //     "listeners": 1894249,
+// //     "playcount": 23056581
+// //   },
+// //   {
+// //     "id": 72,
+// //     "name": "Cinderella",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/221796e1d0448aa45f163077651101ec/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 32,
+// //     "summary": "Cinderella was an American rock band that was formed in Philadelphia in 1982 by vocalist Tom Keifer and bassist Eric Brittingham. In addition, the initial lineup of Cinderella featured Tony Destra on drums and Michael Schermick on guitar.\n\nIn 1985, Schermick and Destra left Cinderella to join Britny Fox (another Pennsylvania-based hard rock band). They were replaced by guitarist Jeff LaBar and drummer Jim Drnec. It was this lineup that recorded their first album, 'Night Songs' (although the drums were played by session drummer Jody Cortez). <a href=\"https://www.last.fm/music/Cinderella\">Read more on Last.fm</a>",
+// //     "listeners": 563383,
+// //     "playcount": 7514038
+// //   },
+// //   {
+// //     "id": 73,
+// //     "name": "Clash",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/82a5fe6ba783cf618d5394ae0b8129b9/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 14,
+// //     "summary": "For the British punk band, see The Clash\n\nClash is one of the most popular Thai rock bands in Thailand today. The band consists of Bank(lead vocals), Ponn(guitar), Hack(guitar), Soom(bass), and Yak(drum). The band signed to UP G record in 2001 and up until now they have released 5 albums, 2 greatest hits albums, and 2 special acoustic albums.\n\nThe band first united as \"Lucifer\" (from Ratwinit bangkaeo school) in order to participate in the second and third Hot Wave Music Awards Contest. <a href=\"https://www.last.fm/music/+noredirect/Clash\">Read more on Last.fm</a>",
+// //     "listeners": 4270,
+// //     "playcount": 66782
+// //   },
+// //   {
+// //     "id": 74,
+// //     "name": "Cliff Richard",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/60d58d133e3cbc29bb673e4b03aedc07/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 122,
+// //     "summary": "Sir Cliff Richard (born Harry Rodger Webb, 1940-10-14, in Lucknow, India) moved as an 8-year-old to the UK, where it would be 10 more years before he and his group The Drifters emerged in the UK charts for the first time with 'Move It'. Cliff was heavily influenced by Elvis, imitating him shamelessly during the first couple of years of his career.  Something which he openly admits, and fully acknowledges that without Elvis, he and many others would never have happened. <a href=\"https://www.last.fm/music/Cliff+Richard\">Read more on Last.fm</a>",
+// //     "listeners": 591072,
+// //     "playcount": 4056624
+// //   },
+// //   {
+// //     "id": 75,
+// //     "name": "Coldplay",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e65d62ecd00b8bf1ba89073943ac62a1/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 93,
+// //     "summary": "Coldplay is a British alternative rock and britpop band formed in London in 1997. They consist of vocalist and pianist Chris Martin, guitarist Jonny Buckland, bassist Guy Berryman, drummer Will Champion and creative director Phil Harvey. They met at University College London and began playing music together from 1996 to 1998, initially calling themselves Starfish. Coldplay's music incorporates elements of soft rock, pop rock, piano rock, and post-britpop. <a href=\"https://www.last.fm/music/Coldplay\">Read more on Last.fm</a>",
+// //     "listeners": 6966836,
+// //     "playcount": 527038155
+// //   },
+// //   {
+// //     "id": 76,
+// //     "name": "Cole Porter",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/114dfc40d0afe6b20c8027d67e36a5ac/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 10,
+// //     "summary": "Cole Albert Porter (June 9, 1891 – October 15, 1964) was an American composer and songwriter from Indiana. His works include the musical comedies Kiss Me, Kate (1948) (based on Shakespeare's The Taming of the Shrew), Fifty Million Frenchmen and Anything Goes, as well as songs like \"Night and Day\", \"I Get a Kick Out of You\" and \"I've Got You Under My Skin\". He was noted for his sophisticated (sometimes ribald) lyrics, clever rhymes, and complex forms. He was one of the greatest half-dozen contributors to the Great American Songbook. <a href=\"https://www.last.fm/music/Cole+Porter\">Read more on Last.fm</a>",
+// //     "listeners": 176342,
+// //     "playcount": 1153772
+// //   },
+// //   {
+// //     "id": 77,
+// //     "name": "Conway Twitty",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/5af0456d49d7af134d0c1b30de81106c/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 59,
+// //     "summary": "Conway Twitty (1 September 1933 – 5 June 1993), born Harold Lloyd Jenkins, was one of the United States' most successful artists of the 20th century. Twitty had the most singles (55) reach Number 1 on various national music charts. Conway Twitty's across the board totals were greater than that of Elvis Presley, Frank Sinatra, the Beatles, and Garth Brooks. Most notably known as a country music singer, Twitty also enjoyed success in early Rock and Roll, R&B, and Pop music (among other genres). <a href=\"https://www.last.fm/music/Conway+Twitty\">Read more on Last.fm</a>",
+// //     "listeners": 288883,
+// //     "playcount": 2690351
+// //   },
+// //   {
+// //     "id": 78,
+// //     "name": "Counting Crows",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/d0a3410595d13d1b6c05cd6b0f395267/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 24,
+// //     "summary": "\nCounting Crows is an American rock band originating from Berkeley, California. Formed in 1991, the group gained fame in 1993 following the release of their debut album, titled 'August and Everything After', when track \"Mr. Jones\" became a big hit. Known for their melancholic yet melodic songwriting, the band started when singer Adam Duritz (previously of The Himalayans and Sordid Humor) teamed up with guitarist David Bryson (local producer and former member of the band Mr. <a href=\"https://www.last.fm/music/Counting+Crows\">Read more on Last.fm</a>",
+// //     "listeners": 2368371,
+// //     "playcount": 42621392
+// //   },
+// //   {
+// //     "id": 79,
+// //     "name": "Creedence Clearwater Revival",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3854c0eca16431e26987bf515f83d364/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 24,
+// //     "summary": "Creedence Clearwater Revival (often referred to as Creedence or CCR) was an American rock band active in the late 1960s and early 1970s which consisted of lead vocalist, lead guitarist, and primary songwriter John Fogerty, his brother rhythm guitarist Tom Fogerty, bassist Stu Cook, and drummer Doug Clifford.\n\nThese members played together since 1959, first as The Blue Velvets, then as The Golliwogs. Their musical style encompassed the roots rock, swamp rock, and blues rock genres. <a href=\"https://www.last.fm/music/Creedence+Clearwater+Revival\">Read more on Last.fm</a>",
+// //     "listeners": 3065157,
+// //     "playcount": 81568996
+// //   },
+// //   {
+// //     "id": 80,
+// //     "name": "Crowded House",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/11e87f98c30b5bbc499cabb1636ba9b0/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 25,
+// //     "summary": "Crowded House is a rock group formed in 1985 in Melbourne, Australia and led by New Zealand musician and singer-songwriter Neil Finn. The band were originally active from 1986 to 1996 before deciding to split up. In 2007, the band reunited to record and tour again.\n\nNeil Finn and Paul Hester decided to form a new band during the Split Enz farewell tour 'Enz with a Bang'. Nick Seymour approached Finn during the after party for the Melbourne show and asked if he could try out for this new band. <a href=\"https://www.last.fm/music/Crowded+House\">Read more on Last.fm</a>",
+// //     "listeners": 1109317,
+// //     "playcount": 16330864
+// //   },
+// //   {
+// //     "id": 81,
+// //     "name": "Culture Club",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3417b1986f518a50e3ee4dce21abc6d0/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 29,
+// //     "summary": "Culture Club was a popular 1980s pop group, perhaps most noticeable for their gender-bending frontman George O'Dowd, known by his stage name Boy George. The other members of the band were Roy Hay on guitars and keyboards, Mikey Craig playing bass and Jon Moss (ex Damned, London, Adam and the Ants) on drums.\n\nTheir first album, 1982's Kissing to Be Clever, became a major international hit, spawning the hit singles \"Do You Really Want to Hurt Me\" (which went 'all the way' in the BBC-Charts in late 1982) <a href=\"https://www.last.fm/music/Culture+Club\">Read more on Last.fm</a>",
+// //     "listeners": 1025900,
+// //     "playcount": 8302631
+// //   },
+// //   {
+// //     "id": 82,
+// //     "name": "Cyndi Lauper",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e4a7fbfacd5303fddde5807637e3dba5/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 38,
+// //     "summary": "Cyndi Lauper (born Cynthia Ann Stephanie Lauper on June 22, 1953 in Brooklyn, New York, United States), is a Grammy Award-winning singer (who possesses a four-octave vocal range) and Emmy Award-winning film, television and theatre actress. She was lead singer of the rockabilly band Blue Angel before her rise to fame as a solo singer. Her melodic voice and wild costumes have come to epitomize the 1980s and New Wave — the decade and genre in which she first came to fame. <a href=\"https://www.last.fm/music/Cyndi+Lauper\">Read more on Last.fm</a>",
+// //     "listeners": 2091118,
+// //     "playcount": 24434172
+// //   },
+// //   {
+// //     "id": 83,
+// //     "name": "Dan Fogelberg",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/c7343ea7cd948801c04a5def0540b70d/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 59,
+// //     "summary": "The late Dan Fogelberg (August 13, 1951, Peoria, Illinois – December 16, 2007, Deer Isle, Maine) was an American singer/songwriter who had several gold and platinum releases in the late 1970's and early 80's. During his solo career, under assistance of Eagles manager Irving Azoff, he rose to prominence and epitomized the soft rock 70s sound. He also voiced his concerns on social and ecological issues, including the No Nukes concerts, and worked in the studio with a diverse variety of musicians including Van Morrison <a href=\"https://www.last.fm/music/Dan+Fogelberg\">Read more on Last.fm</a>",
+// //     "listeners": 289037,
+// //     "playcount": 2428160
+// //   },
+// //   {
+// //     "id": 84,
+// //     "name": "Dave Matthews Band",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/20b56324f9de20b8ca95f7ffc3cc12b4/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 71,
+// //     "summary": "Dave Matthews Band was formed in Charlottesville, VA in 1991 by South African native singer and guitarist Dave Matthews, bassist Stefan Lessard, the late LeRoi Moore, who played a wide variety of instruments from the saxophone to the flute, violin player Boyd Tinsley, drummer Carter Beauford, and keyboardist Peter Griesar (who left the band in 1993), all of whom Dave met in Charlottesville. In 1998, the band played shows with keyboardist Butch Taylor, although he was not officially a member of the band. <a href=\"https://www.last.fm/music/Dave+Matthews+Band\">Read more on Last.fm</a>",
+// //     "listeners": 1514237,
+// //     "playcount": 50930775
+// //   },
+// //   {
+// //     "id": 85,
+// //     "name": "David Allan Coe",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/ed7bbfd12499fa2271bb81373e461dda/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 57,
+// //     "summary": "David Allan Coe (born September 6, 1939) is an American singer and songwriter. Coe took up music after spending much of his early life in reform schools and prisons, and first became notable for busking in Nashville. He initially played mostly in the blues style, before transitioning to country music, becoming a major part of the 1970s outlaw country scene. His biggest hits were \"Mona Lisa Lost Her Smile\", \"The Ride\", \"You Never Even Called Me by My Name\", \"She Used to Love Me a Lot\", and \"Longhaired Redneck\". <a href=\"https://www.last.fm/music/David+Allan+Coe\">Read more on Last.fm</a>",
+// //     "listeners": 246706,
+// //     "playcount": 2878732
+// //   },
+// //   {
+// //     "id": 86,
+// //     "name": "David Bowie",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/2c768882b5736fe66e925e42d88003f9/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 156,
+// //     "summary": "David Robert Jones (8 January 1947 – 10 January 2016), known professionally as David Bowie, was an English singer-songwriter and actor. A leading figure in the music industry, he is regarded as one of the most influential musicians of the 20th century. Bowie was acclaimed by critics and musicians, particularly for his innovative work during the 1970s. His career was marked by reinvention and visual presentation, and his music and stagecraft had a significant impact on popular music. <a href=\"https://www.last.fm/music/David+Bowie\">Read more on Last.fm</a>",
+// //     "listeners": 4303729,
+// //     "playcount": 275886089
+// //   },
+// //   {
+// //     "id": 87,
+// //     "name": "David Guetta",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/2d527fa03e106ed82a28f161694278d3/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 327,
+// //     "summary": "Pierre David Guetta is a French DJ and music producer. He has over 10 million albums and 65 million singles sales globally, with more than 10 billion streams. In 2011, 2020 and 2021, Guetta was voted the number one DJ in the DJ Mag Top 100 DJs poll. In 2013, Billboard crowned \"When Love Takes Over\" as the number one dance-pop collaboration of all time.\n\nGuetta's accolades include two Grammy Awards, an American Music Award and a Billboard Music Award. <a href=\"https://www.last.fm/music/David+Guetta\">Read more on Last.fm</a>",
+// //     "listeners": 3956109,
+// //     "playcount": 127768132
+// //   },
+// //   {
+// //     "id": 88,
+// //     "name": "David Pomeranz",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/bca579cf56c2449581eb85ae88be7619/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 11,
+// //     "summary": "David Pomeranz is an American singer, composer, lyricist, and writer for musical theatre.\n\nBorn in New York City and raised on Long Island, Pomeranz expressed interest in music from an early age, singing in the synagogue choir, learning to play the piano, guitar, and drums, and writing and recording songs by the age of fourteen. When he was nineteen, MCA/Decca signed him to a contract that yielded two albums, New Blues and Time To Fly (the latter featuring Chick Corea) <a href=\"https://www.last.fm/music/David+Pomeranz\">Read more on Last.fm</a>",
+// //     "listeners": 29018,
+// //     "playcount": 212125
+// //   },
+// //   {
+// //     "id": 89,
+// //     "name": "Dean Martin",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/74d19c057f79e3f3cacf727e5ecb62f0/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 76,
+// //     "summary": "Dean Martin (born Dino Paul Crocetti; June 7, 1917 – December 25, 1995) was an American singer, actor, comedian, and producer. One of the most popular and enduring American entertainers of the mid-20th century, Martin was nicknamed the \"King of Cool\" for his seemingly effortless charisma and self-assurance. \n\nHe and Jerry Lewis formed the immensely popular comedy duo Martin and Lewis, with Martin serving as the straight man to Lewis' slapstick hijinks. <a href=\"https://www.last.fm/music/Dean+Martin\">Read more on Last.fm</a>",
+// //     "listeners": 1946109,
+// //     "playcount": 25521721
+// //   },
+// //   {
+// //     "id": 90,
+// //     "name": "Death",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/ad01d0aca958e94cc2e2387f05201208/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 28,
+// //     "summary": "There are multiple artists sharing the name Death;\n\n1)  Death was an American death metal band formed in Altamonte Springs, Florida in 1984 by guitarist and vocalist Chuck Schuldiner. Death is considered to be among the most influential bands in heavy metal and a pioneering force in the extreme metal subgenre of death metal. Their debut album, Scream Bloody Gore, has been widely regarded one of the first death metal records, alongside the first records from Possessed and Necrophagia. <a href=\"https://www.last.fm/music/Death\">Read more on Last.fm</a>",
+// //     "listeners": 715910,
+// //     "playcount": 45041028
+// //   },
+// //   {
+// //     "id": 91,
+// //     "name": "Deep Purple",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3831c80046351582ad41f7fa8069fd64/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 91,
+// //     "summary": "Deep Purple is an English rock band formed in London in 1968. They are considered to be among the pioneers of heavy metal and modern hard rock music, but their musical style has changed over the course of its existence. Originally formed as a psychedelic and progressive rock band, they shifted to a heavier sound with their 1970 album Deep Purple in Rock. Deep Purple, together with Led Zeppelin and Black Sabbath, have been referred to as the \"unholy trinity of British hard rock and heavy metal in the early to mid-seventies\". <a href=\"https://www.last.fm/music/Deep+Purple\">Read more on Last.fm</a>",
+// //     "listeners": 2498124,
+// //     "playcount": 64205425
+// //   },
+// //   {
+// //     "id": 92,
+// //     "name": "Def Leppard",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3bdeca50c4e450cf6e5c5ae0aa4f7a2a/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 49,
+// //     "summary": "Def Leppard is an English rock band formed in 1976 in Sheffield. Since 1992, the band has consisted of Rick Savage (bass, backing vocals), Joe Elliott (lead vocals), Rick Allen (drums, backing vocals), Phil Collen (guitar, backing vocals), and Vivian Campbell (guitar, backing vocals). They established themselves as part of the new wave of British heavy metal movement of the early 1980s.\n\nThe band's greatest commercial success came between the early 1980s and the early 1990s. <a href=\"https://www.last.fm/music/Def+Leppard\">Read more on Last.fm</a>",
+// //     "listeners": 1424275,
+// //     "playcount": 30933662
+// //   },
+// //   {
+// //     "id": 93,
+// //     "name": "Demi Lovato",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/f6a58e3e7d6235797932a9c5519ae681/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 68,
+// //     "summary": "Demetria Devonne Lovato, professionally known as Demi Lovato, is an American singer, songwriter and actress. After appearing on the children's television series Barney & Friends (2002–2004), Lovato rose to prominence for playing Mitchie Torres in the musical television film Camp Rock (2008) and its sequel Camp Rock 2: The Final Jam (2010); the former film's soundtrack contained \"This Is Me\", Lovato's debut single and duet with Joe Jonas, which peaked at number nine on the Billboard Hot 100. <a href=\"https://www.last.fm/music/Demi+Lovato\">Read more on Last.fm</a>",
+// //     "listeners": 2264145,
+// //     "playcount": 123836396
+// //   },
+// //   {
+// //     "id": 94,
+// //     "name": "Depeche Mode",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/b18856da7850c8b8cb10476fefc15657/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 54,
+// //     "summary": "Depeche Mode is an English band founded in 1980, originally from Basildon, Essex, United Kingdom. They are one of the most enduring and successful bands that emerged during the 80s, particularly from the new wave/new romantic era. The band name is derived from a French fashion magazine, Dépêche mode, which means \"fashion dispatch.\"\n\nThe band has been highly influential in the electronic dance music scene, especially synthpop, techno, and trance, partly due to their innovative work, recording techniques, and use of sampling. <a href=\"https://www.last.fm/music/Depeche+Mode\">Read more on Last.fm</a>",
+// //     "listeners": 3378732,
+// //     "playcount": 211545212
+// //   },
+// //   {
+// //     "id": 95,
+// //     "name": "Devo",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3be6ab92e4a732944375235e5e6c1b74/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 17,
+// //     "summary": "Devo is an American rock group formed in Akron, Ohio, United States in 1972. The band split in 1991 and returned in 1996. The band currently consists of Gerald Casale (vocals, bass), Mark Mothersbaugh (vocals, synthesizer), Bob Mothersbaugh (guitar) and Josh Freese (drums). Former members include Bob Casale (guitar, keyboards) (born July 14, 1952; died February 17, 2014) and Alan Myers (drums) (born 1955; died 2013). \nThe band released their first album in 20 years, Something for Everybody on June 15, 2010. <a href=\"https://www.last.fm/music/Devo\">Read more on Last.fm</a>",
+// //     "listeners": 1034572,
+// //     "playcount": 19826055
+// //   },
+// //   {
+// //     "id": 96,
+// //     "name": "Dewa 19",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/7164efb4540b482dd5abac8bff423429/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 67,
+// //     "summary": "Dewa 19 is a Rock Band from Surabaya, Indonesia. Since the band's formation in 1986 there have been a number of changes to the band name and lineup. They were previously known as Down Beat and Dewa.\n\nCurrent members:\n\nGuitar and Keyboard: Dhani Ahmad Prasetyo (1986-2011).\nLead Guitar: Andra Junaidi (1986-2011).\nVocal: Once Mekel (1999-2011).\nBass: Yuke Sampurna (2002-2011).\nDrums: Agung Yudha (2007-2011).\n\nPrevious members:\n\nDrummers:\nWawan Juniarso (1986 - 1994). <a href=\"https://www.last.fm/music/Dewa+19\">Read more on Last.fm</a>",
+// //     "listeners": 37744,
+// //     "playcount": 1767364
+// //   },
+// //   {
+// //     "id": 97,
+// //     "name": "Diana Ross",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/ebe2c56e022f8ab92bbe03a6f936785d/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 67,
+// //     "summary": "Diane Ernestine Earle Ross (born March 26, 1944), better known as Diana Ross, is an American soul, R&B and pop singer and actress born in Detroit, Michigan. Ross is one of the most successful female artists of her era, both due to her solo work and her role as lead singer of The Supremes during the 1960s.\n\nIn 1959, Ross was brought to the attention of Milton Jenkins, the manager of the local doo-wop group The Primes, by Mary Wilson. Primes member Paul Williams convinced Jenkins to enlist Ross in the sister group The Primettes <a href=\"https://www.last.fm/music/Diana+Ross\">Read more on Last.fm</a>",
+// //     "listeners": 1298391,
+// //     "playcount": 12685282
+// //   },
+// //   {
+// //     "id": 98,
+// //     "name": "Dire Straits",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/400d3ece017a3482e9aae5d0c0a951f6/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 19,
+// //     "summary": "Dire Straits was a British   rock band from Newcastle, United Kingdom,  formed in 1977 by Mark Knopfler (guitar and vocals), his brother David Knopfler (guitar), John Illsley (bass), and Pick Withers (drums), and subsequently managed by Ed Bicknell. The band were inducted into the Rock and Roll Hall of Fame in 2018.\n\nDire Straits emerged during the post-punk era of the late '70s, and while their sound was minimalistic and stripped down, they owed little to punk. <a href=\"https://www.last.fm/music/Dire+Straits\">Read more on Last.fm</a>",
+// //     "listeners": 2653646,
+// //     "playcount": 74768434
+// //   },
+// //   {
+// //     "id": 99,
+// //     "name": "Divine",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/e7421e4ac742a68259ea437025343bc7/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 103,
+// //     "summary": "Harris Glenn Milstead (October 19, 1945 – March 7, 1988), better known by his stage name Divine, was an American actor, singer, and drag queen. Closely associated with independent filmmaker John Waters, Divine was a character actor, usually performing female roles in cinematic and theatrical productions, and adopted a female drag persona for his music career.\n\nBorn in Baltimore, Maryland, to a conservative middle-class family, Milstead developed an early interest in drag while working as a women's hairdresser. <a href=\"https://www.last.fm/music/Divine\">Read more on Last.fm</a>",
+// //     "listeners": 128113,
+// //     "playcount": 1196808
+// //   },
+// //   {
+// //     "id": 100,
+// //     "name": "Dolly Parton",
+// //     "rate": 0,
+// //     "image": "http://e-cdn-images.dzcdn.net/images/artist/3237db03da2df4d5b2e8c93e8bfeeefa/250x250-000000-80-0-0.jpg",
+// //     "numOfAlbums": 114,
+// //     "summary": "Dolly Rebecca Parton (born January 19, 1946 in  Sevierville, Tennessee, U.S.) is an American country singer, songwriter, composer, producer, entrepreneur, author and actress.\n\nParton began performing as a child, singing on local radio and television in East Tennessee. At age 12 she was appearing on Knoxville TV, and at 13, she was recording on a small label and appearing at the Grand Ole Opry in Nashville. When she graduated from high school in 1964 she moved to Nashville <a href=\"https://www.last.fm/music/Dolly+Parton\">Read more on Last.fm</a>",
+// //     "listeners": 1513551,
+// //     "playcount": 20930761
+// //   }
+// // ])
+
+// //image numOfAlbums summary listeners playcount
+//             function writeSQL(arr) {
+//                 let str=""
+//                 for (const artist of arr) {
+//                           str+=`UPDATE Artists SET [image] = '${artist.image}' WHERE id = ${artist.id}\n`;
+//                 }
+//                 console.log(str)
+            
+//             }
+       
+        });
         // wire all the buttons to their functions
         function buttonEvents() {
             $(document).on("click", ".viewBtn", function () {
