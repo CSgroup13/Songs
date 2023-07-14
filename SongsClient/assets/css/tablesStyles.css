@@ -4,13 +4,25 @@ body {
     font-family: Arial, sans-serif;
     padding: 20px;
   }
+  .sorting_1{
+    background-color: #444!important;
+  }
   
   table {
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
   }
-  
+  .pagination>li>a, .pagination>li>span{
+    background-color: transparent;
+  }
+  .pagination>li>a, .pagination>li>span:hover{
+    background-color: transparent!important;
+  }
+
+  .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
+    color: white;
+  }
   th, td {
     padding: 10px;
     border: 1px solid #555!important;
