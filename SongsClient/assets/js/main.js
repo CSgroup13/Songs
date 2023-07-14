@@ -26,7 +26,7 @@ $(document).ready(() => {
 
     function renderArtists() {
         // if (localStorage.artists == undefined)
-            ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
+        ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
         // else {
         //   const artistsDiv = document.getElementById("artists");
         //   const data = JSON.parse(localStorage.artists);
@@ -575,7 +575,7 @@ function successCBAllArtists(data) {
                     },
                     error: errorCB
                 });
-                const res = { artistId, name, summary, listeners, playcount, rate, image, songsList};
+                const res = { artistId, name, summary, listeners, playcount, rate, image, songsList };
                 $("#artistLoader").hide();
                 addArtistsToDiv(res);
                 artistsArr.push(res);
@@ -865,7 +865,8 @@ $(document).ready(() => {
         }
     })
     $(".allSongs").on("click", function () {
-        ajaxCall("GET", baseApi + `/Songs`, "", successCBSong, errorCB);
+        if (this.checked)
+            ajaxCall("GET", baseApi + `/Songs`, "", successCBSong, errorCB);
     })
     $(".allSongs").click();
     $("#searchForm").submit(() => {
@@ -1062,12 +1063,32 @@ function successCBSongLyrics(data) {
         html: `<p>&#x1F44D; ${data.rate}</p>
         <div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                <br>
-               <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>`,
+               <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>
+               <br>
+               <audio id="audioPlayer" controls>
+                    <source src="${data.songPreview}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>`,
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
         didOpen: () => {
             $('.song-popup').scrollTop(0);
+            const audioPlayer = document.getElementById('audioPlayer');
+            // Play the audio
+            function playAudio() {
+                audioPlayer.play();
+            }
+
+            // Pause the audio
+            function pauseAudio() {
+                audioPlayer.pause();
+            }
+            // Stop the audio
+            function stopAudio() {
+                audioPlayer.pause();
+                audioPlayer.currentTime = 0;
+            }
             $(`#song_${data.id}`).click(function () {
                 if (localStorage.user === undefined) {
                     Swal.fire({

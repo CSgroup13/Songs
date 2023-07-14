@@ -9,6 +9,8 @@
         public string lyrics { get; set; }
         public int rate { get; set; }
         public string image { get; set; }
+        public string songPreview { get; set; }
+
         public bool InsertSong()
         {
             DBservices dbs = new DBservices();
