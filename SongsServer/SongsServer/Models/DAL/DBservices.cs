@@ -216,6 +216,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image=dataReader["image"].ToString();
                 songsList.Add(s);
             }
             return songsList;
@@ -841,6 +842,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image = dataReader["image"].ToString();
                 songList.Add(s);
             }
             return songList;
@@ -898,6 +900,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image = dataReader["image"].ToString();
                 songList.Add(s);
             }
             return songList;
@@ -958,6 +961,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image = dataReader["image"].ToString();
                 songList.Add(s);
             }
             return songList;
@@ -1017,7 +1021,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
-
+                s.image = dataReader["image"].ToString();
                 return s;
             }
             throw new Exception("could not find Song");
@@ -1079,6 +1083,7 @@ public class DBservices
                 s.link = dataReader["link"].ToString();
                 s.lyrics = dataReader["lyrics"].ToString();
                 s.rate = Convert.ToInt32(dataReader["rate"]);
+                s.image = dataReader["image"].ToString();
                 songList.Add(s);
             }
             if(songList.Count>0)

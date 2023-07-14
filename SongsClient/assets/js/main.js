@@ -960,7 +960,7 @@ function successCBSong(data) {
                       <li class="slider--item slider--item-center" id="slideSong_${data.id}">
                         <a>
                           <div class="slider--item-image">
-                            <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+                            <img src="${data.image}" alt="Metiew and Smith">
                           </div>
                           <p class="slider--item-title">${data.name}</p>
                           <p class="slider--item-description">${data.artistName}</p>
@@ -981,7 +981,7 @@ function successCBSong(data) {
     <li class="slider--item slider--item-center" id="slideSong_${data[0].id}">
         <a>
             <div class="slider--item-image">
-                <img src="assets/img/work-victory.jpg" alt="Victory">
+                <img src="${data[0].image}" alt="Victory">
             </div>
             <p class="slider--item-title">${data[0].name}</p>
             <p class="slider--item-description">${data[0].artistName}</p>
@@ -994,7 +994,7 @@ function successCBSong(data) {
             $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="slideSong_${data[1].id}">
             <a>
               <div class="slider--item-image">
-                <img src="assets/img/work-metiew-smith.jpg" alt="Metiew and Smith">
+                <img src="${data[1].image}" alt="Metiew and Smith">
               </div>
              <p class="slider--item-title">${data[1].name}</p>
              <p class="slider--item-description">${data[1].artistName}</p>
@@ -1008,7 +1008,7 @@ function successCBSong(data) {
             $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-right" id="slideSong_${data[2].id}">
           <a>
             <div class="slider--item-image">
-              <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+              <img src="${data[2].image}" alt="Alex Nowak">
             </div>
             <p class="slider--item-title">${data[2].name}</p>
             <p class="slider--item-description">${data[2].artistName}</p>
@@ -1022,7 +1022,7 @@ function successCBSong(data) {
             $("div.work--lockup>ul.slider").append(`<li class="slider--item" id="slideSong_${data[i].id}">
           <a>
             <div class="slider--item-image">
-              <img src="assets/img/work-alex-nowak.jpg" alt="Alex Nowak">
+              <img src="${data[i].image}" alt="Alex Nowak">
             </div>
             <p class="slider--item-title">${data[i].name}</p>
             <p class="slider--item-description">${data[i].artistName}</p>
