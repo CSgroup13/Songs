@@ -753,6 +753,61 @@ public class DBservices
         }
 
     }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method reads all artists of specific user
+    //--------------------------------------------------------------------------------------------------
+    public Artist getRandomArtist()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+ 
+        cmd = CreateCommandWithStoredProcedure("SP_getRandomArtist", con, null);// create the command
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                Artist a = new Artist();
+                a.id = Convert.ToInt32(dataReader["id"]);
+                a.name = dataReader["name"].ToString();
+                a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
+                
+            return a;
+            }
+            throw new Exception("couldn't get Random artist");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     //*****************************************************Songs Methods*********************************************************************************
     //--------------------------------------------------------------------------------------------------
     // This method add new song to db

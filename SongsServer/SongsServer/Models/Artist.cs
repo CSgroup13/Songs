@@ -25,5 +25,11 @@
             DBservices dbs = new DBservices();
             return dbs.getArtistById(id);
         }
+
+        public static Artist getRandomArtist()
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getRandomArtist();
+        }
     }
 }

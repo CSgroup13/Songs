@@ -95,7 +95,6 @@ $(document).on("click", ".back", function (event) {
         background: '#171717',
         confirmButtonText: "Close",
     });
-    console.log(swal.params.html)
     $("#artistSongsDetails").click(() => {
         event.preventDefault();
         let songsList = [];
@@ -601,13 +600,21 @@ const start = 0;
 const end = 50;
 //random artist
 function randomArtist() {
-    if (localStorage.artists !== undefined) {
-        const artists = JSON.parse(localStorage.artists);
-        const rand = Math.floor(Math.random() * artists.length);
-        const artistName = artists[rand].name;
-
-        return artistName;
-    }
+    let randArtist; // here will be 3 songs of the artist
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Artists/randomArtist`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            randArtist=data
+        },
+        error: errorCB
+    });
+    return randArtist.name;
 }
 
 //3 random songs of artist
