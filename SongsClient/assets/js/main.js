@@ -36,6 +36,7 @@ $(document).ready(() => {
             })
         }
         else {
+            removeFromFavPage=false;
             ajaxCall("GET", baseApi + `/Artists/byName/${inputName}/info`, "", function (data) {
                 const artistsDiv = document.getElementById("artists");
                 artistsDiv.innerHTML = "";
