@@ -2,12 +2,15 @@ const baseApi = 'https://localhost:7091/api';
 
 $(document).ready(() => {
     ///Artists////
+    let removeFromFavPage = false;
     $("#showAllArtistsBtn").click(function () {
+        removeFromFavPage = false;
         $("#searchArtistInput").val("");
         renderArtists();
     })
 
     $("#showFavoritesArtists").click(function () {
+        removeFromFavPage = true;
         $("#searchArtistInput").val("");
         if (localStorage.user !== undefined) {
             const userId = JSON.parse(localStorage.user).id;
@@ -134,7 +137,7 @@ $(document).ready(() => {
                 html: songsDiv
             });
         })
-        $(document).on('click', `#artistHeart_${currArtist.id}`, () => {
+        $(`#artistHeart_${currArtist.id}`).click(() => {
             if (localStorage.user === undefined) {
                 Swal.fire({
                     icon: 'error',
@@ -152,7 +155,7 @@ $(document).ready(() => {
                     background: '#171717'
                 })
                 const artistDiv = $(".back").filter(function () {
-                    return $(this).find("h4").text() === currArtist.name;
+                    return $(this).find("h4").text() === data.name;
                 });
                 artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
             }, errorCB);
@@ -179,7 +182,9 @@ $(document).ready(() => {
                     return $(this).find("h4").text() === currArtist.name;
                 });
                 artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
-                // $("#showFavoritesArtists").click();
+                if (removeFromFavPage) {
+                    $("#showFavoritesArtists").click();
+                }
             }, errorCB);
         })
     });
@@ -290,6 +295,15 @@ $(document).ready(() => {
     });
 
     $('#loginLi').click(function () {
+        if (localStorage["user"] != undefined) { //user logged in
+            updateLoginPage("logout");
+        }
+        else {
+            updateLoginPage("login");
+        }
+    });
+
+    $('#outBarLogin').click(function () {
         if (localStorage["user"] != undefined) { //user logged in
             updateLoginPage("logout");
         }
@@ -542,7 +556,6 @@ function renderFavorites() {
 }
 
 
-
 function successCBFavorites(data) {
     if (data.length === 0) {
         $("#favoriteSongs").html("<h3>You don't have favorite songs</h3>");
@@ -594,7 +607,6 @@ const lastfmBaseAPi = "http://ws.audioscrobbler.com/2.0";
 const lastfmKey = "d6293ebc904c9f3e71bf638f0b55a5f6";
 
 function successCBAllArtists(data) {
-
     const artistsDiv = document.getElementById("artists");
     artistsDiv.innerHTML = "";
     let count = data.length;
@@ -619,7 +631,8 @@ function addArtistsToDiv(artists) {
                     const listenersElement = $("<p>").text("listeners: " + listeners);
                     const playcountElement = $("<p>").text("playcount: " + playcount);
                     const rateElement = $("<p>").html("&#x1F44D; " + artist.rate);
-                    $(this).append(listenersElement, playcountElement, rateElement);
+                    $(this).find("#lastFmDetails").html("");
+                    $(this).find("#lastFmDetails").append(listenersElement, playcountElement, rateElement);
                 }
             });
         }, errorCB);
@@ -629,6 +642,7 @@ function addArtistsToDiv(artists) {
                  </div>
                  <div id=artist_${artist.id} class="back">
                      <h4>${artist.name}</h4>
+                     <div id="lastFmDetails"></div>
                  </div>
                  </div>`;
     }
@@ -1155,21 +1169,6 @@ function successCBSongLyrics(data) {
         confirmButtonText: "Close",
         didOpen: () => {
             $('.song-popup').scrollTop(0);
-            const audioPlayer = document.getElementById('audioPlayer');
-            // Play the audio
-            function playAudio() {
-                audioPlayer.play();
-            }
-
-            // Pause the audio
-            function pauseAudio() {
-                audioPlayer.pause();
-            }
-            // Stop the audio
-            function stopAudio() {
-                audioPlayer.pause();
-                audioPlayer.currentTime = 0;
-            }
             $(`#song_${data.id}`).click(function () {
                 if (localStorage.user === undefined) {
                     Swal.fire({

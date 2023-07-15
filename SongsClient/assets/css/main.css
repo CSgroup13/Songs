@@ -351,7 +351,6 @@ body {
     width: 100%;
     height: 100%
 }
-
 .device-notification {
     display: none;
     position: fixed;
@@ -2003,6 +2002,7 @@ body {
     width: 210px;
 }
 
+
 .artiststBtns:hover {
     color: #0f33ff;
     background-color: white;
@@ -2344,7 +2344,4 @@ div.about h1 {
 }
 #audioPlayer {
     margin-top: 20px;
-}
-#quiz_image{
-    border-radius: 10px;
 }
