@@ -254,7 +254,7 @@ $(document).ready(() => {
                     password: password,
                     regDate: "2023-06-10T12:33:08.383Z"
                 }
-                ajaxCall("POST", baseApi + "/Users/login", JSON.stringify(User), successCBLogin, errorCBLogin);
+                ajaxCall("POST", baseApi + "/Users/login", JSON.stringify(User), successCBLogin, errorCB);
                 return false;
             })
         }
@@ -276,7 +276,7 @@ $(document).ready(() => {
                     password: password,
                     regDate: formattedDateTime
                 }
-                ajaxCall("POST", baseApi + "/Users/register", JSON.stringify(User), successCBSignUp, errorCBLogin);
+                ajaxCall("POST", baseApi + "/Users/register", JSON.stringify(User), successCBSignUp, errorCB);
                 return false;
             })
         }
@@ -370,6 +370,7 @@ $(document).ready(() => {
     });
 
     function successCBLogin(data) {
+
         Swal.fire({
             icon: 'success',
             text: "You Logged In Successfully!",
