@@ -1,7 +1,7 @@
 const baseApi = 'https://localhost:7091/api';
 function errorCB(error) {
     let message = error.responseText;
-    if (message === undefined) window.location.href = "404.html"
+    if (message === undefined || message=="Error in DB") window.location.href = "404.html"
     else {
         Swal.fire({
             icon: 'error',
