@@ -423,6 +423,52 @@ public class DBservices
         }
     }
     //--------------------------------------------------------------------------------------------------
+    // This method deletes User
+    //--------------------------------------------------------------------------------------------------
+    public bool deleteUser(int userId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@id", userId);
+      
+
+        cmd = CreateCommandWithStoredProcedure("SP_DeleteUser", con, paramDic);// create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected > 0;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    //--------------------------------------------------------------------------------------------------
     // This method Check If Exists User by Email
     //--------------------------------------------------------------------------------------------------
     public int FindUser(string email)

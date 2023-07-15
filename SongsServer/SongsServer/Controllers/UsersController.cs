@@ -135,5 +135,13 @@ namespace SongsServer.Controllers
                 return BadRequest(e.Message);
             }
         }
+        // DELETE api/<UsersController>/5
+        [HttpDelete("remove/{userId}")]
+        public IActionResult deleteUser(int userId)
+        {
+            if (UserClass.deleteUser(userId))
+                return Ok(true);
+            return BadRequest("User does not exist");
+        }
     }
 }

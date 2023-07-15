@@ -103,7 +103,7 @@
         }
 
         function DeleteUser(id) {
-            ajaxCall("DELETE", baseApi + "/Users/" + id, "", function (data) {
+            ajaxCall("DELETE", baseApi + "/Users/remove/" + id, "", function (data) {
                 updateSuccess(data, "Deleted")
             }, errorCB);
         }

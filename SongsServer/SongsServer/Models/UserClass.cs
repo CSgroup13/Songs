@@ -85,6 +85,10 @@
             DBservices dbs = new DBservices();
             return dbs.getTop5();
         }
-
+        public static bool deleteUser(int userId)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.deleteUser(userId);
+        }
     }
 }
