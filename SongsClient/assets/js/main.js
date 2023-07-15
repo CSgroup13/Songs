@@ -329,6 +329,27 @@ $(document).ready(() => {
 
 
     /////QUIZ/////
+
+    function playWrongAnswerSound() {
+        var audio = new Audio("../assets/audio/fail-144746.mp3");
+        audio.play();
+    }
+
+    function playCorrectAnswerSound() {
+        var audio = new Audio("../assets/audio/correct-6033.mp3");
+        audio.play();
+    }
+
+    function playStartQuizAudio() {
+        var audio = new Audio("../assets/audio/lets-start-the-quiz-b-39670.mp3");
+        audio.play();
+    }
+
+    function playEndQuizAudio() {
+        var audio = new Audio("../assets/audio/electric-chimes-87900.mp3");
+        audio.play();
+    }
+
     let score = 0;
     function renderQuestion(q) {
         let qArr = q();
@@ -386,14 +407,17 @@ $(document).ready(() => {
                   </tbody>
                 </table>`)
         $('#q_1').on("click", function () {
+            playCorrectAnswerSound();
             clearInterval(interval);
-            alertAnswer('Correct!', 'success')
+            $(this).css("border", "2px solid green");
+            alertAnswer('Correct');
         });
         $('.wrongAns').on("click", function () {
+            playWrongAnswerSound();
             clearInterval(interval);
-            $(this).css("border", "2px solid red")
-            $('#q_1').css("border", "2px solid green")
-            alertAnswer('Wrong &#128531;', 'error')
+            $(this).css("border", "2px solid red");
+            $('#q_1').css("border", "2px solid green");
+            alertAnswer('Wrong');
         });
         const timerElement = document.getElementById('timer');
         let timeLeft = 30;
@@ -402,53 +426,45 @@ $(document).ready(() => {
             timeLeft--;
             if ($(".quizNav.is-active").length === 0) {
                 clearInterval(interval);
+                currentQuestionIndex = 0;
                 return;
             }
             timerElement.textContent = timeLeft;
             if (timeLeft === 0) {
                 clearInterval(interval);
+                var audio = new Audio("../assets/audio/buzzer-or-wrong-answer-20582.mp3");
+                audio.play();
                 timerElement.textContent = 'Time up!';
-                alertAnswer('Wrong &#128531;', 'error')
+                $('.wrongAns').css("border", "2px solid red");
+                $('#q_1').css("border", "2px solid green");
+                setTimeout(() => manageQuiz(), 2000);
             }
         }, 1000);
 
     }
 
-    function alertAnswer(swalTitle, swalIcon) {
-        if (swalIcon === "success")
+    function alertAnswer(answer) {
+        if (answer === "Correct")
             score += 25;
-        Swal.fire({
-            title: swalTitle,
-            icon: swalIcon,
-            timer: 2500,
-            timerProgressBar: true,
-            showConfirmButton: false,
-            color: 'white',
-            background: '#171717',
-            didOpen: () => {
-                timerInterval = setInterval(() => {
-                }, 100)
-            },
-            willClose: () => {
-                clearInterval(timerInterval)
-            }
-        }).then((result) => {
-            if (result.dismiss) {
-                manageQuiz();
-            }
-        })
+        setTimeout(() => manageQuiz(), 2000);
     }
 
     let currentQuestionIndex = 0;
-    let questionsQueue = [getQ2,getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
+    let questionsQueue = [getQ2, getQ1, getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
     function manageQuiz() {
         if (currentQuestionIndex == questionsQueue.length) {
+            playEndQuizAudio();
             $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>`);
             $("#Quiz").append(`<button id="playAgain">Play Again</button>`);
             $("#Quiz").append(`<button id="leaderBoard">Leaders Board</button>`);
             $("#Quiz").append(`<div><img id="winnerImg" src="assets/img/winnerCup.png"></img></div>`);
-            $("#playAgain").on('click', () => manageQuiz());
+            $("#playAgain").on('click', () => {
+                playStartQuizAudio();
+                manageQuiz();
+            });
             $("#leaderBoard").on('click', () => {
+                var audio = new Audio("../assets/audio/success-fanfare-trumpets-6185.mp3");
+                audio.play();
                 ajaxCall("GET", `${baseApi}/Users/leaders`, "", showLeadersboard, errorCB);
             });
             let userId = JSON.parse(localStorage["user"]).id;
@@ -481,18 +497,8 @@ $(document).ready(() => {
             quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
             quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
             $("#startQuizBtn").on('click', () => {
-                // if (localStorage.artists === undefined) {
-                //     quizDiv.html(`<h1 id="Preparing">Preparing Your Quiz...</h1><span class="loader"></span>`)
-                //     const interval = setInterval(() => {
-                //         if (localStorage.artists) {
-                //             clearInterval(interval); // Clear the interval once localStorage.artists is available
-                //             manageQuiz();
-                //         }
-                //     }, 100);
-                // }
-                // else {
+                playStartQuizAudio();
                 manageQuiz();
-                // }
             });
         } else {
             quizDiv.html(`<h1>You Must Login For Starting Quiz!</h1>`);
@@ -607,6 +613,7 @@ function addArtistsToDiv(artists) {
 //////////Quiz/////////////
 const start = 0;
 const end = 50;
+
 //random artist
 function randomArtist() {
     let randArtist; // here will be 3 songs of the artist
@@ -709,12 +716,57 @@ function getDifferentSongs(songName) {
     return songsList;
 }
 
+//return random song
+function getRandomSong() {
+    let songs;
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/randomSong`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            songs = data;
+        },
+        error: errorCB
+    });
+    return songs[0];
+}
+
+function getQ1() {
+    let song = getRandomSong();
+    let preview;
+    let q1 = [];
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/${song.name}/info`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (data) {
+            preview = data.songPreview;
+        },
+        error: errorCB
+    });
+    q1.push(`Which singer sings the following song? (play the audio) <br>
+    <audio id="audioPlayer" controls> <source src="${preview}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>`);
+    q1.push(song.artistName);
+    q1.push(...generateDiff3Artists(song.artistName));
+
+    return q1;
+}
 function getQ2() {
     let q2 = [];
-    const artist=randomArtist()
+    const artist = randomArtist()
     const artistName = artist.name;
-    const question = "Who is this artist?" + `<br><br><img src="${artist.image}" id="quiz_image">` ;
-    q2.push(question,artistName);
+    const question = "Who is this artist?" + `<br><br><img src="${artist.image}" id="quiz_image">`;
+    q2.push(question, artistName);
     q2.push(...generateDiff3Artists(artistName));
     return q2;
 }
@@ -1230,7 +1282,7 @@ function errorCB(error) {
 
 //generates 3 different artist other than given songArtist
 function generateDiff3Artists(songArtist) {
-    let diffArtists=[];
+    let diffArtists = [];
     $.ajax({
         async: false,
         type: "GET",
