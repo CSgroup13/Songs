@@ -332,7 +332,7 @@ $(document).ready(() => {
     let score = 0;
     function renderQuestion(q) {
         let qArr = q();
-        let answersArr = [` <div id="q_1" class="answerDiv">
+        let answersArr = [` <div id="q_1" class="answerDiv ">
                       <h3 style="display: inline-block;">${qArr[1]}</h3>
                     </div>`,
         ` <div id="q_2" class="answerDiv wrongAns">
@@ -391,6 +391,8 @@ $(document).ready(() => {
         });
         $('.wrongAns').on("click", function () {
             clearInterval(interval);
+            $(this).css("border", "2px solid red")
+            $('#q_1').css("border", "2px solid green")
             alertAnswer('Wrong &#128531;', 'error')
         });
         const timerElement = document.getElementById('timer');
@@ -438,7 +440,7 @@ $(document).ready(() => {
     }
 
     let currentQuestionIndex = 0;
-    let questionsQueue = [getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
+    let questionsQueue = [getQ2,getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
     function manageQuiz() {
         if (currentQuestionIndex == questionsQueue.length) {
             $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>`);
@@ -707,6 +709,15 @@ function getDifferentSongs(songName) {
     return songsList;
 }
 
+function getQ2() {
+    let q2 = [];
+    const artist=randomArtist()
+    const artistName = artist.name;
+    const question = "Who is this artist?" + `<br><br><img src="${artist.image}" id="quiz_image">` ;
+    q2.push(question,artistName);
+    q2.push(...generateDiff3Artists(artistName));
+    return q2;
+}
 function getQ3() {
     let q3 = [];
     const artistName = randomArtist().name;

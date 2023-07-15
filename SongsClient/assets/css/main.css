@@ -2334,3 +2334,6 @@ div.about h1 {
 #audioPlayer {
     margin-top: 20px;
 }
+#quiz_image{
+    border-radius: 10px;
+}
