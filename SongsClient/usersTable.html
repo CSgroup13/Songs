@@ -65,21 +65,34 @@
             });
 
 
-            //     $(document).on("click", ".deleteBtn", function () {
-            //         markSelected(this);
-            //         var carId = this.getAttribute('data-userId');
-            //         swal({ // this will open a dialouge 
-            //             title: "Are you sure ??",
-            //             text: "",
-            //             icon: "warning",
-            //             buttons: true,
-            //             dangerMode: true
-            //         })
-            //             .then(function (willDelete) {
-            //                 if (willDelete) DeleteCar(carId);
-            //                 else swal("Not Deleted!");
-            //             });
-            //     });
+            $(document).on("click", ".deleteBtn", function () {
+                markSelected(this);
+                var userId = this.getAttribute('data-userId');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    color: 'white',
+                    background: '#171717',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        DeleteUser(userId)
+                    }
+                    else {
+                        Swal.fire({
+                            title: "Not Deleted!", 
+                            color: 'white',
+                            background: '#171717'
+                        })
+                    }
+                })
+
+
+            });
         }
 
         // mark the selected row
@@ -89,10 +102,11 @@
             row.className = 'selected'; // mark as selected
         }
 
-        // Delete a car from the server
-        // function DeleteCar(id) {
-        //     ajaxCall("DELETE", "../api/cars/" + id, "", deleteSuccess, error);
-        // }
+        function DeleteUser(id) {
+            ajaxCall("DELETE", baseApi + "/Users/" + id, "", function (data) {
+                updateSuccess(data, "Deleted")
+            }, errorCB);
+        }
 
         function onSubmitFunc() {
             let userAfterEdit = {
@@ -103,7 +117,9 @@
                 regDate: user.regDate,
                 score: $("#score").val()
             }
-            ajaxCall("PUT", baseApi + "/Users/update", JSON.stringify(userAfterEdit), updateSuccess, errorCB);
+            ajaxCall("PUT", baseApi + "/Users/update", JSON.stringify(userAfterEdit), function (data) {
+                updateSuccess(data, "Updated")
+            }, errorCB);
             return false;
         }
 
@@ -115,30 +131,23 @@
             $("#score").val(user.score);
         }
 
-        function updateSuccess(userdata) {
+        function updateSuccess(userdata, type) {
             tbl.clear();
             ajaxCall("GET", baseApi + "/Users", "", function (data) {
+                data = data.filter(user => user.email !== "admin@gmail.com")
                 redrawTable(tbl, data);
+                buttonEvents();
+                $("#editDiv").hide();
+                Swal.fire({
+                    icon: 'success',
+                    text: `User ${type} Successfuly!`,
+                    color: 'white',
+                    background: '#171717'
+                })
             }, errorCB);
 
-            buttonEvents();
-            $("#editDiv").hide();
-            Swal.fire({
-                icon: 'success',
-                text: `User ${userdata.name} Updated Successfuly!`,
-                color: 'white',
-                background: '#171717'
-            })
         }
 
-        // // // success callback function after delete
-        // function deleteSuccess(carsdata) {
-        //     tbl.clear();
-        //     redrawTable(tbl, carsdata);
-        //     buttonEvents(); // after redrawing the table, we must wire the new buttons
-        //     $("#editDiv").hide();
-        //     swal("Deleted Successfuly!", "Great Job", "success");
-        // }
 
         function redrawTable(tbl, data) {
             tbl.clear();
@@ -164,7 +173,8 @@
                                 editBtn = "<button type='button' class = 'editBtn btn btn-success' " + dataUser + "> Edit </button>";
                                 songsBtn = "<button type='button' class = 'songsBtn btn btn-info' " + dataUser + ">Songs </button>";
                                 artistBtn = "<button type='button' class = 'artistsBtn btn btn-info' " + dataUser + "> Artists</button>";
-                                return editBtn + songsBtn + artistBtn;
+                                deleteBtn = "<button type='button' class = 'deleteBtn btn btn-danger' " + dataUser + "> Delete </button>";
+                                return editBtn + songsBtn + artistBtn + deleteBtn;
                             }
                         },
                         { data: "id" },
