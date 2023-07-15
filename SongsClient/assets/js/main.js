@@ -1,7 +1,7 @@
 const baseApi = 'https://localhost:7091/api';
 function errorCB(error) {
     let message = error.responseText;
-    if (message === undefined || message=="Error in DB") window.location.href = "404.html"
+    if (message === undefined || message == "Error in DB") window.location.href = "404.html"
     else {
         Swal.fire({
             icon: 'error',
@@ -235,6 +235,8 @@ $(document).ready(() => {
                     text: "You Logged Out!",
                     color: 'white',
                     background: '#171717',
+                    timer: 2300,
+                    showConfirmButton: false,
                 }).then(() => {
                     updateLoginBtns();
                     window.location.href = "./index.html";
@@ -285,18 +287,18 @@ $(document).ready(() => {
     let updateLoginBtns = () => {
         if (localStorage["user"] != undefined) { //user logged in
             $(".header--cta").html("Hello " + JSON.parse(localStorage["user"]).name);
-            const body = JSON.stringify({
-                data: [
-                    `hello ${JSON.parse(localStorage["user"]).name}`,
-                    "KSP (male)",
-                ]
-            })
-            ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
-                const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
-                var audio = new Audio(audioRes);
-                audio.play();
+            // const body = JSON.stringify({
+            //     data: [
+            //         `hello ${JSON.parse(localStorage["user"]).name}`,
+            //         "KSP (male)",
+            //     ]
+            // })
+            // ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+            //     const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+            //     var audio = new Audio(audioRes);
+            //     audio.play();
 
-            }, errorCB);
+            // }, errorCB);
             $("#loginLink").html('LOGOUT <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
             $('#notMember').hide();
             $('#signUpLink').hide();
@@ -370,16 +372,31 @@ $(document).ready(() => {
     });
 
     function successCBLogin(data) {
-
+        localStorage["user"] = JSON.stringify(data);
         Swal.fire({
             icon: 'success',
             text: "You Logged In Successfully!",
             color: 'white',
-            background: '#171717'
+            background: '#171717',
+            timer: 2300,
+            showConfirmButton: false,
+            didOpen: () => {
+                const body = JSON.stringify({
+                    data: [
+                        `hello ${data.name}`,
+                        "KSP (male)",
+                    ]
+                })
+                ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+                    const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+                    var audio = new Audio(audioRes);
+                    audio.play();
+
+                }, errorCB);
+            }
         }).then(() => {
-            localStorage["user"] = JSON.stringify(data);
-            window.location.href = "./index.html";
             updateLoginBtns();
+            window.location.href = "./index.html";
         })
     }
 
@@ -389,7 +406,7 @@ $(document).ready(() => {
             text: "You Signed Up Successfully!",
             color: 'white',
             background: '#171717'
-        }).then(()=>{
+        }).then(() => {
             localStorage["user"] = JSON.stringify(data);
             window.location.href = "./index.html";
             updateLoginBtns();
