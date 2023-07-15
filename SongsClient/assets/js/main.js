@@ -169,7 +169,6 @@ $(document).ready(() => {
                 return;
             }
             ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/removeArtistFromFav/${currArtist.id}`, "", function (data) {
-                console.log(data);
                 Swal.fire({
                     icon: 'success',
                     text: "Artist removed from your Favorites",
@@ -262,7 +261,6 @@ $(document).ready(() => {
             })
             ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
                 const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
-                console.log(audioRes)
                 var audio = new Audio(audioRes);
                 audio.play();
 
@@ -354,22 +352,22 @@ $(document).ready(() => {
     /////QUIZ/////
 
     function playWrongAnswerSound() {
-        var audio = new Audio("../assets/audio/fail-144746.mp3");
+        var audio = new Audio("./assets/audio/fail-144746.mp3");
         audio.play();
     }
 
     function playCorrectAnswerSound() {
-        var audio = new Audio("../assets/audio/correct-6033.mp3");
+        var audio = new Audio("./assets/audio/correct-6033.mp3");
         audio.play();
     }
 
     function playStartQuizAudio() {
-        var audio = new Audio("../assets/audio/lets-start-the-quiz-b-39670.mp3");
+        var audio = new Audio("./assets/audio/lets-start-the-quiz-b-39670.mp3");
         audio.play();
     }
 
     function playEndQuizAudio() {
-        var audio = new Audio("../assets/audio/electric-chimes-87900.mp3");
+        var audio = new Audio("./assets/audio/electric-chimes-87900.mp3");
         audio.play();
     }
 
@@ -430,12 +428,14 @@ $(document).ready(() => {
                   </tbody>
                 </table>`)
         $('#q_1').on("click", function () {
+            $('.answerDiv').css("pointer-events", "none");
             playCorrectAnswerSound();
             clearInterval(interval);
             $(this).css("border", "2px solid green");
             alertAnswer('Correct');
         });
         $('.wrongAns').on("click", function () {
+            $('.answerDiv').css("pointer-events", "none");
             playWrongAnswerSound();
             clearInterval(interval);
             $(this).css("border", "2px solid red");

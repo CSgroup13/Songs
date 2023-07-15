@@ -1793,7 +1793,11 @@ body {
     }
 
     .work-request--information {
-        margin-bottom: 30px
+        margin-bottom: 30px;
+        flex-wrap:wrap;
+    }
+    .artiststBtns{
+        margin: 5px;
     }
 
     .work-request--information .information-name,
@@ -1974,7 +1978,14 @@ body {
     height: 90%;
     border-radius: 20px;
 }
-
+#searchArtistBtn{
+    background-color: white;
+    border-color:white;
+    color:black
+}
+#searchArtistBtn:hover{
+    opacity: 0.8;
+}
 
 .artiststBtns {
     background-color: #0f33ff;
@@ -1983,7 +1994,7 @@ body {
     border: 1px solid #0f33ff;
     width: 150px !important;
     display: inline-block !important;
-    margin-left: 30px;
+    margin: 8px;
     font-size: 16px !important;
     height: 30px;
 }
