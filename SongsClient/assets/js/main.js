@@ -36,7 +36,7 @@ $(document).ready(() => {
             })
         }
         else {
-            removeFromFavPage=false;
+            removeFromFavPage = false;
             ajaxCall("GET", baseApi + `/Artists/byName/${inputName}/info`, "", function (data) {
                 const artistsDiv = document.getElementById("artists");
                 artistsDiv.innerHTML = "";
@@ -203,6 +203,18 @@ $(document).ready(() => {
             }
             $("#mainFormDiv").append('<h2 id="formHeader1" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
             $("#logoutBtn").click(() => {
+                const body = JSON.stringify({
+                    data: [
+                        `Good Bye ${JSON.parse(localStorage["user"]).name}`,
+                        "KSP (male)",
+                    ]
+                })
+                ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+                    const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+                    var audio = new Audio(audioRes);
+                    audio.play();
+
+                }, errorCB);
                 localStorage.removeItem("user");
                 Swal.fire({
                     icon: 'success',
@@ -315,15 +327,28 @@ $(document).ready(() => {
 
     $('#loginLink').click(function () {
         if (localStorage["user"] != undefined) { //user want to logOut
+            const body = JSON.stringify({
+                data: [
+                    `Good Bye ${JSON.parse(localStorage["user"]).name}`,
+                    "KSP (male)",
+                ]
+            })
+            ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+                const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+                var audio = new Audio(audioRes);
+                audio.play();
+
+            }, errorCB);
             localStorage.removeItem("user");
             Swal.fire({
                 icon: 'success',
                 text: "You Logged Out!",
                 color: 'white',
                 background: '#171717'
+            }).then(() => {
+                updateLoginBtns();
+                window.location.href = "./index.html";
             })
-            updateLoginBtns();
-            window.location.href = "./index.html";
         }
         else { //user want to login
             updateLoginPage("login");
@@ -336,10 +361,11 @@ $(document).ready(() => {
             text: "You Logged In Successfully!",
             color: 'white',
             background: '#171717'
+        }).then(() => {
+            localStorage["user"] = JSON.stringify(data);
+            window.location.href = "./index.html";
+            updateLoginBtns();
         })
-        localStorage["user"] = JSON.stringify(data);
-        window.location.href = "./index.html";
-        updateLoginBtns();
     }
 
     function successCBSignUp(data) {
@@ -348,10 +374,11 @@ $(document).ready(() => {
             text: "You Signed Up Successfully!",
             color: 'white',
             background: '#171717'
+        }).then(()=>{
+            localStorage["user"] = JSON.stringify(data);
+            window.location.href = "./index.html";
+            updateLoginBtns();
         })
-        localStorage["user"] = JSON.stringify(data);
-        window.location.href = "./index.html";
-        updateLoginBtns();
     }
     function errorCBLogin(error) {
         let message = error.responseText;
