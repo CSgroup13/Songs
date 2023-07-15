@@ -287,18 +287,6 @@ $(document).ready(() => {
     let updateLoginBtns = () => {
         if (localStorage["user"] != undefined) { //user logged in
             $(".header--cta").html("Hello " + JSON.parse(localStorage["user"]).name);
-            // const body = JSON.stringify({
-            //     data: [
-            //         `hello ${JSON.parse(localStorage["user"]).name}`,
-            //         "KSP (male)",
-            //     ]
-            // })
-            // ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
-            //     const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
-            //     var audio = new Audio(audioRes);
-            //     audio.play();
-
-            // }, errorCB);
             $("#loginLink").html('LOGOUT <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
             $('#notMember').hide();
             $('#signUpLink').hide();
@@ -510,17 +498,16 @@ $(document).ready(() => {
         const timerElement = document.getElementById('timer');
         let timeLeft = 30;
         timerElement.textContent = timeLeft;
-        const interval = setInterval(() => {
+        interval = setInterval(() => {
             timeLeft--;
             if ($(".quizNav.is-active").length === 0) {
-                clearInterval(interval);
-                currentQuestionIndex = 0;
+                resetQuiz();
                 return;
             }
             timerElement.textContent = timeLeft;
             if (timeLeft === 0) {
                 clearInterval(interval);
-                var audio = new Audio("../assets/audio/buzzer-or-wrong-answer-20582.mp3");
+                var audio = new Audio("./assets/audio/buzzer-or-wrong-answer-20582.mp3");
                 audio.play();
                 timerElement.textContent = 'Time up!';
                 $('.wrongAns').css("border", "2px solid red");
@@ -536,11 +523,18 @@ $(document).ready(() => {
             score += 25;
         setTimeout(() => manageQuiz(), 2000);
     }
-
+    let interval;
     let currentQuestionIndex = 0;
-    let questionsQueue = [getQ2, getQ1, getQ3, getQ4, getQ5, getQ6, getQ7, getQ8];
+    let questArr = [getQ1, getQ2, getQ3, getQ4, getQ5, getQ6, getQ7, getQ8]
+    let questionsQueue = Array.from(questArr);
+    function resetQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+        questionsQueue = Array.from(questArr)
+        clearInterval(interval);
+    }
     function manageQuiz() {
-        if (currentQuestionIndex == questionsQueue.length) {
+        if (questionsQueue.length === 0) {
             playEndQuizAudio();
             $("#Quiz").html(`<div id="QuizoverDiv" class="about--banner"><h2 id="quizHeader">QUIZ OVER!</h2><h3 id="scoreOver">Your Score: ${score}</h3></div>`);
             $("#Quiz").append(`<button id="playAgain">Play Again</button>`);
@@ -551,19 +545,21 @@ $(document).ready(() => {
                 manageQuiz();
             });
             $("#leaderBoard").on('click', () => {
-                var audio = new Audio("../assets/audio/success-fanfare-trumpets-6185.mp3");
+                var audio = new Audio("./assets/audio/success-fanfare-trumpets-6185.mp3");
                 audio.play();
                 ajaxCall("GET", `${baseApi}/Users/leaders`, "", showLeadersboard, errorCB);
             });
             let userId = JSON.parse(localStorage["user"]).id;
             ajaxCall("POST", `${baseApi}/Users/${userId}/Score/${score}`, "", successCBScoreUpdate, errorCB);
-            currentQuestionIndex = 0;
-            score = 0
+            resetQuiz();
             return;
         }
-        renderQuestion(questionsQueue[currentQuestionIndex++]);
+        let rand = Math.floor(Math.random() * questionsQueue.length)
+        renderQuestion(questionsQueue[rand]);
+        questionsQueue.splice(rand,1);
     }
     $(".quizNav").click(() => {
+        resetQuiz();
         renderQuizHTML();
     });
     function showLeadersboard(leaders) {
@@ -1078,6 +1074,7 @@ function successCBAddToFavorite() {
 runSpeechRecog = () => {
     var output = $("#searchInput");
     let recognization = new webkitSpeechRecognition();
+    recognization.lang = 'en-US';
     recognization.onstart = () => {
         output.val("");
     }
