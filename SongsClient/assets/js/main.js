@@ -1,6 +1,20 @@
 const baseApi = 'https://localhost:7091/api';
-
+function errorCB(error) {
+    let message = error.responseText;
+    if (message === undefined) window.location.href = "404.html"
+    else {
+        Swal.fire({
+            icon: 'error',
+            text: message,
+            color: 'white',
+            background: '#171717'
+        })
+    }
+}
 $(document).ready(() => {
+
+    //generate random songs
+    ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
     ///Artists////
     let removeFromFavPage = false;
     $("#showAllArtistsBtn").click(function () {
@@ -36,7 +50,7 @@ $(document).ready(() => {
             })
         }
         else {
-            removeFromFavPage=false;
+            removeFromFavPage = false;
             ajaxCall("GET", baseApi + `/Artists/byName/${inputName}/info`, "", function (data) {
                 const artistsDiv = document.getElementById("artists");
                 artistsDiv.innerHTML = "";
@@ -352,15 +366,6 @@ $(document).ready(() => {
         localStorage["user"] = JSON.stringify(data);
         window.location.href = "./index.html";
         updateLoginBtns();
-    }
-    function errorCBLogin(error) {
-        let message = error.responseText;
-        Swal.fire({
-            icon: 'error',
-            text: message,
-            color: 'white',
-            background: '#171717',
-        })
     }
 
 
@@ -920,21 +925,11 @@ function getQ8() {
     return q6Arr;
 }
 
-function errorCB(error) {
-    let message = error.responseText;
-    Swal.fire({
-        icon: 'error',
-        text: message,
-        color: 'white',
-        background: '#171717'
-    })
-}
+
 
 
 /********************************************OFEK***************************************/
 $(document).ready(() => {
-    //generate random songs
-    ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
     //////////add filters 
     const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
     // Add event listener to each checkbox
@@ -1292,15 +1287,7 @@ function successCBFavRand(ids, data) {
     });
 }
 
-function errorCB(error) {
-    let message = error.responseText;
-    Swal.fire({
-        icon: 'error',
-        text: message,
-        color: 'white',
-        background: '#171717'
-    })
-}
+
 ///////////QUIZ/////////
 
 //generates 3 different artist other than given songArtist
