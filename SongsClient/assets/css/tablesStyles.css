@@ -82,3 +82,6 @@ body {
     border-radius: 5px;
     /* Round the corners of the scrollbar thumb */
 }
+.swal2-popup {
+  font-size: 1.6rem !important;
+}
