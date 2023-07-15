@@ -12,6 +12,7 @@ namespace SongsServer.Controllers
     public class SongsController : ControllerBase
     {
         public string deezerApi = "http://api.deezer.com/search";
+        private HttpWebRequest request;
 
         // GET: api/<SongsController>
         [HttpGet]
@@ -22,6 +23,30 @@ namespace SongsServer.Controllers
                 return Ok(Song.getAllSongs());
             }
             catch (Exception ex) { return BadRequest(ex.Message); }
+            //List<Song> songsList = Song.getAllSongs();
+            //foreach (var song in songsList)
+            //{
+            //    request = (HttpWebRequest)WebRequest.Create(deezerApi + "/track?q=" + song.name);
+            //    request.Method = "GET";
+            //    using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
+            //    using (Stream stream = response.GetResponseStream())
+            //    using (StreamReader reader = new StreamReader(stream))
+            //    {
+            //        string jsonResponse = await reader.ReadToEndAsync();
+            //        var res = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+            //        res = res.data;
+            //        foreach (var item in res)
+            //        {
+            //            if(item.artist.name==song.artistName)
+            //            {
+            //                song.image=item.image;
+            //                song.songPreview=item.preview;
+            //                break;
+            //            }
+            //        }
+            //    }
+            //}
+            //return Ok(songsList);
         }
         // GET: api/<SongsController>/randomSong
         [HttpGet("randomSong")]
@@ -58,7 +83,7 @@ namespace SongsServer.Controllers
             try
             {
                 Song s = Song.getSongByName(songName);
-                string apiUrl = deezerApi + "?q=" + s.name + "&index=0&limit=1&output=json";
+                string apiUrl = deezerApi + "?q=" + s.name + "&index=0&output=json";
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create(apiUrl);
                 request.Method = "GET";
 
@@ -69,17 +94,27 @@ namespace SongsServer.Controllers
                 {
                     string jsonResponse = await reader.ReadToEndAsync();
                     var res = JsonConvert.DeserializeObject<dynamic>(jsonResponse);
+                    var resArr = res.data;
+                    foreach (var item in resArr)
+                    {
+                        if (item.artist.name.ToString().Contains(s.artistName, StringComparison.OrdinalIgnoreCase))
+                        {
+                            s.songPreview = item.preview;
+                            return Ok(s);
+
+                        }
+                    }
                     s.songPreview = res.data[0].preview;
                     return Ok(s);
                 }
-              
+
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-      
+
         // GET: api/<SongsController>/songBylyrics
         [HttpGet("songBylyrics")]
         public IActionResult getByLyrics(string lyrics)
