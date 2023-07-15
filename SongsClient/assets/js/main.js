@@ -520,13 +520,14 @@ $(document).ready(() => {
 
     function alertAnswer(answer) {
         if (answer === "Correct")
-            score += 25;
+            score += 10;
         setTimeout(() => manageQuiz(), 2000);
     }
     let interval;
     let currentQuestionIndex = 0;
-    let questArr = [getQ1, getQ2, getQ3, getQ4, getQ5, getQ6, getQ7, getQ8]
+    let questArr = [getQ1, getQ2, getQ3, getQ4, getQ1, getQ5, getQ6, getQ7, getQ2, getQ8]
     let questionsQueue = Array.from(questArr);
+
     function resetQuiz() {
         currentQuestionIndex = 0;
         score = 0;
@@ -556,7 +557,7 @@ $(document).ready(() => {
         }
         let rand = Math.floor(Math.random() * questionsQueue.length)
         renderQuestion(questionsQueue[rand]);
-        questionsQueue.splice(rand,1);
+        questionsQueue.splice(rand, 1);
     }
     $(".quizNav").click(() => {
         resetQuiz();
@@ -927,7 +928,7 @@ function getQ7() {
     const artistName = randomArtist().name;
     const song = getArtistSongs(artistName)[0];//random song
     const sentence = song.lyrics.substring(start, end);
-    const question = `From which song is the following sentence taken? ${sentence}`;
+    const question = `From which song is the following sentence taken? <br> ${sentence}`;
     const answer = song.name;
     q7.push(question.split("\n")[0]);
     q7.push(answer);
