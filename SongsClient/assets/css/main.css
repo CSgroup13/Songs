@@ -1778,7 +1778,12 @@ body {
 
     }
 }
-
+@media (max-width: 720px) {
+    .work-request--information {
+        margin-bottom: 30px;
+        flex-wrap:wrap;
+    }
+}
 @media (max-width: 600px) {
     .work-request--options label {
         width: 150px;
