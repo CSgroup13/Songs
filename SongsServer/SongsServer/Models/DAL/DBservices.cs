@@ -28,14 +28,20 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     public SqlConnection connect(string conString)
     {
-
-        // read the connection string from the configuration file
-        IConfigurationRoot configuration = new ConfigurationBuilder()
-        .AddJsonFile("appsettings.json").Build();
-        string cStr = configuration.GetConnectionString("myProjDB");
-        SqlConnection con = new SqlConnection(cStr);
-        con.Open();
-        return con;
+        try
+        {
+            // read the connection string from the configuration file
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json").Build();
+            string cStr = configuration.GetConnectionString("myProjDB");
+            SqlConnection con = new SqlConnection(cStr);
+            con.Open();
+            return con;
+        }
+        catch(Exception e)
+        {
+            throw new Exception("Error in DB");
+        }
     }
 
     //---------------------------------------------------------------------------------
@@ -43,26 +49,32 @@ public class DBservices
     //---------------------------------------------------------------------------------
     private SqlCommand CreateCommandWithStoredProcedure(string spName, SqlConnection con, Dictionary<string, object> paramDic)
     {
+        try
+        {
+            SqlCommand cmd = new SqlCommand(); // create the command object
 
-        SqlCommand cmd = new SqlCommand(); // create the command object
+            cmd.Connection = con;              // assign the connection to the command object
 
-        cmd.Connection = con;              // assign the connection to the command object
+            cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
 
-        cmd.CommandText = spName;      // can be Select, Insert, Update, Delete 
+            cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
 
-        cmd.CommandTimeout = 10;           // Time to wait for the execution' The default is 30 seconds
+            cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be text
 
-        cmd.CommandType = CommandType.StoredProcedure; // the type of the command, can also be text
+            if (paramDic != null)
+                foreach (KeyValuePair<string, object> param in paramDic)
+                {
+                    cmd.Parameters.AddWithValue(param.Key, param.Value);
 
-        if (paramDic != null)
-            foreach (KeyValuePair<string, object> param in paramDic)
-            {
-                cmd.Parameters.AddWithValue(param.Key, param.Value);
-
-            }
+                }
 
 
-        return cmd;
+            return cmd;
+        }
+        catch (Exception e)
+        {
+            throw new Exception("Error in DB");
+        }
     }
 
     //*****************************************************Users Methods*********************************************************************************
