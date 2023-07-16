@@ -666,11 +666,11 @@ body {
 }
 
 .side-nav li:nth-child(6)::before {
-    content: "Login"
+    content: "Additions"
 }
 
 .side-nav li:nth-child(7)::before {
-    content: "Additions"
+    content: "Login"
 }
 
 .side-nav li.logout::before {

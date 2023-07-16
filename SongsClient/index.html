@@ -55,8 +55,8 @@
               <li onclick="renderFavorites()"><span>Favorites</span></li>
               <li><span>Artists</span></li>
               <li class="quizNav"><span>Quiz</span></li>
-              <li id="loginLi"></li>
               <li class="additions"></li>
+              <li id="loginLi"></li>
             </ul>
           </nav>
           <ul class="l-main-content main-content">
@@ -185,10 +185,6 @@
               </div>
             </li>
             <li class="l-section section">
-              <div id="mainFormDiv" class="hire">
-              </div>
-            </li>
-            <li class="l-section section">
               <div id="additionsPage" class="hire">
                 <div class="contentWrapper">
                   <h3 class="additionHeader">Hugging Face Text-To-Speech</h3>
@@ -207,6 +203,10 @@
                 </div>
               </div>              
             </li>
+            <li class="l-section section">
+              <div id="mainFormDiv" class="hire">
+              </div>
+            </li>
           </ul>
         </div>
       </div>
@@ -217,6 +217,7 @@
       <li onclick="renderFavorites()">Favorites</li>
       <li>Artists</li>
       <li class="quizNav">Quiz</li>
+      <li>Additions</li>
       <li id="outBarLogin">Login</li>
     </ul>
   </div>
@@ -225,7 +226,7 @@
   <script>window.jQuery || document.write('<script src="assets/js/vendor/jquery-2.2.4.min.js"><\/script>')</script>
   <script src="assets/js/functions-min.js"></script>
   <script src="https://apis.google.com/js/api.js"></script>
-  <script>
+  <!-- <script>
     /**
      * Sample JavaScript code for youtube.search.list
      * See instructions for running APIs Explorer code samples locally:
@@ -258,7 +259,7 @@
     gapi.load("client:auth2", function () {
       gapi.auth2.init({ client_id: "YOUR_CLIENT_ID" });
     });
-  </script>
+  </script> -->
 
 
 </body>

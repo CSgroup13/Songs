@@ -122,12 +122,12 @@ $(document).ready(() => {
         });
         const swal = Swal.fire({
             title: `About ${currArtist.name}`,
-            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeFromFav_${currArtist.name}" class="removeArtistFromFav title="Remove From Favorite">&#x1F494;</p><br><a class="songsDetails" id="${currArtist.name}_songsDetails">click here for songs of ${currArtist.name}</a>`,
+            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeFromFav_${currArtist.id}" class="removeArtistFromFav title="Remove From Favorite">&#x1F494;</p><br><a class="songsDetails" id="${currArtist.id}_songsDetails">click here for songs of ${currArtist.name}</a>`,
             color: 'white',
             background: '#171717',
             confirmButtonText: "Close",
         });
-        $(`#${currArtist.name}_songsDetails`).click(() => {
+        $(`#${currArtist.id}_songsDetails`).click(() => {
             event.preventDefault();
             let songsList = [];
             $.ajax({ //get artist songs list
@@ -145,12 +145,17 @@ $(document).ready(() => {
             });
             const songsDiv = $("<div>");
             for (let song of songsList) {
-                songsDiv.append(`<div class="songsList"><a>${song.name}</a></div>`);
+                songsDiv.append(`<div id="artistSong_${song.id}" class="songsList"><a>${song.name}</a></div>`);
             }
             swal.update({
                 title: `Songs of ${currArtist.name}`,
                 html: songsDiv
             });
+            for (let song of songsList) {
+                $(`#artistSong_${song.id}`).on('click', function () {
+                    showSongPopup(song.name)
+                })
+            }
         })
         $(`#artistHeart_${currArtist.id}`).click(() => {
             if (localStorage.user === undefined) {
@@ -176,7 +181,7 @@ $(document).ready(() => {
             }, errorCB);
         })
 
-        $(`#removeFromFav_${currArtist.name}`).click(() => {
+        $(`#removeFromFav_${currArtist.id}`).click(() => {
             if (localStorage.user === undefined) {
                 Swal.fire({
                     icon: 'error',
@@ -792,7 +797,7 @@ function getSongsSentences(artistName) {
     const songs = getArtistSongs(artistName);
     const sentences = [];
     for (let song of songs) {
-        let sentence = "“"+song.lyrics.substring(start, end)+"..”";
+        let sentence = "“" + song.lyrics.substring(start, end) + "..”";
         sentences.push(sentence);
     }
     return sentences;
@@ -800,7 +805,7 @@ function getSongsSentences(artistName) {
 
 function getSongsSentenceOFDifferentArtist(artistName) {
     const song = getRandomSongOfDifferentArtist(artistName);
-    let sentence = "“"+song.lyrics.substring(start, end)+"..”";
+    let sentence = "“" + song.lyrics.substring(start, end) + "..”";
 
     return sentence;
 }
@@ -975,14 +980,14 @@ function getQ8() {
 
             const randInt = Math.floor(Math.random() * 3)
             const songName = songs[randInt].name;
-            const songLyrics = "“"+songs[randInt].lyrics.substring(start, end);
+            const songLyrics = "“" + songs[randInt].lyrics.substring(start, end);
             const songArtist = songs[randInt].artistName
-            q6Arr.push(`Which one of the lyrics is from: ${songName} ?`, songLyrics+"..”")
+            q6Arr.push(`Which one of the lyrics is from: ${songName} ?`, songLyrics + "..”")
             let diffArtist = []
             diffArtist.push(...generateDiff3Artists(songArtist))
             for (let i = 0; i < 3; i++) {
                 let lyrics = getArtistSongs(diffArtist[i])[0].lyrics.substring(start, end)
-                q6Arr.push("“"+lyrics+"..”")
+                q6Arr.push("“" + lyrics + "..”")
             }
         },
         error: errorCB
