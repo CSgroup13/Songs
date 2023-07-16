@@ -582,6 +582,7 @@ $(document).ready(() => {
             quizDiv.html(`<div class="about--banner"><h2 id="quizHeader">Songs Quiz</h2></div>`);
             quizDiv.append(`<button id="startQuizBtn">Start Quiz</button>`);
             $("#startQuizBtn").on('click', () => {
+                questionsQueue = Array.from(questArr);
                 playStartQuizAudio();
                 manageQuiz();
             });
@@ -850,7 +851,7 @@ function getQ2() {
     let q2 = [];
     const artist = randomArtist()
     const artistName = artist.name;
-    const question = "Who is this artist?" + `<br><br><img src="${artist.image}" id="quiz_image">`;
+    const question = "Who is this artist?" + `<br><img src="${artist.image}" id="quiz_image">`;
     q2.push(question, artistName);
     q2.push(...generateDiff3Artists(artistName));
     return q2;
