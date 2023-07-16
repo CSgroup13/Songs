@@ -145,7 +145,7 @@ $(document).ready(() => {
             });
             const songsDiv = $("<div>");
             for (let song of songsList) {
-                songsDiv.append(`<div class="songsList"><a id="songLink_${song.name}">${song.name}</a></div>`);
+                songsDiv.append(`<div class="songsList"><a>${song.name}</a></div>`);
             }
             swal.update({
                 title: `Songs of ${currArtist.name}`,
@@ -1377,3 +1377,9 @@ function generateDiff3Artists(songArtist) {
     return diffArtists;
 }
 
+$(document).ready(function () {
+    $(".artiststBtns").on("click", function () {
+        $(".artiststBtns").removeClass("active");
+        $(this).addClass("active");
+    });
+});
