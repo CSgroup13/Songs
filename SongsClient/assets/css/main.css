@@ -955,12 +955,6 @@ body {
 
 }
 
-@media only screen and (min-width: 1500px) {
-    .work--lockup {
-        margin-top: 100px !important;
-    }
-}
-
 .work h2 {
     margin: 0 0 20px 0;
     font-size: 30px;
@@ -980,7 +974,8 @@ body {
     width: 80%;
     margin: 0 auto;
     padding: 0;
-    list-style: none
+    list-style: none;
+    margin-top:120px;
 }
 
 .work--lockup .slider--item {
@@ -1631,9 +1626,14 @@ body {
     display: flex;
     width: 100%;
     -webkit-box-pack: justify;
-    -webkit-justify-content: space-between;
+    -webkit-justify-content: center;
     -ms-flex-pack: justify;
-    justify-content: space-between
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.work-request--options .options-a label {
+    margin:8px;
+
 }
 
 .work-request--options .options-b {
@@ -1647,7 +1647,7 @@ body {
     flex-wrap: wrap;
     -webkit-justify-content: space-around;
     -ms-flex-pack: distribute;
-    justify-content: space-around
+    justify-content: space-around;
 }
 
 .work-request--options label {
@@ -1699,11 +1699,25 @@ body {
     width: 100%;
     -webkit-box-pack: justify;
     -ms-flex-pack: justify;
-    margin-bottom: 30px;
+    margin: 0px;
     display: flex;
     justify-content: center;
 
 }
+
+@media (max-width: 400px) {
+    .work-request--information{
+        margin-top: 0px;
+    }
+    .slider{
+        margin-top: 0px !important;
+    }
+    .slider--item-title{
+        margin-bottom: 0px;
+        margin-top: 10px !important;
+    }
+}
+
 
 .work-request--information .information-name,
 .work-request--information .information-email {
@@ -2097,13 +2111,25 @@ body {
 #quiz_image {
     border-radius: 25px;
 }
-
-#artistSongsDetails {
+#Filter{
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+.songsDetails {
     cursor: pointer;
     color: rgb(0, 242, 255);
 }
-
-#artistSongsDetails:hover {
+.songsList{
+    margin: 18px;
+    cursor: pointer;
+}
+.songsList:hover{
+    color: #0f33ff;
+}
+.songsDetails:hover {
     opacity: .7;
 }
 
@@ -2253,7 +2279,7 @@ body {
         width: 100% !important;
         margin: auto;
     }
-
+}
     @media screen and (max-width: 1300px) {
         #Quiz {
             width: 60%;
@@ -2330,7 +2356,7 @@ body {
         margin-top: 10px;
     }
 
-    #removeArtistFromFav {
+    .removeArtistFromFav {
         font-size: 26px;
         display: inline-block;
         margin: 15px;
@@ -2409,4 +2435,3 @@ body {
     #audioPlayer {
         margin-top: 20px;
     }
-}

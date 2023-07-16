@@ -122,12 +122,12 @@ $(document).ready(() => {
         });
         const swal = Swal.fire({
             title: `About ${currArtist.name}`,
-            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a id="artistSongsDetails">click here for songs of ${currArtist.name}</a>`,
+            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeFromFav_${currArtist.name}" class="removeArtistFromFav title="Remove From Favorite">&#x1F494;</p><br><a class="songsDetails" id="${currArtist.name}_songsDetails">click here for songs of ${currArtist.name}</a>`,
             color: 'white',
             background: '#171717',
             confirmButtonText: "Close",
         });
-        $("#artistSongsDetails").click(() => {
+        $(`#${currArtist.name}_songsDetails`).click(() => {
             event.preventDefault();
             let songsList = [];
             $.ajax({ //get artist songs list
@@ -145,7 +145,7 @@ $(document).ready(() => {
             });
             const songsDiv = $("<div>");
             for (let song of songsList) {
-                songsDiv.append(`<p>${song.name}</p>`);
+                songsDiv.append(`<div class="songsList"><a id="songLink_${song.name}">${song.name}</a></div>`);
             }
             swal.update({
                 title: `Songs of ${currArtist.name}`,
@@ -176,7 +176,7 @@ $(document).ready(() => {
             }, errorCB);
         })
 
-        $('#removeArtistFromFav').click(() => {
+        $(`#removeFromFav_${currArtist.name}`).click(() => {
             if (localStorage.user === undefined) {
                 Swal.fire({
                     icon: 'error',
@@ -1127,7 +1127,7 @@ function successCBSong(data) {
                     </ul>
                   </div>`)
         $(`#slideSong_${data.id}`).click(function () {
-            showSongPopup(data.id, data.name);
+            showSongPopup(data.name);
         });
     }
     else {
@@ -1146,7 +1146,7 @@ function successCBSong(data) {
         </a>
     </li>`)
         $(`#slideSong_${data[0].id}`).click(function () {
-            showSongPopup(data[0].id, data[0].name);
+            showSongPopup(data[0].name);
         });
         if (data.length > 1) {
             $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="slideSong_${data[1].id}">
@@ -1159,7 +1159,7 @@ function successCBSong(data) {
             </a>
           </li>`)
             $(`#slideSong_${data[1].id}`).click(function () {
-                showSongPopup(data[1].id, data[1].name);
+                showSongPopup(data[1].name);
             });
         }
         if (data.length > 2) {
@@ -1173,7 +1173,7 @@ function successCBSong(data) {
             </a>
             </li>`)
             $(`#slideSong_${data[2].id}`).click(function () {
-                showSongPopup(data[2].id, data[2].name);
+                showSongPopup(data[2].name);
             });
         }
         for (let i = 3; i < data.length; i++) {
@@ -1187,7 +1187,7 @@ function successCBSong(data) {
           </a>
              </li> `)
             $(`#slideSong_${data[i].id}`).click(function () {
-                showSongPopup(data[i].id, data[i].name);
+                showSongPopup(data[i].name);
             });
         }
         if (data.length > 2) {
@@ -1210,13 +1210,13 @@ function successCBSong(data) {
         workSlider();
     }
 }
-function showSongPopup(songId, songName) {
+function showSongPopup(songName) {
     ajaxCall("GET", baseApi + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
 }
 
 function successCBSongLyrics(data) {
     Swal.fire({
-        title: `${data.name} Lyrics`,
+        title: `${data.name}`,
         html: `<p>&#x1F44D; ${data.rate}</p>
         <div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                <br>
