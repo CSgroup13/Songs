@@ -792,7 +792,7 @@ function getSongsSentences(artistName) {
     const songs = getArtistSongs(artistName);
     const sentences = [];
     for (let song of songs) {
-        let sentence = song.lyrics.substring(start, end);
+        let sentence = "“"+song.lyrics.substring(start, end)+"..”";
         sentences.push(sentence);
     }
     return sentences;
@@ -800,7 +800,7 @@ function getSongsSentences(artistName) {
 
 function getSongsSentenceOFDifferentArtist(artistName) {
     const song = getRandomSongOfDifferentArtist(artistName);
-    let sentence = song.lyrics.substring(start, end);
+    let sentence = "“"+song.lyrics.substring(start, end)+"..”";
 
     return sentence;
 }
@@ -927,7 +927,7 @@ function getQ5() {
             const randInt = Math.floor(Math.random() * 3)
             const songLyrics = songs[randInt].lyrics.substring(start, end)
             const songArtist = songs[randInt].artistName
-            q5Arr.push(`Who sang: ${songLyrics} ?`, songArtist)
+            q5Arr.push(`Who sang: “${songLyrics}.. ” ?`, songArtist)
             q5Arr.push(...generateDiff3Artists(songArtist))
         },
         error: errorCB
@@ -975,14 +975,14 @@ function getQ8() {
 
             const randInt = Math.floor(Math.random() * 3)
             const songName = songs[randInt].name;
-            const songLyrics = songs[randInt].lyrics.substring(start, end)
+            const songLyrics = "“"+songs[randInt].lyrics.substring(start, end);
             const songArtist = songs[randInt].artistName
-            q6Arr.push(`Which one of the lyrics is from: ${songName} ?`, songLyrics)
+            q6Arr.push(`Which one of the lyrics is from: ${songName} ?`, songLyrics+"..”")
             let diffArtist = []
             diffArtist.push(...generateDiff3Artists(songArtist))
             for (let i = 0; i < 3; i++) {
                 let lyrics = getArtistSongs(diffArtist[i])[0].lyrics.substring(start, end)
-                q6Arr.push(lyrics)
+                q6Arr.push("“"+lyrics+"..”")
             }
         },
         error: errorCB
