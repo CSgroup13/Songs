@@ -790,7 +790,8 @@ body {
 .intro--banner img {
     position: absolute;
     bottom: 21px;
-    right: -12px
+    right: -12px;
+    width: 44%;
 }
 
 .intro--options {
@@ -2201,15 +2202,18 @@ body {
     text-align: center;
     cursor: pointer;
 }
-#loginSignUp{
+
+#loginSignUp {
     margin-top: 18px;
     text-align: center;
     font-size: 16px;
 }
+
 .randSongs:hover {
     color: #0f33ff !important;
 }
-.signUpLink{
+
+.signUpLink {
     display: inline;
     position: relative;
     padding: 5px 17px 5px 12px;
@@ -2358,10 +2362,6 @@ body {
         color: red !important;
     }
 
-    #mainImage {
-        width: 41%;
-    }
-
     #logoHeader {
         text-transform: none;
     }
@@ -2409,3 +2409,4 @@ body {
     #audioPlayer {
         margin-top: 20px;
     }
+}
