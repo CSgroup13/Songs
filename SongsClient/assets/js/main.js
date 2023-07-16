@@ -217,34 +217,36 @@ $(document).ready(() => {
             }
             $("#mainFormDiv").append('<h2 id="formHeader1" >Are you sure you want to logout?</h2><button id="logoutBtn" class="btnbtn">Log Out</button>');
             $("#logoutBtn").click(() => {
-                const body = JSON.stringify({
-                    data: [
-                        `Good Bye ${JSON.parse(localStorage["user"]).name}`,
-                        "KSP (male)",
-                    ]
-                })
-                ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
-                    const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
-                    var audio = new Audio(audioRes);
-                    audio.play();
-
-                }, errorCB);
-                localStorage.removeItem("user");
                 Swal.fire({
                     icon: 'success',
                     text: "You Logged Out!",
                     color: 'white',
                     background: '#171717',
-                    timer: 2300,
+                    timer: 3500,
                     showConfirmButton: false,
+                    didOpen: () => {
+                        const body = JSON.stringify({
+                            data: [
+                                `Good Bye ${JSON.parse(localStorage["user"]).name}`,
+                                "KSP (male)",
+                            ]
+                        })
+                        ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+                            const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+                            var audio = new Audio(audioRes);
+                            audio.play();
+
+                        }, errorCB);
+                    }
                 }).then(() => {
+                    localStorage.removeItem("user");
                     updateLoginBtns();
                     window.location.href = "./index.html";
                 })
             })
         }
         else if (page === "login") { //login page
-            $("#mainFormDiv").append('<h2 id="formHeader2">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" placeHolder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="logPassInp" type="text" spellcheck="false" placeholder="Password" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Log In"></form>');
+            $("#mainFormDiv").append('<h2 id="formHeader2">Log in to enjoy your music</h2><form id="loginForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-email"><input id="logEmailInp" type="email" spellcheck="false" placeHolder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="logPassInp" type="password" spellcheck="false" placeholder="Password" title="password must has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Log In"></form><div id="loginSignUp"><span class="notMember">Not a Member? </span><button class="signUpLink cta notMember"><u>Sign Up Now</u></button></div>');
             $('#logEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
             $('#loginForm').submit(function () {
                 let email = $("#logEmailInp").val();
@@ -261,7 +263,7 @@ $(document).ready(() => {
             })
         }
         else { //signup page
-            $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" placeholder="Name" title="name must include only letters" required ></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" placeholder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="regPassInp" type="text" spellcheck="false" placeholder="Password" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Sign Up"></form>');
+            $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" placeholder="Name" title="name must include only letters" required ></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" placeholder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="regPassInp" type="password" spellcheck="false" placeholder="Password" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Sign Up"></form>');
             $('#regNameInp').attr('pattern', '[a-zA-Z]+');
             $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
             $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
@@ -288,8 +290,8 @@ $(document).ready(() => {
         if (localStorage["user"] != undefined) { //user logged in
             $(".header--cta").html("Hello " + JSON.parse(localStorage["user"]).name);
             $("#loginLink").html('LOGOUT <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
-            $('#notMember').hide();
-            $('#signUpLink').hide();
+            $('.notMember').hide();
+            $('.signUpLink').hide();
             $('.side-nav li:nth-child(6)').addClass('logout');
             $("#outBarLogin").html("Logout");
             updateLoginPage("logout");
@@ -297,8 +299,8 @@ $(document).ready(() => {
         else { //guest
             $(".header--cta").html("Hello Guest");
             $("#loginLink").html('Login <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
-            $('#notMember').show();
-            $('#signUpLink').show();
+            $('.notMember').show();
+            $('.signUpLink').show();
             $('.side-nav li:nth-child(6)').removeClass('logout');
             $("#outBarLogin").html("Login");
             updateLoginPage("login");
@@ -307,7 +309,7 @@ $(document).ready(() => {
     updateLoginBtns();
     updateLoginPage("login");
 
-    $('#signUpLink').click(function () {
+    $(document).on('click', '.signUpLink', function () {
         updateLoginPage("signup");
     });
 
@@ -331,25 +333,29 @@ $(document).ready(() => {
 
     $('#loginLink').click(function () {
         if (localStorage["user"] != undefined) { //user want to logOut
-            const body = JSON.stringify({
-                data: [
-                    `Good Bye ${JSON.parse(localStorage["user"]).name}`,
-                    "KSP (male)",
-                ]
-            })
-            ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
-                const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
-                var audio = new Audio(audioRes);
-                audio.play();
-
-            }, errorCB);
-            localStorage.removeItem("user");
             Swal.fire({
                 icon: 'success',
                 text: "You Logged Out!",
                 color: 'white',
-                background: '#171717'
+                background: '#171717',
+                timer: 3500,
+                showConfirmButton: false,
+                didOpen: () => {
+                    const body = JSON.stringify({
+                        data: [
+                            `Good Bye ${JSON.parse(localStorage["user"]).name}`,
+                            "KSP (male)",
+                        ]
+                    })
+                    ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+                        const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+                        var audio = new Audio(audioRes);
+                        audio.play();
+
+                    }, errorCB);
+                }
             }).then(() => {
+                localStorage.removeItem("user");
                 updateLoginBtns();
                 window.location.href = "./index.html";
             })
@@ -366,7 +372,7 @@ $(document).ready(() => {
             text: "You Logged In Successfully!",
             color: 'white',
             background: '#171717',
-            timer: 2300,
+            timer: 3500,
             showConfirmButton: false,
             didOpen: () => {
                 const body = JSON.stringify({
@@ -389,13 +395,29 @@ $(document).ready(() => {
     }
 
     function successCBSignUp(data) {
+        localStorage["user"] = JSON.stringify(data);
         Swal.fire({
             icon: 'success',
             text: "You Signed Up Successfully!",
             color: 'white',
-            background: '#171717'
+            background: '#171717',
+            timer: 2300,
+            showConfirmButton: false,
+            didOpen: () => {
+                const body = JSON.stringify({
+                    data: [
+                        `hello ${data.name}`,
+                        "KSP (male)",
+                    ]
+                })
+                ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
+                    const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
+                    var audio = new Audio(audioRes);
+                    audio.play();
+
+                }, errorCB);
+            }
         }).then(() => {
-            localStorage["user"] = JSON.stringify(data);
             window.location.href = "./index.html";
             updateLoginBtns();
         })

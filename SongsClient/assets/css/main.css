@@ -1714,6 +1714,7 @@ body {
 }
 
 .work-request--information input[type="text"],
+.work-request--information input[type="password"],
 .work-request--information input[type="email"] {
     width: 100%;
     padding: 0 0 5px 0;
@@ -1725,6 +1726,7 @@ body {
 }
 
 .work-request--information input[type="text"]:focus,
+.work-request--information input[type="password"]:focus,
 .work-request--information input[type="email"]:focus {
     outline: none;
     background-color: #0c0c0c
@@ -1811,8 +1813,13 @@ body {
     .work-request--information .information-name,
     .work-request--information .information-email {
         height: 40px;
-        font-size: 24px
+        font-size: 24px;
+        width: 40%;
     }
+}
+
+.information-name {
+    margin: 0px 10px;
 }
 
 .perspective {
@@ -2194,9 +2201,22 @@ body {
     text-align: center;
     cursor: pointer;
 }
-
+#loginSignUp{
+    margin-top: 18px;
+    text-align: center;
+    font-size: 16px;
+}
 .randSongs:hover {
     color: #0f33ff !important;
+}
+.signUpLink{
+    display: inline;
+    position: relative;
+    padding: 5px 17px 5px 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: transparent;
+    border: none;
 }
 
 .song-popup {
@@ -2229,164 +2249,163 @@ body {
         width: 100% !important;
         margin: auto;
     }
-}
 
-@media screen and (max-width: 1300px) {
-    #Quiz {
-        width: 60%;
-        height: 80%;
+    @media screen and (max-width: 1300px) {
+        #Quiz {
+            width: 60%;
+            height: 80%;
+        }
+
+        thead {
+            height: 200px;
+        }
+
+        #quiz_image {
+            height: 200px;
+        }
     }
 
-    thead {
+    .song-popup::-webkit-scrollbar {
+        width: 10px;
+        /* Set the width of the scrollbar */
+        background-color: transparent;
+        /* Set the background color of the scrollbar */
+    }
+
+    .song-popup::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.5);
+        /* Set the color of the scrollbar thumb */
+        border-radius: 5px;
+        /* Round the corners of the scrollbar thumb */
+    }
+
+    .artist {
+        perspective: 1000px;
+        width: 200px;
         height: 200px;
     }
 
-    #quiz_image {
-        height: 200px;
-    }
-}
-
-.song-popup::-webkit-scrollbar {
-    width: 10px;
-    /* Set the width of the scrollbar */
-    background-color: transparent;
-    /* Set the background color of the scrollbar */
-}
-
-.song-popup::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.5);
-    /* Set the color of the scrollbar thumb */
-    border-radius: 5px;
-    /* Round the corners of the scrollbar thumb */
-}
-
-.artist {
-    perspective: 1000px;
-    width: 200px;
-    height: 200px;
-}
-
-.artist {
-    position: relative;
-    width: 180px;
-    height: 180px;
-    transform-style: preserve-3d;
-    transition: transform 0.6s;
-    margin: 15px;
-}
-
-.front {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
-}
-
-.front {
-    z-index: 2;
-}
-
-.back {
-    transform: rotateY(180deg);
-    height: 90%;
-}
-
-.front>img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 20px;
-}
-
-.back>h4 {
-    color: #fc42ea;
-}
-
-div.about h1 {
-    font-size: 24px;
-    margin-top: 10px;
-}
-
-#removeArtistFromFav {
-    font-size: 26px;
-    display: inline-block;
-    margin: 15px;
-    cursor: pointer;
-}
-
-.artist:hover {
-    transform: rotateY(180deg);
-}
-
-.artist {
-    cursor: pointer;
-}
-
-.artiststBtns {
-    display: inline-block;
-    width: 60px;
-    background-color: #0f33ff;
-    color: white;
-    font-size: 20px;
-}
-
-.fa.fa-heart-o {
-    cursor: pointer;
-    font-size: 25px;
-}
-
-.fa.fa-heart-o:hover {
-    color: red !important;
-}
-
-#mainImage {
-    width: 41%;
-}
-
-#logoHeader {
-    text-transform: none;
-}
-
-.loader {
-    width: 48px;
-    height: 48px;
-    border: 5px solid #FFF;
-    border-bottom-color: #0f33ff;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: rotation 1s linear infinite;
-}
-
-@keyframes rotation {
-    0% {
-        transform: rotate(0deg);
+    .artist {
+        position: relative;
+        width: 180px;
+        height: 180px;
+        transform-style: preserve-3d;
+        transition: transform 0.6s;
+        margin: 15px;
     }
 
-    100% {
-        transform: rotate(360deg);
+    .front {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
     }
-}
 
-.adminButton {
-    display: inline-block;
-    padding: 5px;
-    background-color: #b50000;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    font-size: 12px;
-    margin-right: 5px;
-}
+    .front {
+        z-index: 2;
+    }
 
-.adminButton:hover {
-    opacity: 0.8;
-}
+    .back {
+        transform: rotateY(180deg);
+        height: 90%;
+    }
 
-#adminBtns {
-    margin-top: 10px;
-}
+    .front>img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 20px;
+    }
 
-#audioPlayer {
-    margin-top: 20px;
-}
+    .back>h4 {
+        color: #fc42ea;
+    }
+
+    div.about h1 {
+        font-size: 24px;
+        margin-top: 10px;
+    }
+
+    #removeArtistFromFav {
+        font-size: 26px;
+        display: inline-block;
+        margin: 15px;
+        cursor: pointer;
+    }
+
+    .artist:hover {
+        transform: rotateY(180deg);
+    }
+
+    .artist {
+        cursor: pointer;
+    }
+
+    .artiststBtns {
+        display: inline-block;
+        width: 60px;
+        background-color: #0f33ff;
+        color: white;
+        font-size: 20px;
+    }
+
+    .fa.fa-heart-o {
+        cursor: pointer;
+        font-size: 25px;
+    }
+
+    .fa.fa-heart-o:hover {
+        color: red !important;
+    }
+
+    #mainImage {
+        width: 41%;
+    }
+
+    #logoHeader {
+        text-transform: none;
+    }
+
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #FFF;
+        border-bottom-color: #0f33ff;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .adminButton {
+        display: inline-block;
+        padding: 5px;
+        background-color: #b50000;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 12px;
+        margin-right: 5px;
+    }
+
+    .adminButton:hover {
+        opacity: 0.8;
+    }
+
+    #adminBtns {
+        margin-top: 10px;
+    }
+
+    #audioPlayer {
+        margin-top: 20px;
+    }
