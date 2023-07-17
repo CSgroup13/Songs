@@ -159,11 +159,39 @@ namespace SongsServer.Controllers
 
         // POST api/<SongsController>
         [HttpPost("addComment/{songId}/{userId}")]
-        public IActionResult addComment(string songId,int userId, [FromBody] string comment)
+        public IActionResult addComment(int songId,int userId, [FromBody] string comment)
         {
             try
             {
                 return Ok(Song.addComment(songId, userId, comment));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // GET api/<SongsController>
+        [HttpGet("comments/{songId}")]
+        public IActionResult getComments(int songId)
+        {
+            try
+            {
+                return Ok(Song.getComments(songId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        // DELETE api/<SongsController>
+        [HttpDelete("deleteComment/{songId}/{commentId}")]
+        public IActionResult deleteComment(int songId, int commentId)
+        {
+            try
+            {
+                return Ok(Song.deleteComment(songId, commentId));
             }
             catch (Exception ex)
             {

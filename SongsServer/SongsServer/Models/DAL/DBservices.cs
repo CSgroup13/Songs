@@ -678,7 +678,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method Insert a comment to songsComments table
     //--------------------------------------------------------------------------------------------------
-    public List<ExpandoObject> addCommentToSong(string songId,int userId,string comment)
+    public List<ExpandoObject> addCommentToSong(int songId,int userId,string comment)
     {
         SqlConnection con;
         SqlCommand cmd;
@@ -709,8 +709,124 @@ public class DBservices
             while (dataReader.Read())
             {
                 dynamic obj = new ExpandoObject();
+                obj.id = Convert.ToInt32(dataReader["id"]);
                 obj.songId = Convert.ToInt32(dataReader["songId"]);
                 obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.userName = dataReader["name"].ToString();
+                obj.comment = dataReader["comment"].ToString();
+
+                comments.Add(obj);
+            }
+            return comments;
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Remove a comment from songsComments table
+    //--------------------------------------------------------------------------------------------------
+    public List<ExpandoObject> deleteCommentOfSong(int songId,int commentId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@songId", songId);
+        paramDic.Add("@commentId", commentId);
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_DeleteCommentFromSong", con, paramDic);// create the command
+
+        List<ExpandoObject> comments = new List<ExpandoObject>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                dynamic obj = new ExpandoObject();
+                obj.id = Convert.ToInt32(dataReader["id"]);
+                obj.songId = Convert.ToInt32(dataReader["songId"]);
+                obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.userName = dataReader["name"].ToString();
+                obj.comment = dataReader["comment"].ToString();
+
+                comments.Add(obj);
+            }
+            return comments;
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method return all songs comments
+    //--------------------------------------------------------------------------------------------------
+    public List<ExpandoObject> getCommentsOfSong(int songId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@songId", songId);
+
+        cmd = CreateCommandWithStoredProcedure("SP_getSongsComments", con, paramDic);// create the command
+
+        List<ExpandoObject> comments = new List<ExpandoObject>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                dynamic obj = new ExpandoObject();
+                obj.id = Convert.ToInt32(dataReader["id"]);
+                obj.songId = Convert.ToInt32(dataReader["songId"]);
+                obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.userName = dataReader["name"].ToString();
                 obj.comment = dataReader["comment"].ToString();
 
                 comments.Add(obj);
