@@ -177,7 +177,7 @@ $(document).ready(() => {
                 const artistDiv = $(".back").filter(function () {
                     return $(this).find("h4").text() === data.name;
                 });
-                artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
+                artistDiv.find("p").last().html(`&#xf004; ${data.rate}`);
             }, errorCB);
         })
 
@@ -201,7 +201,7 @@ $(document).ready(() => {
                 const artistDiv = $(".back").filter(function () {
                     return $(this).find("h4").text() === currArtist.name;
                 });
-                artistDiv.find("p").last().html(`&#x1F44D; ${data.rate}`);
+                artistDiv.find("p").last().html(`&#xf004; ${data.rate}`);
                 if (removeFromFavPage) {
                     $("#showFavoritesArtists").click();
                 }
@@ -706,7 +706,7 @@ function addArtistsToDiv(artists) {
                     const playcount = data.artist.stats.playcount;
                     const listenersElement = $("<p>").text("listeners: " + listeners);
                     const playcountElement = $("<p>").text("playcount: " + playcount);
-                    const rateElement = $("<p>").html("&#x1F44D; " + artist.rate);
+                    const rateElement = $("<p class='fa'>").html("&#xf004; " + artist.rate);
                     $(this).find("#lastFmDetails").html("");
                     $(this).find("#lastFmDetails").append(listenersElement, playcountElement, rateElement);
                 }
@@ -876,11 +876,14 @@ function getQ1() {
 }
 function getQ2() {
     let q2 = [];
+
     const artist = randomArtist()
     const artistName = artist.name;
     const question = "Who is this artist?" + `<br><img src="${artist.image}" id="quiz_image">`;
     q2.push(question, artistName);
     q2.push(...generateDiff3Artists(artistName));
+
+
     return q2;
 }
 function getQ3() {
@@ -1220,17 +1223,19 @@ function showSongPopup(songName) {
 }
 
 function successCBSongLyrics(data) {
-    Swal.fire({
+    // generateYouTubeLink(data.name, data.artistName)
+    //     .then(htmlLink => {
+    let swal = Swal.fire({
         title: `${data.name}`,
-        html: `<p>&#x1F44D; ${data.rate}</p>
-        <div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
-               <br>
-               <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>
-               <br>
-               <audio id="audioPlayer" controls>
-                    <source src="${data.songPreview}" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>`,
+        html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
+                       <br>
+                       <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><span> ${data.rate}</span>
+                       <i id="comments_${data.id}" style='font-size:24px' class='far'>&#xf086;</i>
+                       <br>
+                       <audio id="audioPlayer" controls>
+                            <source src="${data.songPreview}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>`, //${htmlLink}
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -1248,10 +1253,106 @@ function successCBSongLyrics(data) {
                 }
                 ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
             });
+            $(`#comments_${data.id}`).click(() => {
+                let commentsDiv = getSongComments(data, "showAll");
+                let newCommentForm = `<form id="addCommentForm_${data.id}">
+                <label for="comment">Add new comment:</label><br>
+                <textarea id="comment_${data.id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
+                <input type="submit" value="Submit">
+            </form>`;
+                swal.update({
+                    title: "Comments",
+                    html: newCommentForm + commentsDiv
+                })
+                $(document).on('submit', `#addCommentForm_${data.id}`, (event) => {
+                    event.preventDefault()
+                    let commentForSong = $(`#comment_${data.id}`).val();
+                    ajaxCall("POST", `${baseApi}/Songs/addComment/${data.id}/${JSON.parse(localStorage.user).id}`, JSON.stringify(commentForSong), function (responseData) {
+                        commentsDiv = getSongComments(responseData, "new");
+                        console.log(commentsDiv)
+
+                        // for (let c of commentsDiv) {
+                            // $(document).on('click', `#commentDel_${c.id}`, () => {
+                            //     ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${id}/${c.id}`, "", function (d) {
+                            //         console.log(d)
+                            //         commentsDiv = getSongComments(d, "new");
+                            //         swal.update({
+                            //             title: "Comments",
+                            //             html: newCommentForm + commentsDiv
+                            //         })
+                            //     }, errorCB);
+                            // })
+                        // }
+                        swal.update({
+                            title: "Comments",
+                            html: newCommentForm + commentsDiv
+                        })
+                    }, errorCB);
+                })
+            })
         }
     });
+    // })
+    // .catch(error => {
+    //     errorCB(error);
+    // });
 }
 
+function getSongComments(data, type) {
+    let res = "";
+    let id;
+    if (type === "showAll") {
+        res = data;
+        id = res.id;
+    }
+    else {
+        if (data.length > 0) {
+            res = data[0];
+            id = res.songId;
+        }
+    }
+    let songsComments = [];
+    if (type === "showAll") {
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: baseApi + `/Songs/comments/${id}`,
+            data: "",
+            cache: false,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (response) {
+                songsComments = response;
+            },
+            error: errorCB
+        });
+    }
+    else {
+        songsComments = data;
+    }
+
+    let commentsDiv = $('<div id="comments-container">');
+    let newCommentForm = `<form id="addCommentForm_${id}">
+            <label for="comment">Add new comment:</label><br>
+            <textarea id="comment_${id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
+            <input type="submit" value="Submit">
+        </form>`;
+
+    if (songsComments.length === 0) {
+        commentsDiv.html("This songs doesn't have comments.")
+    }
+    else {
+        for (let c of songsComments) {
+            if (c.userId === JSON.parse(localStorage.user).id) {
+                commentsDiv.append(`<div class="comment"><p>${c.comment} - by ${c.userName}</p><i id="commentDel_${c.id}" style="font-size:24px" class="fa deleteComment">&#xf00d;</i></div>`);
+            }
+            else {
+                commentsDiv.append(`<div class="comment"><p>${c.comment} - by ${c.userName}</p></div>`);
+            }
+        }
+    }
+    return commentsDiv.prop('outerHTML');
+}
 
 function workSlider() {
 
@@ -1388,3 +1489,28 @@ $(document).ready(function () {
         $(this).addClass("active");
     });
 });
+
+async function generateYouTubeLink(songName, artistName) {
+    const apiKey = 'AIzaSyC2W6ggVmVdSWAioEd8oZnhbHCh-hJTwJM';
+    const formattedSongName = encodeURIComponent(songName);
+    const formattedArtistName = encodeURIComponent(artistName);
+
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName} ${formattedArtistName}&key=${apiKey}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        // Retrieve the video ID of the first search result
+        const videoId = data.items[0].id.videoId;
+
+        // Construct the YouTube video URL
+        const youtubeVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+
+        const htmlLink = `<a href="${youtubeVideoUrl}" target="_blank" class="youtube-link"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`;
+
+        // Return the HTML link
+        return htmlLink;
+    } catch (error) {
+        errorCB(error);
+    }
+}

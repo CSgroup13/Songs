@@ -12,7 +12,6 @@ namespace SongsServer.Models
         public int rate { get; set; }
         public string image { get; set; }
         public string songPreview { get; set; }
-        public string comment { get; set; }
 
         public bool InsertSong()
         {
@@ -51,10 +50,21 @@ namespace SongsServer.Models
             DBservices dbs = new DBservices();
             return dbs.getSongByDiffArtist(artistName);
         }
-        public static List<ExpandoObject> addComment(string songId, int userId,string comment)
+        public static List<ExpandoObject> addComment(int songId, int userId,string comment)
         {
             DBservices dbs = new DBservices();
             return dbs.addCommentToSong(songId, userId, comment);
+        }
+        public static List<ExpandoObject> deleteComment(int songId,int commentId)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.deleteCommentOfSong(songId, commentId);
+        }
+
+        public static List<ExpandoObject> getComments(int songId)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.getCommentsOfSong(songId);
         }
     }
 }
