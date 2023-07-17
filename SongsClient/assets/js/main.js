@@ -13,7 +13,6 @@ function errorCB(error) {
 }
 $(document).ready(() => {
 
-
     //generate random songs
     ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
     ///Artists////
@@ -1221,42 +1220,36 @@ function showSongPopup(songName) {
 }
 
 function successCBSongLyrics(data) {
-    generateYouTubeLink(data.name,data.artistName)
-        .then(htmlLink => {
-            Swal.fire({
-                title: `${data.name}`,
-                html: `<p>&#x1F44D; ${data.rate}</p>
-                <div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
-                       <br>
-                       <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>
-                       <br>
-                       <audio id="audioPlayer" controls>
-                            <source src="${data.songPreview}" type="audio/mpeg">
-                            Your browser does not support the audio element.
-                        </audio>${htmlLink}`,
-                color: 'white',
-                background: '#171717',
-                confirmButtonText: "Close",
-                didOpen: () => {
-                    $('.song-popup').scrollTop(0);
-                    $(`#song_${data.id}`).click(function () {
-                        if (localStorage.user === undefined) {
-                            Swal.fire({
-                                icon: 'error',
-                                text: "Please Log in to add song to Favorites",
-                                color: 'white',
-                                background: '#171717'
-                            })
-                            return;
-                        }
-                        ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
-                    });
+    Swal.fire({
+        title: `${data.name}`,
+        html: `<p>&#x1F44D; ${data.rate}</p>
+        <div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
+               <br>
+               <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i>
+               <br>
+               <audio id="audioPlayer" controls>
+                    <source src="${data.songPreview}" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>`,
+        color: 'white',
+        background: '#171717',
+        confirmButtonText: "Close",
+        didOpen: () => {
+            $('.song-popup').scrollTop(0);
+            $(`#song_${data.id}`).click(function () {
+                if (localStorage.user === undefined) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: "Please Log in to add song to Favorites",
+                        color: 'white',
+                        background: '#171717'
+                    })
+                    return;
                 }
+                ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
             });
-        })
-        .catch(error => {
-            errorCB(error);
-        });
+        }
+    });
 }
 
 
@@ -1395,29 +1388,3 @@ $(document).ready(function () {
         $(this).addClass("active");
     });
 });
-
-async function generateYouTubeLink(songName,artistName) {
-    const apiKey = 'AIzaSyC2W6ggVmVdSWAioEd8oZnhbHCh-hJTwJM';
-    const formattedSongName = encodeURIComponent(songName);
-    const formattedArtistName = encodeURIComponent(artistName);
-
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName} ${formattedArtistName}&key=${apiKey}`;
-
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        // Retrieve the video ID of the first search result
-        const videoId = data.items[0].id.videoId;
-
-        // Construct the YouTube video URL
-        const youtubeVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-        const htmlLink = `<a href="${youtubeVideoUrl}" target="_blank" class="youtube-link"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`;
-
-        // Return the HTML link
-        return htmlLink;
-    } catch (error) {
-        errorCB(error);
-        return '';
-    }
-}
