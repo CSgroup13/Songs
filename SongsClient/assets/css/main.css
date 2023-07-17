@@ -376,6 +376,7 @@ body {
     background-color: #0c0c0c;
     z-index: 12
 }
+
 /* 
 .device-notification--logo {
     display: -webkit-box;
@@ -600,9 +601,10 @@ body {
     .container-fluid>p {
         font-size: 14px;
     }
-.container-fluid{
-    max-height: 50%;
-}
+
+    .container-fluid {
+        max-height: 50%;
+    }
 }
 
 
@@ -2478,7 +2480,7 @@ div.about h1 {
 }
 
 #audioPlayer {
-    margin-top: 20px;
+    display: inline-block;
 }
 
 .additionHeader {
@@ -2513,4 +2515,24 @@ div.about h1 {
 
 #additionsPage::-webkit-scrollbar-thumb {
     background-color: transparent;
+}
+
+a.youtube-link {
+    color: #ff0000;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.addToFavorite {
+    margin-bottom: 10px;
+}
+
+a.youtube-link:hover {
+    color: white;
+}
+
+#youtubeImg {
+    width: 60px;
+    margin-left: 10px;
 }
