@@ -376,7 +376,7 @@ body {
     background-color: #0c0c0c;
     z-index: 12
 }
-
+/* 
 .device-notification--logo {
     display: -webkit-box;
     display: -webkit-flex;
@@ -438,7 +438,7 @@ body {
         display: -ms-flexbox;
         display: flex
     }
-}
+} */
 
 .section {
     opacity: 0;
@@ -592,7 +592,19 @@ body {
     .header--cta {
         display: none
     }
+
+    .container-fluid>h3 {
+        font-size: 20px;
+    }
+
+    .container-fluid>p {
+        font-size: 14px;
+    }
+.container-fluid{
+    max-height: 50%;
 }
+}
+
 
 .side-nav {
     position: relative;
@@ -2294,6 +2306,7 @@ body {
 }
 
 @media screen and (max-width: 400px) {
+
     .song-popup {
         max-height: 150px;
     }
@@ -2320,14 +2333,21 @@ body {
     }
 }
 
-.song-popup::-webkit-scrollbar {
+.container-fluid {
+    max-height: 70%;
+    overflow-y: auto;
+}
+
+.song-popup::-webkit-scrollbar,
+.container-fluid::-webkit-scrollbar {
     width: 10px;
     /* Set the width of the scrollbar */
     background-color: transparent;
     /* Set the background color of the scrollbar */
 }
 
-.song-popup::-webkit-scrollbar-thumb {
+.song-popup::-webkit-scrollbar-thumb,
+.container-fluid::-webkit-scrollbar-thumb {
     background-color: rgba(255, 255, 255, 0.5);
     /* Set the color of the scrollbar thumb */
     border-radius: 5px;
@@ -2474,20 +2494,23 @@ div.about h1 {
     margin-top: 0px;
     text-align: center;
     font-size: 18px;
+    margin-left: 2.5px;
+    margin-right: 2.5px;
 }
 
-#additionsPage{
+#additionsPage {
     display: flex;
     overflow: auto;
 }
+
 #additionsPage::-webkit-scrollbar {
     width: 8px;
-  }
-  
-  #additionsPage::-webkit-scrollbar-track {
+}
+
+#additionsPage::-webkit-scrollbar-track {
     background-color: transparent;
-  }
-  
-  #additionsPage::-webkit-scrollbar-thumb {
+}
+
+#additionsPage::-webkit-scrollbar-thumb {
     background-color: transparent;
-  }
+}
