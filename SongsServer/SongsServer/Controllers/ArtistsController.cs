@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.SqlServer.Server;
 using Newtonsoft.Json;
 using SongsServer.Models;
@@ -6,7 +7,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -16,7 +21,7 @@ namespace SongsServer.Controllers
     [ApiController]
     public class ArtistsController : ControllerBase
     {
-      
+
         // GET: api/<ArtistsController>
         [HttpGet]
         public IActionResult getAllArtists()

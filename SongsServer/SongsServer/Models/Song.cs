@@ -1,4 +1,6 @@
-﻿namespace SongsServer.Models
+﻿using System.Dynamic;
+
+namespace SongsServer.Models
 {
     public class Song
     {
@@ -10,6 +12,7 @@
         public int rate { get; set; }
         public string image { get; set; }
         public string songPreview { get; set; }
+        public string comment { get; set; }
 
         public bool InsertSong()
         {
@@ -47,6 +50,11 @@
         {
             DBservices dbs = new DBservices();
             return dbs.getSongByDiffArtist(artistName);
+        }
+        public static List<ExpandoObject> addComment(string songId, int userId,string comment)
+        {
+            DBservices dbs = new DBservices();
+            return dbs.addCommentToSong(songId, userId, comment);
         }
     }
 }

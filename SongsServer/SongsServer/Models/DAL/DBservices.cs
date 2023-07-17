@@ -9,6 +9,7 @@ using System.Net;
 using System.Diagnostics.Metrics;
 using SongsServer.Models;
 using System.Data.Common;
+using System.Dynamic;
 
 /// <summary>
 /// DBServices is a class created by me to provides some DataBase Services
@@ -668,6 +669,64 @@ public class DBservices
             if (con != null)
             {
                 // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Insert a comment to songsComments table
+    //--------------------------------------------------------------------------------------------------
+    public List<ExpandoObject> addCommentToSong(string songId,int userId,string comment)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@songId", songId);
+        paramDic.Add("@userId", userId);
+        paramDic.Add("@comment", comment);
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_addCommentToSong", con, paramDic);// create the command
+
+        List<ExpandoObject> comments=new List<ExpandoObject>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                dynamic obj = new ExpandoObject();
+                obj.songId = Convert.ToInt32(dataReader["songId"]);
+                obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.comment = dataReader["comment"].ToString();
+
+                comments.Add(obj);
+            }
+            return comments;
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                Console.WriteLine(comments);
                 con.Close();
             }
         }

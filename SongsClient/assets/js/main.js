@@ -298,7 +298,7 @@ $(document).ready(() => {
             $("#loginLink").html('LOGOUT <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
             $('.notMember').hide();
             $('.signUpLink').hide();
-            $('.side-nav li:nth-child(6)').addClass('logout');
+            $('.side-nav li:nth-child(7)').addClass('logout');
             $("#outBarLogin").html("Logout");
             updateLoginPage("logout");
         }
@@ -307,7 +307,7 @@ $(document).ready(() => {
             $("#loginLink").html('Login <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118" style="enable-background:new 0 0 150 118;" xml:space="preserve"><g transform="translate(0.000000,118.000000) scale(0.100000,-0.100000)"><path d="M870,1167c-34-17-55-57-46-90c3-15,81-100,194-211l187-185l-565-1c-431,0-571-3-590-13c-55-28-64-94-18-137c21-20,33-20,597-20h575l-192-193C800,103,794,94,849,39c20-20,39-29,61-29c28,0,63,30,298,262c147,144,272,271,279,282c30,51,23,60-219,304C947,1180,926,1196,870,1167z" /></g></svg><span class="btn-background"></span>');
             $('.notMember').show();
             $('.signUpLink').show();
-            $('.side-nav li:nth-child(6)').removeClass('logout');
+            $('.side-nav li:nth-child(7)').removeClass('logout');
             $("#outBarLogin").html("Login");
             updateLoginPage("login");
         }
@@ -1221,7 +1221,7 @@ function showSongPopup(songName) {
 }
 
 function successCBSongLyrics(data) {
-    generateYouTubeLink(data.name)
+    generateYouTubeLink(data.name,data.artistName)
         .then(htmlLink => {
             Swal.fire({
                 title: `${data.name}`,
@@ -1396,15 +1396,14 @@ $(document).ready(function () {
     });
 });
 
-async function generateYouTubeLink(songName) {
+async function generateYouTubeLink(songName,artistName) {
     const apiKey = 'AIzaSyC2W6ggVmVdSWAioEd8oZnhbHCh-hJTwJM';
     const formattedSongName = encodeURIComponent(songName);
+    const formattedArtistName = encodeURIComponent(artistName);
 
-    // Construct the YouTube Data API search URL
-    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName}&key=${apiKey}`;
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName} ${formattedArtistName}&key=${apiKey}`;
 
     try {
-        // Make the API request
         const response = await fetch(apiUrl);
         const data = await response.json();
         // Retrieve the video ID of the first search result
@@ -1413,7 +1412,6 @@ async function generateYouTubeLink(songName) {
         // Construct the YouTube video URL
         const youtubeVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
-        // Generate the HTML link
         const htmlLink = `<a href="${youtubeVideoUrl}" target="_blank" class="youtube-link"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`;
 
         // Return the HTML link

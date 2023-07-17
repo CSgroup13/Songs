@@ -156,5 +156,19 @@ namespace SongsServer.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // POST api/<SongsController>
+        [HttpPost("addComment/{songId}/{userId}")]
+        public IActionResult addComment(string songId,int userId, [FromBody] string comment)
+        {
+            try
+            {
+                return Ok(Song.addComment(songId, userId, comment));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
