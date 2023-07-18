@@ -1231,7 +1231,7 @@ function successCBSongLyrics(data) {
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                        <br>
                        <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><span> ${data.rate}</span>
-                       <i id="comments_${data.id}" style='font-size:24px' class='far'>&#xf086;</i>
+                       <img src="./assets/img/comment.png" id="comments_${data.id}" class="commentImage" title="show comments"></img>
                        <br>
                        <audio id="audioPlayer" controls>
                             <source src="${data.songPreview}" type="audio/mpeg">
@@ -1255,32 +1255,42 @@ function successCBSongLyrics(data) {
                 ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
             });
             $(`#comments_${data.id}`).click(() => {
-                //add comment form
-                let newCommentForm = `<form id="addCommentForm_${data.id}">
+                if (localStorage.user === undefined) {
+                    swal.update({
+                        icon: 'error',
+                        title: "You should login for view comments",
+                        html:""
+                    })
+                }
+                else {
+                    //add comment form
+                    let newCommentForm = `<form id="addCommentForm_${data.id}">
                 <label for="comment">Add new comment:</label><br>
                 <textarea id="comment_${data.id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
                 <input type="submit" value="Submit">
             </form>`;
 
-                //all song comments
-                let commentsDiv = getSongCommentsDiv(data, swal);
-                swal.update({
-                    title: "Comments",
-                    html: newCommentForm + commentsDiv
-                })
+                    //all song comments
+                    let commentsDiv = getSongCommentsDiv(data, swal);
+                    swal.update({
+                        title: "Comments",
+                        html: newCommentForm + commentsDiv
+                    })
 
-                $(document).off('submit', `#addCommentForm_${data.id}`);
-                $(document).on('submit', `#addCommentForm_${data.id}`, (event) => {//add new comment
-                    event.preventDefault()
-                    let commentForSong = $(`#comment_${data.id}`).val();
-                    ajaxCall("POST", `${baseApi}/Songs/addComment/${data.id}/${JSON.parse(localStorage.user).id}`, JSON.stringify(commentForSong), function (responseData) {
-                        commentsDiv = getUpdateCommentsDiv(responseData, swal);
-                        swal.update({
-                            title: "Comments",
-                            html: newCommentForm + commentsDiv
-                        })
-                    }, errorCB);
-                })
+                    $(document).off('submit', `#addCommentForm_${data.id}`);
+                    $(document).on('submit', `#addCommentForm_${data.id}`, (event) => {//add new comment
+                        event.preventDefault()
+                        let commentForSong = $(`#comment_${data.id}`).val();
+                        ajaxCall("POST", `${baseApi}/Songs/addComment/${data.id}/${JSON.parse(localStorage.user).id}`, JSON.stringify(commentForSong), function (responseData) {
+                            commentsDiv = getUpdateCommentsDiv(responseData, swal);
+                            swal.update({
+                                title: "Comments",
+                                html: newCommentForm + commentsDiv
+                            })
+                        }, errorCB);
+                    })
+                }
+
             })
         }
     });
@@ -1293,7 +1303,7 @@ function getUpdateCommentsDiv(data, swal) {//data is array of updated song comme
     console.log(data)
     let commentsDiv = $('<div id="comments-container">');
     let newCommentForm;
-    if(data.length!==0){
+    if (data.length !== 0) {
         newCommentForm = `<form id="addCommentForm_${data[0].songId}">
         <label for="comment">Add new comment:</label><br>
         <textarea id="comment_${data[0].songId}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>

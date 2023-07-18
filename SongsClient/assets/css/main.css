@@ -2544,3 +2544,10 @@ a.youtube-link:hover {
     color: white;
     cursor: pointer;
 }
+.commentImage{
+    position: relative;
+    width:30px;
+    cursor:pointer;
+    top: 5px;
+    left: 5px;
+}
