@@ -104,6 +104,7 @@ namespace SongsServer.Controllers
 
                         }
                     }
+                    if (resArr.Count == 0) return Ok(s);
                     s.songPreview = res.data[0].preview;
                     return Ok(s);
                 }

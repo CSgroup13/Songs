@@ -849,22 +849,25 @@ function getRandomSong() {
 }
 
 function getQ1() {
-    let song = getRandomSong();
-    let preview;
+    let preview = null;
     let q1 = [];
-    $.ajax({
-        async: false,
-        type: "GET",
-        url: baseApi + `/Songs/${song.name}/info`,
-        data: "",
-        cache: false,
-        contentType: "application/json",
-        dataType: "json",
-        success: function (data) {
-            preview = data.songPreview;
-        },
-        error: errorCB
-    });
+    let song;
+    do {
+        song = getRandomSong();
+        $.ajax({
+            async: false,
+            type: "GET",
+            url: baseApi + `/Songs/${song.name}/info`,
+            data: "",
+            cache: false,
+            contentType: "application/json",
+            dataType: "json",
+            success: function (data) {
+                preview = data.songPreview;
+            },
+            error: errorCB
+        });
+    } while (preview == null)
     q1.push(`Which singer sings the following song? (play the audio) <br>
     <audio id="audioPlayer" controls> <source src="${preview}" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -876,9 +879,12 @@ function getQ1() {
 }
 function getQ2() {
     let q2 = [];
-
-    const artist = randomArtist()
-    const artistName = artist.name;
+    let artist;
+    let artistName;
+    do {
+         artist = randomArtist()
+         artistName = artist.name;
+    } while (artistName == "Beauty And The Beast" || artistName == "Divine")
     const question = "Who is this artist?" + `<br><img src="${artist.image}" id="quiz_image">`;
     q2.push(question, artistName);
     q2.push(...generateDiff3Artists(artistName));
@@ -1257,13 +1263,13 @@ function successCBSongLyrics(data) {
                 if (localStorage.user === undefined) {
                     swal.update({
                         icon: 'error',
-                        title: "You should login for view comments",
+                        title: "You should login to view comments",
                         html: ""
                     })
                 }
                 else {
                     //add comment form
-                    let newCommentForm = `<form id="addCommentForm_${data.id}">
+                    let newCommentForm = `<form class="commentForm" id="addCommentForm_${data.id}">
                 <label for="comment">Add new comment:</label><br>
                 <textarea id="comment_${data.id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
                 <input type="submit" value="Submit">

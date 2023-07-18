@@ -2538,11 +2538,12 @@ a.youtube-link:hover {
     cursor: pointer;
 }
 .new_comment{
-    color: black;
+    color: white;
+    background-color: transparent;
     font: 14px;
 }
 .deleteComment{
-    color: white;
+    color: red;
     cursor: pointer;
 }
 .commentImage{
@@ -2551,4 +2552,7 @@ a.youtube-link:hover {
     cursor:pointer;
     top: 5px;
     left: 5px;
+}
+.commentForm>input[type="submit"]{
+color: #000;
 }
