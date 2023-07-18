@@ -13,7 +13,6 @@ function errorCB(error) {
 }
 $(document).ready(() => {
 
-
     //generate random songs
     ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
     ///Artists////
