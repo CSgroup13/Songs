@@ -1224,8 +1224,6 @@ function showSongPopup(songName) {
 }
 
 function successCBSongLyrics(data) {
-    // generateYouTubeLink(data.name, data.artistName)
-    //     .then(htmlLink => {
     let swal = Swal.fire({
         title: `${data.name}`,
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
@@ -1237,7 +1235,7 @@ function successCBSongLyrics(data) {
                             <source src="${data.songPreview}" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                        <a id="youtubeLink" target="_blank" class="youtube-link"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`, //${htmlLink}
+                        <a id="youtubeLink" target="_blank" class="youtube-link" title="Go To Youtube"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`, //${htmlLink}
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -1293,13 +1291,17 @@ function successCBSongLyrics(data) {
                 }
 
             })
-            $("#youtubeLink").click(()=>{generateYouTubeLink(data.name, data.artistName)})
+            $("#youtubeLink").click(() => {
+                generateYouTubeLink(data.name, data.artistName)
+                    .then((link) => {
+                        window.open(link);
+                    })
+                    .catch(error => {
+                        errorCB(error)
+                    })
+            });
         }
     });
-    // })
-    // .catch(error => {
-    //     errorCB(error);
-    // });
 }
 function getUpdateCommentsDiv(data, swal) {//data is array of updated song comments
     console.log(data)
@@ -1529,9 +1531,11 @@ async function generateYouTubeLink(songName, artistName) {
     const apiKey = 'AIzaSyC2W6ggVmVdSWAioEd8oZnhbHCh-hJTwJM';
     const formattedSongName = encodeURIComponent(songName);
     const formattedArtistName = encodeURIComponent(artistName);
+    const songNameSearch = songName.replace(/\s/g, '+');
+    const artistNaeSearch = artistName.replace(/\s/g, '+');
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName} ${formattedArtistName}&key=${apiKey}`;
-    const youtubeSearchUrl=`https://www.youtube.com/results?search_query=${formattedSongName} ${formattedArtistName}`
+    const youtubeSearchUrl = `https://www.youtube.com/results?search_query=${songNameSearch} ${artistNaeSearch}`
 
     try {
         const response = await fetch(apiUrl);
@@ -1546,6 +1550,6 @@ async function generateYouTubeLink(songName, artistName) {
         // Return the HTML link
         return htmlLink;
     } catch (error) {
-        return htmlLink = youtubeSearchUrl
+        return youtubeSearchUrl;
     }
 }

@@ -2535,6 +2535,7 @@ a.youtube-link:hover {
 #youtubeImg {
     width: 60px;
     margin-left: 10px;
+    cursor: pointer;
 }
 .new_comment{
     color: black;
