@@ -1235,7 +1235,8 @@ function successCBSongLyrics(data) {
                        <audio id="audioPlayer" controls>
                             <source src="${data.songPreview}" type="audio/mpeg">
                             Your browser does not support the audio element.
-                        </audio>`, //${htmlLink}
+                        </audio>
+                        <a id="youtubeLink" target="_blank" class="youtube-link"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`, //${htmlLink}
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -1290,6 +1291,7 @@ function successCBSongLyrics(data) {
                     }, errorCB);
                 })
             })
+            $("#youtubeLink").click(()=>{generateYouTubeLink(data.name, data.artistName)})
         }
     });
     // })
@@ -1496,6 +1498,7 @@ async function generateYouTubeLink(songName, artistName) {
     const formattedArtistName = encodeURIComponent(artistName);
 
     const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName} ${formattedArtistName}&key=${apiKey}`;
+    const youtubeSearchUrl=`https://www.youtube.com/results?search_query=${formattedSongName} ${formattedArtistName}`
 
     try {
         const response = await fetch(apiUrl);
@@ -1505,12 +1508,11 @@ async function generateYouTubeLink(songName, artistName) {
 
         // Construct the YouTube video URL
         const youtubeVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-
-        const htmlLink = `<a href="${youtubeVideoUrl}" target="_blank" class="youtube-link"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`;
+        const htmlLink = youtubeVideoUrl
 
         // Return the HTML link
         return htmlLink;
     } catch (error) {
-        errorCB(error);
+        return htmlLink = youtubeSearchUrl
     }
 }
