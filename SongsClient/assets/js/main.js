@@ -1259,7 +1259,7 @@ function successCBSongLyrics(data) {
                     swal.update({
                         icon: 'error',
                         title: "You should login for view comments",
-                        html:""
+                        html: ""
                     })
                 }
                 else {
