@@ -2032,7 +2032,7 @@ body {
 #searchBtn {
     width: 22%;
     line-height: 30px;
-    height: 90%;
+    height: 100%;
     border-radius: 20px;
 }
 
@@ -2542,4 +2542,5 @@ a.youtube-link:hover {
 }
 .deleteComment{
     color: white;
+    cursor: pointer;
 }
