@@ -406,7 +406,7 @@ $(document).ready(() => {
             text: "You Signed Up Successfully!",
             color: 'white',
             background: '#171717',
-            timer: 2300,
+            timer: 3500,
             showConfirmButton: false,
             didOpen: () => {
                 const body = JSON.stringify({
@@ -1113,6 +1113,7 @@ runSpeechRecog = () => {
     recognization.onresult = (e) => {
         var transcript = e.results[0][0].transcript;
         output.val(transcript);
+        $("#searchBtn").click();
     }
     recognization.start();
 }
@@ -1230,7 +1231,7 @@ function successCBSongLyrics(data) {
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                        <br>
                        <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><span> ${data.rate}</span>
-                       <i id="comments_${data.id}" style='font-size:24px' class='far'>&#xf086;</i>
+                       <img src="./assets/img/comment.png" id="comments_${data.id}" class="commentImage" title="show comments"></img>
                        <br>
                        <audio id="audioPlayer" controls>
                             <source src="${data.songPreview}" type="audio/mpeg">
@@ -1255,41 +1256,42 @@ function successCBSongLyrics(data) {
                 ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
             });
             $(`#comments_${data.id}`).click(() => {
-                let commentsDiv = getSongComments(data, "showAll");
-                let newCommentForm = `<form id="addCommentForm_${data.id}">
+                if (localStorage.user === undefined) {
+                    swal.update({
+                        icon: 'error',
+                        title: "You should login for view comments",
+                        html:""
+                    })
+                }
+                else {
+                    //add comment form
+                    let newCommentForm = `<form id="addCommentForm_${data.id}">
                 <label for="comment">Add new comment:</label><br>
                 <textarea id="comment_${data.id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
                 <input type="submit" value="Submit">
             </form>`;
-                swal.update({
-                    title: "Comments",
-                    html: newCommentForm + commentsDiv
-                })
-                $(document).on('submit', `#addCommentForm_${data.id}`, (event) => {
-                    event.preventDefault()
-                    let commentForSong = $(`#comment_${data.id}`).val();
-                    ajaxCall("POST", `${baseApi}/Songs/addComment/${data.id}/${JSON.parse(localStorage.user).id}`, JSON.stringify(commentForSong), function (responseData) {
-                        commentsDiv = getSongComments(responseData, "new");
-                        console.log(commentsDiv)
 
-                        // for (let c of commentsDiv) {
-                            // $(document).on('click', `#commentDel_${c.id}`, () => {
-                            //     ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${id}/${c.id}`, "", function (d) {
-                            //         console.log(d)
-                            //         commentsDiv = getSongComments(d, "new");
-                            //         swal.update({
-                            //             title: "Comments",
-                            //             html: newCommentForm + commentsDiv
-                            //         })
-                            //     }, errorCB);
-                            // })
-                        // }
-                        swal.update({
-                            title: "Comments",
-                            html: newCommentForm + commentsDiv
-                        })
-                    }, errorCB);
-                })
+                    //all song comments
+                    let commentsDiv = getSongCommentsDiv(data, swal);
+                    swal.update({
+                        title: "Comments",
+                        html: newCommentForm + commentsDiv
+                    })
+
+                    $(document).off('submit', `#addCommentForm_${data.id}`);
+                    $(document).on('submit', `#addCommentForm_${data.id}`, (event) => {//add new comment
+                        event.preventDefault()
+                        let commentForSong = $(`#comment_${data.id}`).val();
+                        ajaxCall("POST", `${baseApi}/Songs/addComment/${data.id}/${JSON.parse(localStorage.user).id}`, JSON.stringify(commentForSong), function (responseData) {
+                            commentsDiv = getUpdateCommentsDiv(responseData, swal);
+                            swal.update({
+                                title: "Comments",
+                                html: newCommentForm + commentsDiv
+                            })
+                        }, errorCB);
+                    })
+                }
+
             })
             $("#youtubeLink").click(()=>{generateYouTubeLink(data.name, data.artistName)})
         }
@@ -1299,46 +1301,65 @@ function successCBSongLyrics(data) {
     //     errorCB(error);
     // });
 }
+function getUpdateCommentsDiv(data, swal) {//data is array of updated song comments
+    console.log(data)
+    let commentsDiv = $('<div id="comments-container">');
+    let newCommentForm;
+    if (data.length !== 0) {
+        newCommentForm = `<form id="addCommentForm_${data[0].songId}">
+        <label for="comment">Add new comment:</label><br>
+        <textarea id="comment_${data[0].songId}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
+        <input type="submit" value="Submit">
+        </form>`;
+    }
 
-function getSongComments(data, type) {
-    let res = "";
-    let id;
-    if (type === "showAll") {
-        res = data;
-        id = res.id;
+    if (data.length === 0) {
+        commentsDiv.html("This songs doesn't have comments.")
     }
     else {
-        if (data.length > 0) {
-            res = data[0];
-            id = res.songId;
+        for (let c of data) {
+            if (c.userId === JSON.parse(localStorage.user).id) {
+                commentsDiv.append(`<div class="comment"><span>${c.comment} - by ${c.userName} </span><i class="commentDel_${c.id} fa deleteComment" style="font-size:24px" title="delete comment"> &#xf00d;</i></div>`);
+                $(document).off('click', `.commentDel_${c.id}`);
+                $(document).on('click', `.commentDel_${c.id}`, () => {//delete comment
+                    ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${data[0].songId}/${c.id}`, "", function (responseData) {
+                        let updateDiv = getUpdateCommentsDiv(responseData, swal);
+                        swal.update({
+                            title: "Comments",
+                            html: newCommentForm + updateDiv
+                        })
+                    }, errorCB);
+                })
+            }
+            else {
+                commentsDiv.append(`<div class="comment"><span>${c.comment} - by ${c.userName}</span></div>`);
+            }
         }
     }
-    let songsComments = [];
-    if (type === "showAll") {
-        $.ajax({
-            async: false,
-            type: "GET",
-            url: baseApi + `/Songs/comments/${id}`,
-            data: "",
-            cache: false,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (response) {
-                songsComments = response;
-            },
-            error: errorCB
-        });
-    }
-    else {
-        songsComments = data;
-    }
+    return commentsDiv.prop('outerHTML');
+}
 
+function getSongCommentsDiv(data, swal) {//data is song object
+    let songsComments = [];
+    $.ajax({
+        async: false,
+        type: "GET",
+        url: baseApi + `/Songs/comments/${data.id}`,
+        data: "",
+        cache: false,
+        contentType: "application/json",
+        dataType: "json",
+        success: function (response) {
+            songsComments = response;
+        },
+        error: errorCB
+    });
     let commentsDiv = $('<div id="comments-container">');
-    let newCommentForm = `<form id="addCommentForm_${id}">
-            <label for="comment">Add new comment:</label><br>
-            <textarea id="comment_${id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
-            <input type="submit" value="Submit">
-        </form>`;
+    let newCommentForm = `<form id="addCommentForm_${data.id}">
+                <label for="comment">Add new comment:</label><br>
+                <textarea id="comment_${data.id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
+                <input type="submit" value="Submit">
+            </form>`;
 
     if (songsComments.length === 0) {
         commentsDiv.html("This songs doesn't have comments.")
@@ -1346,10 +1367,22 @@ function getSongComments(data, type) {
     else {
         for (let c of songsComments) {
             if (c.userId === JSON.parse(localStorage.user).id) {
-                commentsDiv.append(`<div class="comment"><p>${c.comment} - by ${c.userName}</p><i id="commentDel_${c.id}" style="font-size:24px" class="fa deleteComment">&#xf00d;</i></div>`);
+                commentsDiv.append(`<div class="comment"><span>${c.comment} - by ${c.userName} </span><i id="commentDel_${c.id}" class="fa deleteComment" style="font-size:24px" title="delete comment"> &#xf00d;</i></div>`);
+                $(document).off('click', `.deleteComment`);
+                $(document).on('click', '.deleteComment', function () {//delete comment
+                    let commentId = c.id;
+                    ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${data.id}/${commentId}`, "", function (responseData) {
+                        let updateDiv = getUpdateCommentsDiv(responseData, swal);
+                        swal.update({
+                            title: "Comments",
+                            html: newCommentForm + updateDiv
+                        });
+                    }, errorCB);
+                });
+
             }
             else {
-                commentsDiv.append(`<div class="comment"><p>${c.comment} - by ${c.userName}</p></div>`);
+                commentsDiv.append(`<div class="comment"><span>${c.comment} - by ${c.userName}</span></div>`);
             }
         }
     }
