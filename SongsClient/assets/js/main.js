@@ -407,7 +407,7 @@ $(document).ready(() => {
             text: "You Signed Up Successfully!",
             color: 'white',
             background: '#171717',
-            timer: 2300,
+            timer: 3500,
             showConfirmButton: false,
             didOpen: () => {
                 const body = JSON.stringify({
@@ -1273,16 +1273,16 @@ function successCBSongLyrics(data) {
                         console.log(commentsDiv)
 
                         // for (let c of commentsDiv) {
-                            // $(document).on('click', `#commentDel_${c.id}`, () => {
-                            //     ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${id}/${c.id}`, "", function (d) {
-                            //         console.log(d)
-                            //         commentsDiv = getSongComments(d, "new");
-                            //         swal.update({
-                            //             title: "Comments",
-                            //             html: newCommentForm + commentsDiv
-                            //         })
-                            //     }, errorCB);
-                            // })
+                        // $(document).on('click', `#commentDel_${c.id}`, () => {
+                        //     ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${id}/${c.id}`, "", function (d) {
+                        //         console.log(d)
+                        //         commentsDiv = getSongComments(d, "new");
+                        //         swal.update({
+                        //             title: "Comments",
+                        //             html: newCommentForm + commentsDiv
+                        //         })
+                        //     }, errorCB);
+                        // })
                         // }
                         swal.update({
                             title: "Comments",

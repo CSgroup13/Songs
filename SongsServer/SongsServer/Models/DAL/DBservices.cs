@@ -348,7 +348,6 @@ public class DBservices
                 u.id = Convert.ToInt32(dataReader["id"]);
                 u.name = dataReader["name"].ToString();
                 u.email = dataReader["email"].ToString();
-                u.password = dataReader["password"].ToString();
                 u.regDate = Convert.ToDateTime(dataReader["regDate"]);
                 u.score= Convert.ToInt32(dataReader["score"]);
                 return u;
@@ -561,7 +560,6 @@ public class DBservices
                 u.id = Convert.ToInt32(dataReader["id"]);
                 u.name = dataReader["name"].ToString();
                 u.email = dataReader["email"].ToString();
-                u.password = dataReader["password"].ToString();
                 return u;
             }
             return null;
