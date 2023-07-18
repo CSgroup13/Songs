@@ -1577,6 +1577,9 @@ body {
     align-items: center;
     color: #fff
 }
+.work-request#searchForm{
+    z-index: 2;
+}
 
 .work-request input[type="submit"] {
     width: 400px;
