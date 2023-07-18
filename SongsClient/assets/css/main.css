@@ -1459,7 +1459,7 @@ body {
 }
 
 @media (min-width: 1450px) {
-    .work--lockup .slider {
+    .work--lockup.songsGallery {
         margin-top: 100px;
     }
 }

@@ -1128,7 +1128,7 @@ function successCBSong(data) {
     $("#songs").html("")
     if (data.length === undefined) {//single song returned as object and not array
         $("#songs").append(`
-                  <div class="work--lockup">
+                  <div class="work--lockup songsGallery">
                     <ul class="slider">
                       <li class="slider--item slider--item-center" id="slideSong_${data.id}">
                         <a>
@@ -1147,11 +1147,11 @@ function successCBSong(data) {
     }
     else {
         $("#songs").append(`
-           <div class="work--lockup">
+           <div class="work--lockup songsGallery">
             <ul class="slider"> </ul>
               </div>`)
         $("div.work--lockup>ul.slider").append(`
-    <li class="slider--item slider--item-center" id="slideSong_${data[0].id}">
+    <li class="slider--item slider--item-left" id="slideSong_${data[0].id}">
         <a>
             <div class="slider--item-image">
                 <img src="${data[0].image}" alt="Victory">
@@ -1164,7 +1164,7 @@ function successCBSong(data) {
             showSongPopup(data[0].name);
         });
         if (data.length > 1) {
-            $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-left" id="slideSong_${data[1].id}">
+            $("div.work--lockup>ul.slider").append(`<li class="slider--item slider--item-center" id="slideSong_${data[1].id}">
             <a>
               <div class="slider--item-image">
                 <img src="${data[1].image}" alt="Metiew and Smith">
@@ -1205,7 +1205,7 @@ function successCBSong(data) {
                 showSongPopup(data[i].name);
             });
         }
-        if (data.length > 2) {
+        if (data.length > 1) {
             $("div.work--lockup").append(`<div class="slider--prev">
           <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
                         xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 150 118"
