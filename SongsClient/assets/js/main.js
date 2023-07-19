@@ -1125,7 +1125,7 @@ runSpeechRecog = () => {
 }
 
 function successCBSong(data) {
-    $("#songs").html("")
+    $("#songs").html("");
     if (data.length === undefined) {//single song returned as object and not array
         $("#songs").append(`
                   <div class="work--lockup songsGallery">
@@ -1151,7 +1151,7 @@ function successCBSong(data) {
             <ul class="slider"> </ul>
               </div>`)
         $("div.work--lockup>ul.slider").append(`
-    <li class="slider--item slider--item-left" id="slideSong_${data[0].id}">
+    <li class="slider--item slider--item-${data.length===1?"center":"left"}" id="slideSong_${data[0].id}">
         <a>
             <div class="slider--item-image">
                 <img src="${data[0].image}" alt="Victory">
