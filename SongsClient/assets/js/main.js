@@ -1,4 +1,5 @@
-const baseApi = 'https://localhost:7091/api';
+
+const baseApi = 'https://proj.ruppin.ac.il/cgroup13/test2/tar1/api';
 // default error cb for any function if failed
 function errorCB(error) {
     let message = error.responseText;
