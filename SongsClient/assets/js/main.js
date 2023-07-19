@@ -537,6 +537,7 @@ $(document).ready(() => {
         questionsQueue = Array.from(questArr)
         clearInterval(interval);
     }
+
     //this function in charge for starting quiz and managing questions queue, calling renderQuestion func for each question template in a shuffeld manner
     function manageQuiz() {
         if (questionsQueue.length === 0) {
@@ -986,7 +987,6 @@ function getQ8() {
 
 
 
-/********************************************OFEK***************************************/
 $(document).ready(() => {
     //////////add filters 
     const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
