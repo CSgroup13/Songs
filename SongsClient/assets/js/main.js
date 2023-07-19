@@ -268,7 +268,7 @@ $(document).ready(() => {
             })
         }
         else { //signup page
-            $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" placeholder="Name" title="name must include only letters" required ></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" placeholder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="regPassInp" type="password" spellcheck="false" placeholder="Password" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Sign Up"></form>');
+            $("#mainFormDiv").append('<h2 id="formHeader3">Sign up to enjoy new music</h2><form id="signUpForm" class="work-request"><div id="formDiv" class="work-request--information"><div class="information-name"><input id="regNameInp" type="text" spellcheck="false" placeholder="Name" title="name must include only letters" required ></div><div class="information-email"><input id="regEmailInp" type="email" spellcheck="false" placeholder="Email" title="example12@example.exapmle" required></div><div class="information-name"><input id="regPassInp" type="password" spellcheck="false" placeholder="Password" title="password should has a minimum of 6 characters, at least 1 uppercase letter, 1 lowercase letter, and 1 number, with no spaces." required></div></div><input type="submit" value="Sign Up"></form><div id="signUpLogin"><span class="notMember">Already a Member? </span><button class="loginSignUp cta notMember"><u>Login Now</u></button></div>');
             $('#regNameInp').attr('pattern', '[a-zA-Z]+');
             $('#regEmailInp').attr('pattern', "^((?!\\.)[\\w-_.]*[^.])(@\\w+)(\\.\\w+(\\.\\w+)?[^.\\W])$");
             $('#regPassInp').attr('pattern', "^((?=\\S*?[A-Z])(?=\\S*?[a-z])(?=\\S*?[0-9]).{5,})\\S$");
@@ -882,8 +882,8 @@ function getQ2() {
     let artist;
     let artistName;
     do {
-         artist = randomArtist()
-         artistName = artist.name;
+        artist = randomArtist()
+        artistName = artist.name;
     } while (artistName == "Beauty And The Beast" || artistName == "Divine")
     const question = "Who is this artist?" + `<br><img src="${artist.image}" id="quiz_image">`;
     q2.push(question, artistName);

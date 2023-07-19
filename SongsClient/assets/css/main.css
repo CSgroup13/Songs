@@ -2270,7 +2270,7 @@ body {
     cursor: pointer;
 }
 
-#loginSignUp {
+#loginSignUp,#signUpLogin {
     margin-top: 18px;
     text-align: center;
     font-size: 16px;
@@ -2280,7 +2280,7 @@ body {
     color: #0f33ff !important;
 }
 
-.signUpLink {
+.signUpLink , .loginSignUp{
     display: inline;
     position: relative;
     padding: 5px 17px 5px 12px;
