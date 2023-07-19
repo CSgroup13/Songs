@@ -77,11 +77,14 @@ namespace SongsServer.Controllers
         [HttpPost("{userId}/Score/{userScore}")]
         public IActionResult updateUserScore(int userId, int userScore)
         {
-            if (UserClass.updateUserScore(userId, userScore))
-                return Ok(true);
-            return BadRequest("Couldn't update score");
-
-
+            try
+            {
+                return Ok(UserClass.updateUserScore(userId, userScore));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         //post for adding song to favorites of user

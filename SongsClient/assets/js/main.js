@@ -1,4 +1,5 @@
 const baseApi = 'https://localhost:7091/api';
+// default error cb for any function if failed
 function errorCB(error) {
     let message = error.responseText;
     if (message === undefined || message == "Error in DB") window.location.href = "404.html"
@@ -13,16 +14,20 @@ function errorCB(error) {
 }
 $(document).ready(() => {
 
-    //generate random songs
+    //generate 3 random songs on the load of the page
     ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
     ///Artists////
+
+
+    //flag to know if we want to render favorite artists again(if user is on favorite artist)
     let removeFromFavPage = false;
+    //renders all artists 
     $("#showAllArtistsBtn").click(function () {
         removeFromFavPage = false;
         $("#searchArtistInput").val("");
         renderArtists();
     })
-
+    //pull from DB user favorite artists
     $("#showFavoritesArtists").click(function () {
         removeFromFavPage = true;
         $("#searchArtistInput").val("");
@@ -39,6 +44,7 @@ $(document).ready(() => {
             })
         }
     })
+    //search an artist my name
     $("#searchArtistBtn").click(() => {
         let inputName = $("#searchArtistInput").val();
         if (inputName === "") {
@@ -65,29 +71,12 @@ $(document).ready(() => {
         return false;
     })
     renderArtists();
-
+    // get all artists data from DB
     function renderArtists() {
         ajaxCall("GET", baseApi + `/Artists`, "", successCBAllArtists, errorCB);
     }
-
-    function getArtist(id) {
-        let artist;
-        $.ajax({
-            async: false,
-            type: "GET",
-            url: baseApi + `/Artists/${id}/info`,
-            data: "",
-            cache: false,
-            contentType: "application/json",
-            dataType: "json",
-            success: function (data) {
-                artist = data;
-            },
-            error: errorCB
-        });
-        return artist;
-    }
-
+    //when clicking on the back of an artist card
+    //this function pulls info on specific artist from DB and LastFM API then preparing a swal with artist likes,songs and comments functionality
     $(document).on("click", ".back", function (event) {
         event.preventDefault();
         const name = $(event.target).closest(".artist").find("h4").text();
@@ -210,6 +199,8 @@ $(document).ready(() => {
     });
 
     ////////////////////////login and register///////////////////
+
+    //this function renders login page elements according to page parameter login/logut/signup
     let updateLoginPage = (page) => {
         $("#mainFormDiv").html("");
         if (page === "logout") {//logout page
@@ -263,7 +254,9 @@ $(document).ready(() => {
                     password: password,
                     regDate: "2023-06-10T12:33:08.383Z"
                 }
-                ajaxCall("POST", baseApi + "/Users/login", JSON.stringify(User), successCBLogin, errorCB);
+                ajaxCall("POST", baseApi + "/Users/login", JSON.stringify(User), function (data) {
+                    successCBLogin(data, "Logged in")
+                }, errorCB);
                 return false;
             })
         }
@@ -285,12 +278,14 @@ $(document).ready(() => {
                     password: password,
                     regDate: formattedDateTime
                 }
-                ajaxCall("POST", baseApi + "/Users/register", JSON.stringify(User), successCBSignUp, errorCB);
+                ajaxCall("POST", baseApi + "/Users/register", JSON.stringify(User), function (data) {
+                    successCBLogin(data, "Signed Up")
+                }, errorCB);
                 return false;
             })
         }
     }
-
+    //this function updates website buttons to match current state: user is logged in / no user is logged in (guest)
     let updateLoginBtns = () => {
         if (localStorage["user"] != undefined) { //user logged in
             $(".header--cta").html("Hello " + JSON.parse(localStorage["user"]).name);
@@ -311,13 +306,18 @@ $(document).ready(() => {
             updateLoginPage("login");
         }
     }
+    //initialize page to guest state
     updateLoginBtns();
     updateLoginPage("login");
-
+    // clicking on sign up button renders sign up form
     $(document).on('click', '.signUpLink', function () {
         updateLoginPage("signup");
     });
-
+    // clicking on login button renders log in form
+    $(document).on('click', '.loginSignUp', function () {
+        updateLoginPage("login");
+    });
+    //clicking on login/out left side nav bar renders page elements according to state
     $('#loginLi').click(function () {
         if (localStorage["user"] != undefined) { //user logged in
             updateLoginPage("logout");
@@ -326,7 +326,7 @@ $(document).ready(() => {
             updateLoginPage("login");
         }
     });
-
+    //same as last function but user clicked from outer nav (right side)
     $('#outBarLogin').click(function () {
         if (localStorage["user"] != undefined) { //user logged in
             updateLoginPage("logout");
@@ -335,7 +335,7 @@ $(document).ready(() => {
             updateLoginPage("login");
         }
     });
-
+    //clicking on login/out button renders page elements according to state. if user is logged in logs him out and play goodbye greeting
     $('#loginLink').click(function () {
         if (localStorage["user"] != undefined) { //user want to logOut
             Swal.fire({
@@ -361,7 +361,6 @@ $(document).ready(() => {
                 }
             }).then(() => {
                 localStorage.removeItem("user");
-                updateLoginBtns();
                 window.location.href = "./index.html";
             })
         }
@@ -370,40 +369,12 @@ $(document).ready(() => {
         }
     });
 
-    function successCBLogin(data) {
+    //user successfully logged in/signed up - plays hello greeting and refresh page
+    function successCBLogin(data, type) {
         localStorage["user"] = JSON.stringify(data);
         Swal.fire({
             icon: 'success',
-            text: "You Logged In Successfully!",
-            color: 'white',
-            background: '#171717',
-            timer: 3500,
-            showConfirmButton: false,
-            didOpen: () => {
-                const body = JSON.stringify({
-                    data: [
-                        `hello ${data.name}`,
-                        "KSP (male)",
-                    ]
-                })
-                ajaxCall("POST", "https://matthijs-speecht5-tts-demo.hf.space/run/predict", body, function (data) {
-                    const audioRes = `https://matthijs-speecht5-tts-demo.hf.space/file=` + data.data[0].name;
-                    var audio = new Audio(audioRes);
-                    audio.play();
-
-                }, errorCB);
-            }
-        }).then(() => {
-            updateLoginBtns();
-            window.location.href = "./index.html";
-        })
-    }
-
-    function successCBSignUp(data) {
-        localStorage["user"] = JSON.stringify(data);
-        Swal.fire({
-            icon: 'success',
-            text: "You Signed Up Successfully!",
+            text: `You ${type} Successfully!`,
             color: 'white',
             background: '#171717',
             timer: 3500,
@@ -424,34 +395,38 @@ $(document).ready(() => {
             }
         }).then(() => {
             window.location.href = "./index.html";
-            updateLoginBtns();
         })
     }
 
 
     /////QUIZ/////
-
+    //in charge of wrong answer sound in quiz
     function playWrongAnswerSound() {
         var audio = new Audio("./assets/audio/fail-144746.mp3");
         audio.play();
     }
 
+    //in charge of correct answer sound in quiz
     function playCorrectAnswerSound() {
         var audio = new Audio("./assets/audio/correct-6033.mp3");
         audio.play();
     }
 
+    //in charge of start quiz sound
     function playStartQuizAudio() {
         var audio = new Audio("./assets/audio/lets-start-the-quiz-b-39670.mp3");
         audio.play();
     }
 
+    //in charge of end quiz sound
     function playEndQuizAudio() {
         var audio = new Audio("./assets/audio/electric-chimes-87900.mp3");
         audio.play();
     }
-
+    //resets score to zero
     let score = 0;
+    //this function gets question function runs it and renders returned array to quiz while shuffeling answers
+    //also this function in charge for 30 seconds timer of question.
     function renderQuestion(q) {
         let qArr = q();
         let answersArr = [` <div id="q_1" class="answerDiv ">
@@ -512,7 +487,7 @@ $(document).ready(() => {
             playCorrectAnswerSound();
             clearInterval(interval);
             $(this).css("border", "2px solid green");
-            alertAnswer('Correct');
+            sumAnswer('Correct');
         });
         $('.wrongAns').on("click", function () {
             $('.answerDiv').css("pointer-events", "none");
@@ -520,7 +495,7 @@ $(document).ready(() => {
             clearInterval(interval);
             $(this).css("border", "2px solid red");
             $('#q_1').css("border", "2px solid green");
-            alertAnswer('Wrong');
+            sumAnswer('Wrong');
         });
         const timerElement = document.getElementById('timer');
         let timeLeft = 30;
@@ -544,23 +519,25 @@ $(document).ready(() => {
         }, 1000);
 
     }
-
-    function alertAnswer(answer) {
+    //this function sums score if correct and continue the quiz next question
+    function sumAnswer(answer) {
         if (answer === "Correct")
             score += 10;
         setTimeout(() => manageQuiz(), 2000);
     }
+    //declaring global variables for quiz mangment
     let interval;
     let currentQuestionIndex = 0;
     let questArr = [getQ1, getQ2, getQ3, getQ4, getQ1, getQ5, getQ6, getQ7, getQ2, getQ8]
     let questionsQueue = Array.from(questArr);
-
+    //reseting neccessary variables for the next quiz
     function resetQuiz() {
         currentQuestionIndex = 0;
         score = 0;
         questionsQueue = Array.from(questArr)
         clearInterval(interval);
     }
+    //this function in charge for starting quiz and managing questions queue, calling renderQuestion func for each question template in a shuffeld manner
     function manageQuiz() {
         if (questionsQueue.length === 0) {
             playEndQuizAudio();
@@ -578,7 +555,9 @@ $(document).ready(() => {
                 ajaxCall("GET", `${baseApi}/Users/leaders`, "", showLeadersboard, errorCB);
             });
             let userId = JSON.parse(localStorage["user"]).id;
-            ajaxCall("POST", `${baseApi}/Users/${userId}/Score/${score}`, "", successCBScoreUpdate, errorCB);
+            ajaxCall("POST", `${baseApi}/Users/${userId}/Score/${score}`, "", function (data) {
+                $("#scoreOver").append(`<br>Your Total Score: ${data.score}`)
+            }, errorCB);
             resetQuiz();
             return;
         }
@@ -727,9 +706,9 @@ function addArtistsToDiv(artists) {
 const start = 0;
 const end = 50;
 
-//random artist
+//this function returns random artist object
 function randomArtist() {
-    let randArtist; // here will be 3 songs of the artist
+    let randArtist;
     $.ajax({
         async: false,
         type: "GET",
@@ -1098,9 +1077,7 @@ $(document).ready(() => {
 
 
 })
-function successCBScoreUpdate() {
-    console.log('score updated');
-}
+
 function successCBAddToFavorite() {
     Swal.fire({
         icon: 'success',
@@ -1151,7 +1128,7 @@ function successCBSong(data) {
             <ul class="slider"> </ul>
               </div>`)
         $("div.work--lockup>ul.slider").append(`
-    <li class="slider--item slider--item-${data.length===1?"center":"left"}" id="slideSong_${data[0].id}">
+    <li class="slider--item slider--item-${data.length === 1 ? "center" : "left"}" id="slideSong_${data[0].id}">
         <a>
             <div class="slider--item-image">
                 <img src="${data[0].image}" alt="Victory">
@@ -1310,21 +1287,17 @@ function successCBSongLyrics(data) {
     });
 }
 function getUpdateCommentsDiv(data, swal) {//data is array of updated song comments
-    console.log(data)
     let commentsDiv = $('<div id="comments-container">');
     let newCommentForm;
-    if (data.length !== 0) {
-        newCommentForm = `<form id="addCommentForm_${data[0].songId} class="commentForm">
-        <label for="comment">Add new comment:</label><br>
-        <textarea id="comment_${data[0].songId}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
-        <input type="submit" value="Submit">
-        </form>`;
-    }
-
     if (data.length === 0) {
         commentsDiv.html("This songs doesn't have comments.")
     }
     else {
+        newCommentForm = `<form id="addCommentForm_${data[0].songId}" class="commentForm">
+        <label for="comment">Add new comment:</label><br>
+        <textarea id="comment_${data[0].songId}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
+        <input type="submit" value="Submit">
+        </form>`;
         for (let c of data) {
             if (c.userId === JSON.parse(localStorage.user).id) {
                 commentsDiv.append(`<div class="comment"><span>${c.comment} - by ${c.userName} </span><i class="commentDel_${c.id} fa deleteComment" style="font-size:24px" title="delete comment"> &#xf00d;</i></div>`);
@@ -1376,8 +1349,8 @@ function getSongCommentsDiv(data, swal) {//data is song object
         for (let c of songsComments) {
             if (c.userId === JSON.parse(localStorage.user).id) {
                 commentsDiv.append(`<div class="comment"><span>${c.comment} - by ${c.userName} </span><i id="commentDel_${c.id}" class="fa deleteComment" style="font-size:24px" title="delete comment"> &#xf00d;</i></div>`);
-                $(document).off('click', `.deleteComment`);
-                $(document).on('click', '.deleteComment', function () {//delete comment
+                $(document).off('click', `#commentDel_${c.id}`);
+                $(document).on('click', `#commentDel_${c.id}`, function () {//delete comment
                     let commentId = c.id;
                     ajaxCall("DELETE", `${baseApi}/Songs/deleteComment/${data.id}/${commentId}`, "", function (responseData) {
                         let updateDiv = getUpdateCommentsDiv(responseData, swal);

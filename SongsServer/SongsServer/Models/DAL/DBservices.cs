@@ -583,7 +583,7 @@ public class DBservices
     //--------------------------------------------------------------------------------------------------
     // This method updates User Score
     //--------------------------------------------------------------------------------------------------
-    public bool updateUserScore(int id,int score)
+    public UserClass updateUserScore(int id,int score)
     {
 
         SqlConnection con;
@@ -607,9 +607,14 @@ public class DBservices
         UserClass u = new UserClass();
         try
         {
-            int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            return numEffected > 0;
-         }
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            if (dataReader.Read())
+            {
+                u.score = Convert.ToInt32(dataReader["score"]);
+                return u;
+            }
+            throw new Exception("couldn't update score");
+        }
         catch (Exception ex)
         {
             // write to log

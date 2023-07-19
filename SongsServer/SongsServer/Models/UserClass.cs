@@ -58,9 +58,8 @@
         }
 
         //return True if score updated and False if no
-        public static bool updateUserScore(int id,int score)
+        public static UserClass updateUserScore(int id,int score)
         {
-
             DBservices dbs = new DBservices();
             return dbs.updateUserScore(id, score);
         }
@@ -108,7 +107,7 @@
             return dbs.getTop5();
         }
 
-        //return true if user deleted form DB and false if it failed
+        //return true if user deleted from DB and false if it failed
         public static bool deleteUser(int userId)
         {
             DBservices dbs = new DBservices();
