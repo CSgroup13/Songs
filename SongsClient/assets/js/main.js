@@ -781,7 +781,7 @@ function getSongsSentences(artistName) {
     }
     return sentences;
 }
-
+//get sentence from given artist song
 function getSongsSentenceOFDifferentArtist(artistName) {
     const song = getRandomSongOfDifferentArtist(artistName);
     let sentence = "“" + song.lyrics.substring(start, end) + "..”";
