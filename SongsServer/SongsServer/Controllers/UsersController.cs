@@ -11,6 +11,7 @@ namespace SongsServer.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        //get all users
         // GET: api/<UsersController>/
         [HttpGet]
         public List<UserClass> getAllUsers()
@@ -18,6 +19,7 @@ namespace SongsServer.Controllers
             return UserClass.getAllUsers();
         }
 
+        //get all favorite songs of user by user id
         // GET: api/<UsersController>/
         [HttpGet("{userId}/songs")]
         public List<Song> getSongsByUser(int userId)
@@ -25,12 +27,15 @@ namespace SongsServer.Controllers
             return UserClass.getSongsByUser(userId);
         }
 
+        //get all favorite artists of user by user id
         // GET: api/<UsersController>/userId/artists
         [HttpGet("{userId}/artists")]
         public List<Artist> getArtistsByUser(int userId)
         {
             return UserClass.getArtistsByUser(userId);
         }
+
+        //get top 5 of users by users total score in the quiz
         // GET: api/<UsersController>/leaders
         [HttpGet("leaders")]
         public List<UserClass> getTop5()
@@ -38,7 +43,7 @@ namespace SongsServer.Controllers
             return UserClass.getTop5();
         }
 
-
+        //post User object to DB while registration
         // POST api/<UsersController>/register
         [HttpPost("register")]
         public IActionResult Register([FromBody] UserClass u)
@@ -53,6 +58,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //post User object (email and password) to DB while logging
         // POST api/<UsersController>/login
         [HttpPost("login")]
         public IActionResult Login([FromBody] UserClass u)
@@ -67,6 +73,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //update user score in DB
         [HttpPost("{userId}/Score/{userScore}")]
         public IActionResult updateUserScore(int userId, int userScore)
         {
@@ -77,6 +84,7 @@ namespace SongsServer.Controllers
 
         }
 
+        //post for adding song to favorites of user
         // POST api/<UsersController>
         [HttpPost("{userId}/{songId}")]
         public IActionResult addSongToFav(int userId, int songId)
@@ -86,15 +94,7 @@ namespace SongsServer.Controllers
             return BadRequest("Song is already in favorites");
         }
 
-        // DELETE api/<UsersController>/5
-        [HttpDelete("{userId}/{songId}")]
-        public IActionResult deleteSongFromFav(int userId, int songId)
-        {
-            if (UserClass.deleteSongFromFav(userId, songId))
-                return Ok(true);
-            return BadRequest("Song is not in favorites");
-        }
-
+        //post for adding artist to favorites of user
         // POST api/<UsersController>
         [HttpPost("{userId}/addArtistToFav/{artistId}")]
         public IActionResult addArtistToFav(int userId, int artistId)
@@ -109,19 +109,7 @@ namespace SongsServer.Controllers
             }
         }
 
-        // DELETE api/<UsersController>
-        [HttpDelete("{userId}/removeArtistFromFav/{artistId}")]
-        public IActionResult deleteArtistFromFav(int userId, int artistId)
-        {
-            try
-            {
-                return Ok(UserClass.deleteArtistFromFav(userId, artistId));
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
+        //update user details (by admin)
         // POST api/<UsersController>/register
         [HttpPut("update")]
         public IActionResult updateUserDetails([FromBody] UserClass u)
@@ -135,6 +123,33 @@ namespace SongsServer.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        //delete song from user's favorite songs
+        // DELETE api/<UsersController>/5
+        [HttpDelete("{userId}/{songId}")]
+        public IActionResult deleteSongFromFav(int userId, int songId)
+        {
+            if (UserClass.deleteSongFromFav(userId, songId))
+                return Ok(true);
+            return BadRequest("Song is not in favorites");
+        }
+
+        //delete artist from user's favorite artists
+        // DELETE api/<UsersController>
+        [HttpDelete("{userId}/removeArtistFromFav/{artistId}")]
+        public IActionResult deleteArtistFromFav(int userId, int artistId)
+        {
+            try
+            {
+                return Ok(UserClass.deleteArtistFromFav(userId, artistId));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        //delete user(by admin)
         // DELETE api/<UsersController>/5
         [HttpDelete("remove/{userId}")]
         public IActionResult deleteUser(int userId)

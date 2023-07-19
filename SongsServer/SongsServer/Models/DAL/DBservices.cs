@@ -78,7 +78,7 @@ public class DBservices
         }
     }
 
-    //*****************************************************Users Methods*********************************************************************************
+    //**********************************************************************Users Methods*********************************************************************************
 
     //--------------------------------------------------------------------------------------------------
     // This method reads all users
@@ -193,7 +193,7 @@ public class DBservices
 
     }
     //--------------------------------------------------------------------------------------------------
-    // This method reads all songs of specific user
+    // This method reads all songs of specific user favorite songs
     //--------------------------------------------------------------------------------------------------
     public List<Song> getSongsByUser(int userId)
     {
@@ -253,7 +253,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method reads all artists of specific user
+    // This method reads all artists of specific user favorite artists
     //--------------------------------------------------------------------------------------------------
     public List<Artist> getArtistsByUser(int userId)
     {
@@ -627,7 +627,7 @@ public class DBservices
 
     }
     //--------------------------------------------------------------------------------------------------
-    // This method Insert a song to userSongs table
+    // This method Insert a song to userSongs table(favorite songs)
     //--------------------------------------------------------------------------------------------------
     public bool addSongToFav(int userId, int songId)
     {
@@ -674,181 +674,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method Insert a comment to songsComments table
-    //--------------------------------------------------------------------------------------------------
-    public List<ExpandoObject> addCommentToSong(int songId,int userId,string comment)
-    {
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-
-        paramDic.Add("@songId", songId);
-        paramDic.Add("@userId", userId);
-        paramDic.Add("@comment", comment);
-
-
-        cmd = CreateCommandWithStoredProcedure("SP_addCommentToSong", con, paramDic);// create the command
-
-        List<ExpandoObject> comments=new List<ExpandoObject>();
-        try
-        {
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            while (dataReader.Read())
-            {
-                dynamic obj = new ExpandoObject();
-                obj.id = Convert.ToInt32(dataReader["id"]);
-                obj.songId = Convert.ToInt32(dataReader["songId"]);
-                obj.userId = Convert.ToInt32(dataReader["userId"]);
-                obj.userName = dataReader["name"].ToString();
-                obj.comment = dataReader["comment"].ToString();
-
-                comments.Add(obj);
-            }
-            return comments;
-        }
-        catch (Exception ex)
-        {
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                con.Close();
-            }
-        }
-
-    }
-
-    //--------------------------------------------------------------------------------------------------
-    // This method Remove a comment from songsComments table
-    //--------------------------------------------------------------------------------------------------
-    public List<ExpandoObject> deleteCommentOfSong(int songId,int commentId)
-    {
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-
-        paramDic.Add("@songId", songId);
-        paramDic.Add("@commentId", commentId);
-
-
-        cmd = CreateCommandWithStoredProcedure("SP_DeleteCommentFromSong", con, paramDic);// create the command
-
-        List<ExpandoObject> comments = new List<ExpandoObject>();
-        try
-        {
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            while (dataReader.Read())
-            {
-                dynamic obj = new ExpandoObject();
-                obj.id = Convert.ToInt32(dataReader["id"]);
-                obj.songId = Convert.ToInt32(dataReader["songId"]);
-                obj.userId = Convert.ToInt32(dataReader["userId"]);
-                obj.userName = dataReader["name"].ToString();
-                obj.comment = dataReader["comment"].ToString();
-
-                comments.Add(obj);
-            }
-            return comments;
-        }
-        catch (Exception ex)
-        {
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                con.Close();
-            }
-        }
-
-    }
-
-    //--------------------------------------------------------------------------------------------------
-    // This method return all songs comments
-    //--------------------------------------------------------------------------------------------------
-    public List<ExpandoObject> getCommentsOfSong(int songId)
-    {
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-
-        paramDic.Add("@songId", songId);
-
-        cmd = CreateCommandWithStoredProcedure("SP_getSongsComments", con, paramDic);// create the command
-
-        List<ExpandoObject> comments = new List<ExpandoObject>();
-        try
-        {
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-            while (dataReader.Read())
-            {
-                dynamic obj = new ExpandoObject();
-                obj.id = Convert.ToInt32(dataReader["id"]);
-                obj.songId = Convert.ToInt32(dataReader["songId"]);
-                obj.userId = Convert.ToInt32(dataReader["userId"]);
-                obj.userName = dataReader["name"].ToString();
-                obj.comment = dataReader["comment"].ToString();
-
-                comments.Add(obj);
-            }
-            return comments;
-        }
-        catch (Exception ex)
-        {
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                Console.WriteLine(comments);
-                con.Close();
-            }
-        }
-
-    }
-
-    //--------------------------------------------------------------------------------------------------
-    // This method Delete a song to userSongs table
+    // This method Delete a song from userSongs table
     //--------------------------------------------------------------------------------------------------
     public bool deleteSongFromFav(int userId, int songId)
     {
@@ -895,7 +721,7 @@ public class DBservices
     }
 
     //--------------------------------------------------------------------------------------------------
-    // This method Insert artist to UserArtists table
+    // This method Insert artist to UserArtists table(favorite artists)
     //--------------------------------------------------------------------------------------------------
     public Artist addArtistToFav(int userId, int artistId)
     {
@@ -1011,59 +837,6 @@ public class DBservices
 
     }
 
-    //--------------------------------------------------------------------------------------------------
-    // This method reads all artists of specific user
-    //--------------------------------------------------------------------------------------------------
-    public Artist getRandomArtist()
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw (ex);
-        }
-
- 
-        cmd = CreateCommandWithStoredProcedure("SP_getRandomArtist", con, null);// create the command
-        try
-        {
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-            if (dataReader.Read())
-            {
-                Artist a = new Artist();
-                a.id = Convert.ToInt32(dataReader["id"]);
-                a.name = dataReader["name"].ToString();
-                a.rate = Convert.ToInt32(dataReader["rate"]);
-                a.image = dataReader["image"].ToString();
-                
-            return a;
-            }
-            throw new Exception("couldn't get Random artist");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-
-    }
 
     //*****************************************************Songs Methods*********************************************************************************
     //--------------------------------------------------------------------------------------------------
@@ -1418,7 +1191,236 @@ public class DBservices
         }
 
     }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Insert a comment to songsComments table
+    //--------------------------------------------------------------------------------------------------
+    public List<ExpandoObject> addCommentToSong(int songId, int userId, string comment)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@songId", songId);
+        paramDic.Add("@userId", userId);
+        paramDic.Add("@comment", comment);
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_addCommentToSong", con, paramDic);// create the command
+
+        List<ExpandoObject> comments = new List<ExpandoObject>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                dynamic obj = new ExpandoObject();
+                obj.id = Convert.ToInt32(dataReader["id"]);
+                obj.songId = Convert.ToInt32(dataReader["songId"]);
+                obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.userName = dataReader["name"].ToString();
+                obj.comment = dataReader["comment"].ToString();
+
+                comments.Add(obj);
+            }
+            return comments;
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method Remove a comment from songsComments table
+    //--------------------------------------------------------------------------------------------------
+    public List<ExpandoObject> deleteCommentOfSong(int songId, int commentId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@songId", songId);
+        paramDic.Add("@commentId", commentId);
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_DeleteCommentFromSong", con, paramDic);// create the command
+
+        List<ExpandoObject> comments = new List<ExpandoObject>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                dynamic obj = new ExpandoObject();
+                obj.id = Convert.ToInt32(dataReader["id"]);
+                obj.songId = Convert.ToInt32(dataReader["songId"]);
+                obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.userName = dataReader["name"].ToString();
+                obj.comment = dataReader["comment"].ToString();
+
+                comments.Add(obj);
+            }
+            return comments;
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // This method return all songs comments
+    //--------------------------------------------------------------------------------------------------
+    public List<ExpandoObject> getCommentsOfSong(int songId)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@songId", songId);
+
+        cmd = CreateCommandWithStoredProcedure("SP_getSongsComments", con, paramDic);// create the command
+
+        List<ExpandoObject> comments = new List<ExpandoObject>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                dynamic obj = new ExpandoObject();
+                obj.id = Convert.ToInt32(dataReader["id"]);
+                obj.songId = Convert.ToInt32(dataReader["songId"]);
+                obj.userId = Convert.ToInt32(dataReader["userId"]);
+                obj.userName = dataReader["name"].ToString();
+                obj.comment = dataReader["comment"].ToString();
+
+                comments.Add(obj);
+            }
+            return comments;
+        }
+        catch (Exception ex)
+        {
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                Console.WriteLine(comments);
+                con.Close();
+            }
+        }
+
+    }
+
     //*****************************************************Artists Methods*********************************************************************************
+    //--------------------------------------------------------------------------------------------------
+    // This method return random artist
+    //--------------------------------------------------------------------------------------------------
+    public Artist getRandomArtist()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("SP_getRandomArtist", con, null);// create the command
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                Artist a = new Artist();
+                a.id = Convert.ToInt32(dataReader["id"]);
+                a.name = dataReader["name"].ToString();
+                a.rate = Convert.ToInt32(dataReader["rate"]);
+                a.image = dataReader["image"].ToString();
+
+                return a;
+            }
+            throw new Exception("couldn't get Random artist");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     //--------------------------------------------------------------------------------------------------
     // This method return 3 random songs that are different from input value
     //--------------------------------------------------------------------------------------------------
@@ -1476,8 +1478,6 @@ public class DBservices
         }
 
     }
-
-
 
     //--------------------------------------------------------------------------------------------------
     // This method return artist by id

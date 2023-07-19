@@ -22,6 +22,7 @@ namespace SongsServer.Controllers
     public class ArtistsController : ControllerBase
     {
 
+        //get all artists
         // GET: api/<ArtistsController>
         [HttpGet]
         public IActionResult getAllArtists()
@@ -36,6 +37,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get songs of specific artist by artist name
         [HttpGet("{artistName}/songs")]
         public IActionResult getSongsByArtist(string artistName)
         {
@@ -49,6 +51,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get info about artist by artist id
         // GET api/<ArtistsController>
         [HttpGet("{id}/info")]
         public IActionResult getArtistById(int id)
@@ -63,6 +66,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get info about artist by artist name
         // GET api/<ArtistsController>
         [HttpGet("byName/{artistName}/info")]
         public IActionResult getArtistByName(string artistName)
@@ -77,6 +81,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get random artist
         // GET api/<ArtistsController>
         [HttpGet("randomArtist")]
         public IActionResult getRandomArtist()
@@ -91,6 +96,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get random artists that are different from some artist(by name) 
         // GET: api/<SongsController>/randomSong
         [HttpGet("diffRandomArtists/{artistName}")]
         public IActionResult getDiffRandomArtists(String artistName)

@@ -1314,7 +1314,7 @@ function getUpdateCommentsDiv(data, swal) {//data is array of updated song comme
     let commentsDiv = $('<div id="comments-container">');
     let newCommentForm;
     if (data.length !== 0) {
-        newCommentForm = `<form id="addCommentForm_${data[0].songId}">
+        newCommentForm = `<form id="addCommentForm_${data[0].songId} class="commentForm">
         <label for="comment">Add new comment:</label><br>
         <textarea id="comment_${data[0].songId}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
         <input type="submit" value="Submit">
@@ -1363,7 +1363,7 @@ function getSongCommentsDiv(data, swal) {//data is song object
         error: errorCB
     });
     let commentsDiv = $('<div id="comments-container">');
-    let newCommentForm = `<form id="addCommentForm_${data.id}">
+    let newCommentForm = `<form id="addCommentForm_${data.id}" class="commentForm">
                 <label for="comment">Add new comment:</label><br>
                 <textarea id="comment_${data.id}" class="new_comment" name="message" rows="2" cols="20" required></textarea><br>
                 <input type="submit" value="Submit">

@@ -2556,6 +2556,7 @@ a.youtube-link:hover {
     top: 5px;
     left: 5px;
 }
-.commentForm>input[type="submit"]{
+.commentForm>input[type="submit"], .addCommentForm_3>input[type="submit"]{
 color: #000;
+margin: 15px 0px;
 }

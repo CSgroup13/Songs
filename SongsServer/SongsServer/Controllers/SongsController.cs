@@ -14,6 +14,7 @@ namespace SongsServer.Controllers
         public string deezerApi = "http://api.deezer.com/search";
         private HttpWebRequest request;
 
+        //get all songs
         // GET: api/<SongsController>
         [HttpGet]
         public IActionResult getAllSongs()
@@ -48,6 +49,8 @@ namespace SongsServer.Controllers
             //}
             //return Ok(songsList);
         }
+
+        //get 3 random songs
         // GET: api/<SongsController>/randomSong
         [HttpGet("randomSong")]
         public IActionResult getRandomSong()
@@ -62,6 +65,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get 3 random songs that are different from songName
         // GET: api/<SongsController>/randomSong
         [HttpGet("diffRandomSongs/{songName}")]
         public IActionResult getDiffRandomSongs(String songName)
@@ -76,6 +80,22 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get 3 random songs that are not songs of artist(by artistName)
+        // GET: api/<SongsController>/randomSong
+        [HttpGet("getSongByDiffArtist/{artistName}")]
+        public IActionResult getSongByDiffArtist(String artistName)
+        {
+            try
+            {
+                return Ok(Song.getSongByDiffArtist(artistName));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //get song info by name
         // GET: api/<SongsController>/{songName}/info
         [HttpGet("{songName}/info")]
         public async Task<IActionResult> getSongByName(string songName)
@@ -116,6 +136,7 @@ namespace SongsServer.Controllers
             }
         }
 
+        //get song info by lyrics
         // GET: api/<SongsController>/songBylyrics
         [HttpGet("songBylyrics")]
         public IActionResult getByLyrics(string lyrics)
@@ -130,48 +151,7 @@ namespace SongsServer.Controllers
             }
         }
 
-        // POST api/<SongsController>
-        [HttpPost]
-        public IActionResult Post([FromBody] Song s)
-        {
-            try
-            {
-                return Ok(s.InsertSong());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        // GET: api/<SongsController>/randomSong
-        [HttpGet("getSongByDiffArtist/{artistName}")]
-        public IActionResult getSongByDiffArtist(String artistName)
-        {
-            try
-            {
-                return Ok(Song.getSongByDiffArtist(artistName));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        // POST api/<SongsController>
-        [HttpPost("addComment/{songId}/{userId}")]
-        public IActionResult addComment(int songId,int userId, [FromBody] string comment)
-        {
-            try
-            {
-                return Ok(Song.addComment(songId, userId, comment));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
+        //get all comments of song
         // GET api/<SongsController>
         [HttpGet("comments/{songId}")]
         public IActionResult getComments(int songId)
@@ -186,6 +166,37 @@ namespace SongsServer.Controllers
             }
         }
 
+        //add song to DB
+        // POST api/<SongsController>
+        [HttpPost]
+        public IActionResult Post([FromBody] Song s)
+        {
+            try
+            {
+                return Ok(s.InsertSong());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //add comment to song
+        // POST api/<SongsController>
+        [HttpPost("addComment/{songId}/{userId}")]
+        public IActionResult addComment(int songId,int userId, [FromBody] string comment)
+        {
+            try
+            {
+                return Ok(Song.addComment(songId, userId, comment));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        //delete comment of song by songId and commentId
         // DELETE api/<SongsController>
         [HttpDelete("deleteComment/{songId}/{commentId}")]
         public IActionResult deleteComment(int songId, int commentId)
