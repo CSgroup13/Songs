@@ -556,7 +556,7 @@ $(document).ready(() => {
             });
             let userId = JSON.parse(localStorage["user"]).id;
             ajaxCall("POST", `${baseApi}/Users/${userId}/Score/${score}`, "", function (data) {
-                $("#scoreOver").append(`<br>Your Total Score: ${data.score}`)
+                $("#scoreOver").append(`<br><span id="totalScore">Total Score: ${data.score}</span>`)
             }, errorCB);
             resetQuiz();
             return;

@@ -2560,3 +2560,7 @@ a.youtube-link:hover {
 color: #000;
 margin: 15px 0px;
 }
+#totalScore{
+    font-size: 20px;
+    margin-bottom: 20px;
+}
