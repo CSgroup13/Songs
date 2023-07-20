@@ -987,13 +987,10 @@ function getQ8() {
     return q6Arr;
 }
 
-
-
-
 $(document).ready(() => {
-    //////////add filters 
+    //add songs search filter 
     const checkboxes = document.querySelectorAll('input[type="checkbox"][name="song-option"]');
-    // Add event listener to each checkbox
+    // Add event listener to each filter type
     checkboxes.forEach(function (checkbox) {
         checkbox.addEventListener('change', function () {
             // Uncheck all checkboxes except the current one
@@ -1004,6 +1001,7 @@ $(document).ready(() => {
             });
         });
     });
+    //add onclick to filters, if its not all songs filter so it will show the search input and button
     $(".song-option").on("click", function () {
         if (this.value === "allSongs") {
             $(".searchInput").hide()
@@ -1016,11 +1014,15 @@ $(document).ready(() => {
             $(".microphone-button").show()
         }
     })
+
+    //add onclick to all songs filter and call to allSongs api
     $(".allSongs").on("click", function () {
         if (this.checked)
             ajaxCall("GET", baseApi + `/Songs`, "", successCBSong, errorCB);
     })
     $(".allSongs").click();
+
+    //add submit listener to search songs form
     $("#searchForm").submit(() => {
         let checkedValue = document.querySelector('input[name="song-option"]:checked');
         let serachApi;
@@ -1043,6 +1045,7 @@ $(document).ready(() => {
             });
             return false;
         }
+        //create the api path by the filter type
         checkedValue = checkedValue.value
         switch (checkedValue) {
             case "songName":
@@ -1063,6 +1066,7 @@ $(document).ready(() => {
         return false;
     })
 
+    //add onclick to random songs in home page for adding to user favorites songs
     $(document).on("click", ".randSongs", function () {
         if (localStorage.user === undefined) {
             Swal.fire({
@@ -1076,11 +1080,9 @@ $(document).ready(() => {
         this.querySelector(".fa-heart-o").style.color = "red";
         ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${this.id.split("_")[1]}`, "", successCBAddToFavorite, errorCB);
     })
-
-
-
 })
 
+//succes CB - adding song to favorite
 function successCBAddToFavorite() {
     Swal.fire({
         icon: 'success',
@@ -1089,6 +1091,8 @@ function successCBAddToFavorite() {
         background: '#171717'
     })
 }
+
+//This function use speech recognition library, it's start listening to the user and show the result on the search input and search it
 runSpeechRecog = () => {
     var output = $("#searchInput");
     let recognization = new webkitSpeechRecognition();
@@ -1104,6 +1108,7 @@ runSpeechRecog = () => {
     recognization.start();
 }
 
+//success CB - when get songs from DB
 function successCBSong(data) {
     $("#songs").html("");
     if (data.length === undefined) {//single song returned as object and not array
@@ -1140,6 +1145,7 @@ function successCBSong(data) {
             <p class="slider--item-description">${data[0].artistName}</p>
         </a>
     </li>`)
+        //add onclick for show the songs popup
         $(`#slideSong_${data[0].id}`).click(function () {
             showSongPopup(data[0].name);
         });
@@ -1153,6 +1159,7 @@ function successCBSong(data) {
              <p class="slider--item-description">${data[1].artistName}</p>
             </a>
           </li>`)
+            //add onclick for show the songs popup
             $(`#slideSong_${data[1].id}`).click(function () {
                 showSongPopup(data[1].name);
             });
@@ -1167,6 +1174,7 @@ function successCBSong(data) {
             <p class="slider--item-description">${data[2].artistName}</p>
             </a>
             </li>`)
+            //add onclick for show the songs popup
             $(`#slideSong_${data[2].id}`).click(function () {
                 showSongPopup(data[2].name);
             });
@@ -1181,6 +1189,7 @@ function successCBSong(data) {
             <p class="slider--item-description">${data[i].artistName}</p>
           </a>
              </li> `)
+            //add onclick for show the songs popup
             $(`#slideSong_${data[i].id}`).click(function () {
                 showSongPopup(data[i].name);
             });
@@ -1205,10 +1214,13 @@ function successCBSong(data) {
         workSlider();
     }
 }
+
+//this function call api the get song info from DB and show popup with it
 function showSongPopup(songName) {
     ajaxCall("GET", baseApi + `/Songs/${songName}/info`, "", successCBSongLyrics, errorCB);
 }
 
+//success CB for showing the soung popup with the lyrics
 function successCBSongLyrics(data) {
     let swal = Swal.fire({
         title: `${data.name}`,
@@ -1227,6 +1239,7 @@ function successCBSongLyrics(data) {
         confirmButtonText: "Close",
         didOpen: () => {
             $('.song-popup').scrollTop(0);
+            //add onclick inside the popup such that the user can add this song to his favorites
             $(`#song_${data.id}`).click(function () {
                 if (localStorage.user === undefined) {
                     Swal.fire({
@@ -1239,6 +1252,7 @@ function successCBSongLyrics(data) {
                 }
                 ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
             });
+            //add onclick for each song for adding comments
             $(`#comments_${data.id}`).click(() => {
                 if (localStorage.user === undefined) {
                     swal.update({
@@ -1261,7 +1275,7 @@ function successCBSongLyrics(data) {
                         title: "Comments",
                         html: newCommentForm + commentsDiv
                     })
-
+                    //add on submit listener when user submiting the comment to the song
                     $(document).off('submit', `#addCommentForm_${data.id}`);
                     $(document).on('submit', `#addCommentForm_${data.id}`, (event) => {//add new comment
                         event.preventDefault()
@@ -1277,6 +1291,7 @@ function successCBSongLyrics(data) {
                 }
 
             })
+            //add onclick to youtube link that open the song in Youtube
             $("#youtubeLink").click(() => {
                 generateYouTubeLink(data.name, data.artistName)
                     .then((link) => {
@@ -1289,6 +1304,8 @@ function successCBSongLyrics(data) {
         }
     });
 }
+
+//this function return update comments div (after add or delete comment)
 function getUpdateCommentsDiv(data, swal) {//data is array of updated song comments
     let commentsDiv = $('<div id="comments-container">');
     let newCommentForm;
@@ -1323,6 +1340,7 @@ function getUpdateCommentsDiv(data, swal) {//data is array of updated song comme
     return commentsDiv.prop('outerHTML');
 }
 
+//this function return div with all comment of song
 function getSongCommentsDiv(data, swal) {//data is song object
     let songsComments = [];
     $.ajax({
@@ -1373,6 +1391,7 @@ function getSongCommentsDiv(data, swal) {//data is song object
     return commentsDiv.prop('outerHTML');
 }
 
+//this function add the option to move forward and back in the songs slider
 function workSlider() {
 
     $('.slider--prev, .slider--next').click(function () {
@@ -1449,7 +1468,7 @@ function workSlider() {
     });
 
 }
-
+//success CB - getting 3 random songs from DB
 function successCBRandom(data) {
     let songsCards = document.querySelectorAll(".randSongs");
     let ids = [];
@@ -1467,6 +1486,7 @@ function successCBRandom(data) {
     }
 }
 
+//this function check which of the random songs is already in the favorites of the user and give red color to the addToFav button
 function successCBFavRand(ids, data) {
     const randomSongs = document.querySelectorAll(".randSongs");
     randomSongs.forEach(song => {
@@ -1502,6 +1522,7 @@ function generateDiff3Artists(songArtist) {
     return diffArtists;
 }
 
+//add css to artists showAll and show favorites buttons
 $(document).ready(function () {
     $(".artiststBtns").on("click", function () {
         $(".artiststBtns").removeClass("active");
@@ -1509,6 +1530,7 @@ $(document).ready(function () {
     });
 });
 
+//async function that call youtubeApi and generate youtube link to song
 async function generateYouTubeLink(songName, artistName) {
     const apiKey = 'AIzaSyC2W6ggVmVdSWAioEd8oZnhbHCh-hJTwJM';
     const formattedSongName = encodeURIComponent(songName);
