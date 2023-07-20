@@ -1,5 +1,7 @@
 
 const baseApi = 'https://proj.ruppin.ac.il/cgroup13/test2/tar1/api';
+// const localhostApi = 'https://localhost:7091/api';
+
 // default error cb for any function if failed
 function errorCB(error) {
     let message = error.responseText;
@@ -660,7 +662,7 @@ function successCBRemoveFromFavorite(data) {
 }
 
 ///////////Artists/////////////////
-const lastfmBaseAPi = "http://ws.audioscrobbler.com/2.0";
+const lastfmBaseAPi = "https://ws.audioscrobbler.com/2.0";
 const lastfmKey = "d6293ebc904c9f3e71bf638f0b55a5f6";
 
 function successCBAllArtists(data) {
