@@ -569,10 +569,12 @@ $(document).ready(() => {
         renderQuestion(questionsQueue[rand]);
         questionsQueue.splice(rand, 1);
     }
+    //when clicking quiz on navbar- resets quiz vars and renders quiz html
     $(".quizNav").click(() => {
         resetQuiz();
         renderQuizHTML();
     });
+    //succes callback which gets top 5 lead users and alert it
     function showLeadersboard(leaders) {
         const leadersDiv = $("<div>");
         for (let leader of leaders) {
@@ -586,6 +588,7 @@ $(document).ready(() => {
         })
 
     }
+    //renders quiz starting phase and manage a click to start it
     function renderQuizHTML() {
         const quizDiv = $("#Quiz");
         if (localStorage.user !== undefined) {
@@ -603,7 +606,7 @@ $(document).ready(() => {
 
 });
 ////////////////////////Favorites Songs///////////////////
-
+//pulls users favorite songs if a user is logged
 function renderFavorites() {
     if (localStorage["user"] !== undefined) {
         let userId = JSON.parse(localStorage["user"]).id;
@@ -614,7 +617,7 @@ function renderFavorites() {
     }
 }
 
-
+//renders favorite songs html and in charge for remove from favorite click+ song popup (lyrics and preview)
 function successCBFavorites(data) {
     if (data.length === 0) {
         $("#favoriteSongs").html("<h3>You don't have favorite songs</h3>");
@@ -648,6 +651,7 @@ function successCBFavorites(data) {
         }
     }
 }
+//callback of removed song from favorite refresh favorites and random songs
 function successCBRemoveFromFavorite(data) {
     if (data === true) {
         Swal.fire({
@@ -664,7 +668,7 @@ function successCBRemoveFromFavorite(data) {
 ///////////Artists/////////////////
 const lastfmBaseAPi = "https://ws.audioscrobbler.com/2.0";
 const lastfmKey = "d6293ebc904c9f3e71bf638f0b55a5f6";
-
+//callback which in charge of rendering
 function successCBAllArtists(data) {
     const artistsDiv = document.getElementById("artists");
     artistsDiv.innerHTML = "";
@@ -676,7 +680,7 @@ function successCBAllArtists(data) {
         artistsDiv.innerHTML = "<p>Artist Not Found.</p>";
     }
 }
-
+//get each artist additional info from Last FM and renders artists to html
 function addArtistsToDiv(artists) {
     const artistsDiv = document.getElementById("artists");
     $("#artistLoader").hide();
@@ -729,7 +733,7 @@ function randomArtist() {
     return randArtist;
 }
 
-//3 random songs of artist
+//this function returns 3 random songs of artist
 function getArtistSongs(artistName) {
     let songsList = []; // here will be 3 songs of the artist
     $.ajax({
@@ -756,7 +760,7 @@ function getArtistSongs(artistName) {
     return songsList;
 }
 
-//song of different artist
+//this function returns random song of different artist then given parameter
 function getRandomSongOfDifferentArtist(artistName) {
     let song;
     $.ajax({
@@ -775,7 +779,7 @@ function getRandomSongOfDifferentArtist(artistName) {
     return song;
 }
 
-//3 sentences of different songs of artist
+//this function returns 3 sentences of different songs of artist
 function getSongsSentences(artistName) {
     const songs = getArtistSongs(artistName);
     const sentences = [];
@@ -785,7 +789,7 @@ function getSongsSentences(artistName) {
     }
     return sentences;
 }
-//get sentence from given artist song
+//this function returns sentence from song of given artist 
 function getSongsSentenceOFDifferentArtist(artistName) {
     const song = getRandomSongOfDifferentArtist(artistName);
     let sentence = "“" + song.lyrics.substring(start, end) + "..”";
@@ -793,7 +797,7 @@ function getSongsSentenceOFDifferentArtist(artistName) {
     return sentence;
 }
 
-//return 3 random songs different from songName
+//this function returns returns 3 random songs different from given songName
 function getDifferentSongs(songName) {
     let songsList = [];
     $.ajax({
@@ -812,7 +816,7 @@ function getDifferentSongs(songName) {
     return songsList;
 }
 
-//return random song
+//this function returns a random song
 function getRandomSong() {
     let songs;
     $.ajax({
@@ -830,7 +834,12 @@ function getRandomSong() {
     });
     return songs[0];
 }
+//the next 8 funciton in charge of each question in quiz
+//they all return an array which contains strings in this order [question,correct answer,answer,answer,answer]
+//each question has different template - explained above each function
 
+
+//this question returns a song preview ,4 artists names and asks who sings this song
 function getQ1() {
     let preview = null;
     let q1 = [];
@@ -860,6 +869,8 @@ function getQ1() {
 
     return q1;
 }
+
+//this question returns an artist image and 4 artists names, then asks who is the artist
 function getQ2() {
     let q2 = [];
     let artist;
@@ -875,6 +886,7 @@ function getQ2() {
 
     return q2;
 }
+//this question returns an artist name and 4 song names, then asks which song is not by this artist
 function getQ3() {
     let q3 = [];
     const artistName = randomArtist().name;
@@ -886,7 +898,7 @@ function getQ3() {
 
     return q3;
 }
-
+//this question returns song name and 4 artists names, then asks who is the artist of the song
 function getQ4() {
     let q4Arr = [];
     $.ajax({
@@ -908,7 +920,7 @@ function getQ4() {
     });
     return q4Arr;
 }
-
+//this question returns song lyrics and 4 artists names, then asks who is the artist of the lyrics
 function getQ5() {
     let q5Arr = [];
     $.ajax({
@@ -931,7 +943,7 @@ function getQ5() {
     });
     return q5Arr;
 }
-
+//this question returns an artist name and 4 sentences, then asks which sentence is not by the artist
 function getQ6() {
     let q6 = [];
     const artistName = randomArtist().name;
@@ -942,7 +954,7 @@ function getQ6() {
 
     return q6;
 }
-
+//this question returns a song lyrics and 4 songs names and asks which song has this lyrics
 function getQ7() {
     let q7 = [];
     const artistName = randomArtist().name;
@@ -957,7 +969,7 @@ function getQ7() {
 
     return q7;
 }
-
+//this question returns a song name and 4 songs lyrics and asks which lyrics is from the song
 function getQ8() {
     let q6Arr = [];
     $.ajax({
