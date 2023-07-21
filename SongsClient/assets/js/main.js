@@ -30,6 +30,7 @@ $(document).ready(() => {
         $("#searchArtistInput").val("");
         renderArtists();
     })
+    
     //pull from DB user favorite artists
     $("#showFavoritesArtists").click(function () {
         removeFromFavPage = true;
@@ -164,7 +165,9 @@ $(document).ready(() => {
                     icon: 'success',
                     text: "Artist added to your Favorites",
                     color: 'white',
-                    background: '#171717'
+                    background: '#171717',
+                    timer: 1800,
+                    showConfirmButton: false
                 })
                 const artistDiv = $(".back").filter(function () {
                     return $(this).find("h4").text() === data.name;
@@ -188,7 +191,9 @@ $(document).ready(() => {
                     icon: 'success',
                     text: "Artist removed from your Favorites",
                     color: 'white',
-                    background: '#171717'
+                    background: '#171717',
+                    timer: 1800,
+                    showConfirmButton: false
                 })
                 const artistDiv = $(".back").filter(function () {
                     return $(this).find("h4").text() === currArtist.name;
@@ -658,7 +663,9 @@ function successCBRemoveFromFavorite(data) {
             icon: 'success',
             text: "Song removed from your Favorites",
             color: 'white',
-            background: '#171717'
+            background: '#171717',
+            timer: 1800,
+            showConfirmButton: false
         })
         renderFavorites();
         ajaxCall("GET", baseApi + `/Songs/randomSong`, "", successCBRandom, errorCB);
@@ -1100,7 +1107,9 @@ function successCBAddToFavorite() {
         icon: 'success',
         text: "Song added to your Favorites",
         color: 'white',
-        background: '#171717'
+        background: '#171717',
+        timer: 1800,
+        showConfirmButton: false
     })
 }
 
