@@ -1,6 +1,7 @@
 
-const baseApi = 'https://proj.ruppin.ac.il/cgroup13/test2/tar1/api';
-// const localhostApi = 'https://localhost:7091/api';
+const ruppinApi = 'https://proj.ruppin.ac.il/cgroup13/test2/tar1/api';
+const localhostApi = 'https://localhost:7091/api';
+const baseApi = ruppinApi;
 
 // default error cb for any function if failed
 function errorCB(error) {
@@ -114,7 +115,7 @@ $(document).ready(() => {
         });
         const swal = Swal.fire({
             title: `About ${currArtist.name}`,
-            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeFromFav_${currArtist.id}" class="removeArtistFromFav title="Remove From Favorite">&#x1F494;</p><br><a class="songsDetails" id="${currArtist.id}_songsDetails">click here for songs of ${currArtist.name}</a>`,
+            html: `<div class="song-popup">${summary}</div><i id="artistHeart_${currArtist.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><p id="removeFromFav_${currArtist.id}" class="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</p><br><a class="songsDetails" id="${currArtist.id}_songsDetails">click here for songs of ${currArtist.name}</a>`,
             color: 'white',
             background: '#171717',
             confirmButtonText: "Close",
@@ -632,21 +633,7 @@ function successCBFavorites(data) {
           </a>`;
             favoritesDiv.append(songDiv);
             $(`#a_${song.id}`).on("click", function () {
-                Swal.fire({
-                    title: `${song.name} Lyrics`,
-                    html: `<div class="song-popup">${song.lyrics.replace(/\n/g, '<br>')}</div>
-               <br>
-               <i id="fav_${song.id}" class="fa fa-heart-o removeFromFavorite" title="Remove From Favorite" style="color:red;"></i>`,
-                    color: 'white',
-                    background: '#171717',
-                    confirmButtonText: "Close",
-                    didOpen: () => {
-                        $('.song-popup').scrollTop(0);
-                        $(`#fav_${song.id}`).click(function () {
-                            ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${song.id}`, "", successCBRemoveFromFavorite, errorCB);
-                        });
-                    }
-                });
+                showSongPopup(song.name);
             })
         }
     }
@@ -1239,13 +1226,14 @@ function successCBSongLyrics(data) {
         html: `<div class="song-popup">${data.lyrics.replace(/\n/g, '<br>')}</div>
                        <br>
                        <i id="song_${data.id}" class="fa fa-heart-o addToFavorite" title="Add To Favorite" style="color:white;"></i><span> ${data.rate}</span>
+                       <i id="deleteSongFav_${data.id}" class="removeArtistFromFav" title="Remove From Favorite">&#x1F494;</i>
                        <img src="./assets/img/comment.png" id="comments_${data.id}" class="commentImage" title="show comments"></img>
                        <br>
                        <audio id="audioPlayer" controls>
                             <source src="${data.songPreview}" type="audio/mpeg">
                             Your browser does not support the audio element.
                         </audio>
-                        <a id="youtubeLink" target="_blank" class="youtube-link" title="Go To Youtube"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`, //${htmlLink}
+                        <a id="youtubeLink" target="_blank" class="youtube-link" title="Go To Youtube"><img id="youtubeImg" src="./assets/img/youtubeLogo.png" alt="YouTube Logo"></a>`,
         color: 'white',
         background: '#171717',
         confirmButtonText: "Close",
@@ -1263,6 +1251,18 @@ function successCBSongLyrics(data) {
                     return;
                 }
                 ajaxCall("POST", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBAddToFavorite, errorCB);
+            });
+            $(`#deleteSongFav_${data.id}`).click(function () {
+                if (localStorage.user === undefined) {
+                    Swal.fire({
+                        icon: 'error',
+                        text: "Please Log in to remove song from Favorites",
+                        color: 'white',
+                        background: '#171717'
+                    })
+                    return;
+                }
+                ajaxCall("DELETE", baseApi + `/Users/${JSON.parse(localStorage.user).id}/${data.id}`, "", successCBRemoveFromFavorite, errorCB);
             });
             //add onclick for each song for adding comments
             $(`#comments_${data.id}`).click(() => {
