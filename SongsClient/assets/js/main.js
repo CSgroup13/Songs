@@ -1570,7 +1570,7 @@ async function generateYouTubeLink(songName, artistName) {
 
         // Construct the YouTube video URL
         const youtubeVideoUrl = `https://www.youtube.com/watch?v=${videoId}`;
-        const htmlLink = youtubeVideoUrl
+        const htmlLink = youtubeVideoUrl;
 
         // Return the HTML link
         return htmlLink;
