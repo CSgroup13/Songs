@@ -45,10 +45,6 @@ https://proj.ruppin.ac.il/cgroup13/test2/tar5/index.html
 - Database: Microsoft SQL Server
 - APIs: YouTube API, Deezer API, Lastfm API, Hugging Face API
   
-## Contributing
-
-We welcome contributions to improve this project. If you find any bugs or have ideas for additional features, please feel free to open an issue or submit a pull request.
-
 ## Acknowledgments
 
 Special thanks to all the contributors who have made this project possible: Elad Armoni and Ofek Begerano.
