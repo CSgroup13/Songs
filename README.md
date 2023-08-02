@@ -2,7 +2,7 @@
 
 Welcome to the SongsHive Web App! This web application allows you to explore and enjoy a vast collection of 500 songs from 100 different artists. With a combination of cutting edge technologies and user friendly features, your musical journey is about to get even better. Sign up, log in, and immerse yourself in the world of music!
 
-##Try Now!
+## Try Now!
 https://proj.ruppin.ac.il/cgroup13/test2/tar5/index.html
 
 ## Features
