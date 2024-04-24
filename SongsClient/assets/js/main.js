@@ -1,6 +1,6 @@
 
 const ruppinApi = 'https://proj.ruppin.ac.il/cgroup13/prod/api';
-const localhostApi = 'https://localhost:7091/api';
+// const localhostApi = 'https://localhost:7091/api';
 const baseApi = ruppinApi;
 
 // default error cb for any function if failed
@@ -31,7 +31,7 @@ $(document).ready(() => {
         $("#searchArtistInput").val("");
         renderArtists();
     })
-    
+
     //pull from DB user favorite artists
     $("#showFavoritesArtists").click(function () {
         removeFromFavPage = true;
