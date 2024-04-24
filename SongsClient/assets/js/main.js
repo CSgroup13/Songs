@@ -1,5 +1,5 @@
 
-const ruppinApi = 'https://proj.ruppin.ac.il/cgroup13/test2/tar1/api';
+const ruppinApi = 'https://proj.ruppin.ac.il/cgroup13/prod/api';
 const localhostApi = 'https://localhost:7091/api';
 const baseApi = ruppinApi;
 
